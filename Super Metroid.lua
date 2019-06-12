@@ -1,16 +1,15 @@
--- Also patch some functions for cross-emu compatability (at least between snes9x and BizHawk)
-if memory.usememorydomain then
+-- Also patch some functions for cross-emu compatibility (at least between snes9x and BizHawk)
+if memory.usememorydomain then -- if bizhawk:
     function snes2pc(p)
         return bit.band(bit.rshift(p, 1), 0x3F8000) + bit.band(p, 0x7FFF)
     end
-    
+
     function makeMemoryReader(f)
         return function(p)
             if p < 0x800000 then
                 return f(bit.band(p, 0x1FFFF), "WRAM")
             else
-                -- BizHawk bug: having to add $80:0000 for whatever reason
-                return f(snes2pc(p) + 0x800000, "CARTROM")
+                return f(snes2pc(p), "CARTROM")
             end
         end
     end
@@ -20,9 +19,9 @@ if memory.usememorydomain then
             if p < 0x800000 then
                 return f(bit.band(p, 0x1FFFF), v, "WRAM")
             else
-                -- BizHawk bug: having to add $80:0000 for whatever reason
+                print(string.format('Error: trying to write to ROM address %X', p))
                 -- Writing to ROM in Bizhawk doesn't actually work, but hoping it might one day...
-                return f(snes2pc(p) + 0x800000, v, "CARTROM")
+                return f(snes2pc(p), v, "CARTROM")
             end
         end
     end
@@ -33,7 +32,7 @@ if memory.usememorydomain then
     read_s16  = makeMemoryReader(memory.read_s16_le)
     write_u8  = makeMemoryWriter(memory.write_u8)
     write_u16 = makeMemoryWriter(memory.write_u16_le)
-else
+else -- else not bizhawk:
     read_u8   = memory.readbyte
     read_u16  = memory.readshort
     read_s8   = memory.readbytesigned
@@ -52,6 +51,10 @@ function makeReader(p, n, signed, interval)
     -- signed: Whether or not to sign extend read values
     -- interval: If specified, size of array entries, where p is the address within the first array entry
     --           Returned reader will have an array index parameter
+
+    if n < 1 or n > 2 then
+        error(string.format('Trying to make reader with n = %d', n))
+    end
 
     local unsignedReaders = {
         [1] = read_u8,
@@ -79,6 +82,10 @@ function makeWriter(p, n, interval)
     -- n: Number of bytes to write
     -- interval: If specified, size of array entries, where p is the address within the first array entry
     --           Returned writer will have an array index parameter
+
+    if n < 1 or n > 2 then
+        error(string.format('Trying to make writer with n = %d', n))
+    end
 
     local writers = {
         [1] = write_u8,
@@ -109,8 +116,10 @@ return {
 
     getBg1TilemapOptions      = makeReader(0x7E0058, 2),
     getBg2TilemapOptions      = makeReader(0x7E0059, 2),
+    
     getInput                  = makeReader(0x7E008B, 2),
     getChangedInput           = makeReader(0x7E008F, 2),
+    
     getBg1ScrollX             = makeReader(0x7E00B1, 2),
     setBg1ScrollX             = makeWriter(0x7E00B1, 2),
     getBg1ScrollY             = makeReader(0x7E00B3, 2),
@@ -119,16 +128,27 @@ return {
     setBg2ScrollX             = makeWriter(0x7E00B5, 2),
     getBg2ScrollY             = makeReader(0x7E00B7, 2),
     setBg2ScrollY             = makeWriter(0x7E00B7, 2),
+    getBg3ScrollX             = makeReader(0x7E00B9, 2),
+    setBg3ScrollX             = makeWriter(0x7E00B9, 2),
+    getBg3ScrollY             = makeReader(0x7E00BB, 2),
+    setBg3ScrollY             = makeWriter(0x7E00BB, 2),
+    
     getMode7Flag              = makeReader(0x7E0783, 2),
     getDoorDirection          = makeReader(0x7E0791, 2),
+    getRoomPointer            = makeReader(0x7E079B, 2),
     getAreaIndex              = makeReader(0x7E079F, 2),
     getRoomWidth              = makeReader(0x7E07A5, 2),
     getRoomHeight             = makeReader(0x7E07A7, 2),
+    getRoomWidthInScrolls     = makeReader(0x7E07A9, 2),
+    getRoomHeightInScrolls    = makeReader(0x7E07AB, 2),
     getUpScroller             = makeReader(0x7E07AD, 2),
     getDownScroller           = makeReader(0x7E07AF, 2),
     getDoorListPointer        = makeReader(0x7E07B5, 2),
+    
+    getLayer1XSubposition     = makeReader(0x7E090F, 2),
     getLayer1XPosition        = makeReader(0x7E0911, 2, true),
     setLayer1XPosition        = makeWriter(0x7E0911, 2),
+    getLayer1YSubposition     = makeReader(0x7E0913, 2),
     getLayer1YPosition        = makeReader(0x7E0915, 2, true),
     setLayer1YPosition        = makeWriter(0x7E0915, 2),
     getLayer2XPosition        = makeReader(0x7E0917, 2, true),
@@ -139,14 +159,23 @@ return {
     getBg1ScrollYOffset       = makeReader(0x7E091F, 2, true),
     getBg2ScrollXOffset       = makeReader(0x7E0921, 2, true),
     getBg2ScrollYOffset       = makeReader(0x7E0923, 2, true),
+    
+    getCameraDistanceIndex    = makeReader(0x7E0941, 2),
+    
     getGameState              = makeReader(0x7E0998, 2),
     getDoorTransitionFunction = makeReader(0x7E099C, 2),
+    
     getGameTimeFrames         = makeReader(0x7E09DA, 2),
     getGameTimeSeconds        = makeReader(0x7E09DC, 2),
     getGameTimeMinutes        = makeReader(0x7E09DE, 2),
     getGameTimeHours          = makeReader(0x7E09E0, 2),
+    
+    getSamusFacingDirection   = makeReader(0x7E0A1E, 1),
+    getSamusMovementType      = makeReader(0x7E0A1F, 1),
     getShinesparkTimer        = makeReader(0x7E0A68, 2),
     getFrozenTimeFlag         = makeReader(0x7E0A78, 2),
+    getXrayState              = makeReader(0x7E0A7A, 2),
+    
     getSamusXPosition         = makeReader(0x7E0AF6, 2),
     getSamusXPositionSigned   = makeReader(0x7E0AF6, 2, true),
     setSamusXPosition         = makeWriter(0x7E0AF6, 2),
@@ -155,6 +184,10 @@ return {
     setSamusYPosition         = makeWriter(0x7E0AFA, 2),
     getSamusXRadius           = makeReader(0x7E0AFE, 2),
     getSamusYRadius           = makeReader(0x7E0B00, 2),
+    getIdealLayer1XPosition   = makeReader(0x7E0B0A, 2),
+    getIdealLayer1YPosition   = makeReader(0x7E0B0E, 2),
+    getSamusPreviousXPosition = makeReader(0x7E0B10, 2),
+    getSamusPreviousYPosition = makeReader(0x7E0B14, 2),
     getSamusYSubspeed         = makeReader(0x7E0B2C, 2),
     getSamusYSpeed            = makeReader(0x7E0B2E, 2),
     getSpeedBoosterLevel      = makeReader(0x7E0B3F, 2),
@@ -162,21 +195,41 @@ return {
     getSamusXSpeed            = makeReader(0x7E0B44, 2),
     getSamusXMomentum         = makeReader(0x7E0B46, 2),
     getSamusXSubmomentum      = makeReader(0x7E0B48, 2),
+    
     getCooldownTimer          = makeReader(0x7E0CCC, 2),
     getChargeCounter          = makeReader(0x7E0CD0, 2),
     getPowerBombXPosition     = makeReader(0x7E0CE2, 2),
     getPowerBombYPosition     = makeReader(0x7E0CE4, 2),
     getPowerBombRadius        = makeReader(0x7E0CEA, 2),
+    getPowerBombPreRadius     = makeReader(0x7E0CEC, 2),
     getPowerBombFlag          = makeReader(0x7E0CEE, 2),
+    
+    getXDistanceSamusMoved    = makeReader(0x7E0DA2, 2),
+    getXSubdistanceSamusMoved = makeReader(0x7E0DA4, 2),
+    getYDistanceSamusMoved    = makeReader(0x7E0DA6, 2),
+    getYSubdistanceSamusMoved = makeReader(0x7E0DA8, 2),
+    
     getBlockIndex             = makeReader(0x7E0DC4, 2),
+    
     getElevatorState          = makeReader(0x7E0E18, 2),
+    
     getNEnemies               = makeReader(0x7E0E4E, 2),
+    
     getBossNumber             = makeReader(0x7E179C, 2),
+    
     getEarthquakeType         = makeReader(0x7E183E, 2),
     getEarthquakeTimer        = makeReader(0x7E1840, 2),
+    
     getInvincibilityTimer     = makeReader(0x7E18A8, 2),
     getRecoilTimer            = makeReader(0x7E18AA, 2),
     
+    getHdmaObjectIndex        = makeReader(0x7E18B2, 2),
+    
+    getFxYPosition            = makeReader(0x7E195E, 2),
+    setFxYPosition            = makeWriter(0x7E195E, 2),
+    getLavaAcidYPosition      = makeReader(0x7E1962, 2),
+    setLavaAcidYPosition      = makeWriter(0x7E1962, 2),
+
     -- OAM
     getOamXLow                = makeReader(0x7E0370, 1, false, 4),
     setOamXLow                = makeWriter(0x7E0370, 1, 4),
@@ -226,12 +279,19 @@ return {
     getEnemyProjectileXRadius   = makeReader(0x7E1BB3, 1, false, 2),
     getEnemyProjectileYRadius   = makeReader(0x7E1BB4, 1, false, 2),
 
+    -- PLMs
+    getPlmId           = makeReader(0x7E1C37, 2, false, 2),
+    getPlmRoomArgument = makeReader(0x7E1DC7, 2, false, 2),
+
     -- Metatiles
     getMetatileTopLeft     = makeReader(0x7EA000, 2, false, 8),
     getMetatileTopRight    = makeReader(0x7EA002, 2, false, 8),
     getMetatileBottomLeft  = makeReader(0x7EA004, 2, false, 8),
     getMetatileBottomRight = makeReader(0x7EA006, 2, false, 8),
-    
+
+    -- Scroll
+    getScroll = makeReader(0x7ECD20, 1, false, 1),
+
     -- Sprite objects
     getSpriteObjectInstructionList = makeReader(0x7EEF78, 2, false, 2),
     getSpriteObjectXPosition       = makeReader(0x7EF0F8, 2, false, 2),
