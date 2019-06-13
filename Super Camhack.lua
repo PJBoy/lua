@@ -627,7 +627,7 @@ function adjustWaterPosition()
 end
 
 function restoreWaterPosition()
-    mainmemory.write_u16_le(0x1962, waterYPosition)
+    sm.setFxYPosition(waterYPosition)
 end
 
 function calculatePowerBombHdmaTablePointers(powerBombRadius)
@@ -1126,7 +1126,8 @@ event.onmemoryexecute(restoreLavaAcidPosition, 0x88B477)
 
 -- Execute for the duration of water HDMA calculations
 event.onmemoryexecute(adjustWaterPosition, 0x88C4BE)
-event.onmemoryexecute(restoreWaterPosition, 0x88C569)
+--event.onmemoryexecute(restoreWaterPosition, 0x88C569)
+event.onmemoryexecute(restoreWaterPosition, 0x88C4EA)
 
 -- Execute for the duration of power bomb HDMA calculations
 -- Main explosion
