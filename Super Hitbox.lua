@@ -1,4 +1,5 @@
-package.path = "D:\\Games\\Lua\\Super Metroid.lua"
+-- If lsnes complains about "module 'Super Metroid' not found", uncomment the next line and provide the path to the "Super Metroid.lua" file
+-- package.path = "D:\\Games\\Lua\\Super Metroid.lua"
 sm = require("Super Metroid")
 
 if console and console.clear then
