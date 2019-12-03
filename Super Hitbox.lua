@@ -1,21 +1,42 @@
+package.path = "D:\\Games\\Lua\\Super Metroid.lua"
 sm = require("Super Metroid")
 
 if console and console.clear then
     console.clear()
+elseif print then
+    print("\n\n\n\n\n\n\n\n")
+    print("\n\n\n\n\n\n\n\n")
+end
+
+-- Patch some functions for cross-emu compatibility
+emuId_bizhawk = 0
+emuId_snes9x  = 1
+emuId_lsnes   = 2
+
+if memory.usememorydomain then
+    emuId = emuId_bizhawk
+elseif memory.readshort then
+    emuId = emuId_snes9x
+else
+    emuId = emuId_lsnes
+end
+
+if emuId == emuId_lsnes then
+    rshift = bit.lrshift
+else
+    rshift = bit.rshift
 end
 
 function snes2pc(p)
-    return bit.band(bit.rshift(p, 1), 0x3F8000) + bit.band(p, 0x7FFF)
+    return bit.band(rshift(p, 1), 0x3F8000) + bit.band(p, 0x7FFF)
 end
 
--- Patch some functions for cross-emu compatability (at least between snes9x and BizHawk)
-if memory.usememorydomain then
+if emuId == emuId_bizhawk then
     function makeMemoryReader(f)
         return function(p)
             if p < 0x800000 then
                 return f(bit.band(p, 0x1FFFF), "WRAM")
             else
-                -- BizHawk bug: having to add 0x800000 for whatever reason
                 return f(snes2pc(p), "CARTROM")
             end
         end
@@ -26,8 +47,9 @@ if memory.usememorydomain then
             if p < 0x800000 then
                 return f(bit.band(p, 0x1FFFF), v, "WRAM")
             else
-                -- BizHawk bug: having to add 0x800000 for whatever reason
-                return f(snes2pc(p) + 0x800000, v, "CARTROM")
+                print(string.format('Error: trying to write to ROM address %X', p))
+                -- Writing to ROM in Bizhawk doesn't actually work, but hoping it might one day...
+                return f(snes2pc(p), v, "CARTROM")
             end
         end
     end
@@ -38,13 +60,40 @@ if memory.usememorydomain then
     read_s16_le  = makeMemoryReader(memory.read_s16_le)
     write_u8     = makeMemoryWriter(memory.write_u8)
     write_u16_le = makeMemoryWriter(memory.write_u16_le)
-else
+elseif emuId == emuId_snes9x then
     read_u8      = memory.readbyte
     read_u16_le  = memory.readshort
     read_s8      = memory.readbytesigned
     read_s16_le  = memory.readshortsigned
     write_u8     = memory.writebyte
     write_u16_le = memory.writeshort
+else -- emuId == lsnes
+    function makeMemoryReader(f)
+        return function(p)
+            if p < 0x800000 then
+                return f(p)
+            else
+                return f("ROM", snes2pc(p))
+            end
+        end
+    end
+
+    function makeMemoryWriter(f)
+        return function(p, v)
+            if p < 0x800000 then
+                return f(p, v)
+            else
+                print(string.format('Error: trying to write to ROM address %X', p))
+            end
+        end
+    end
+    
+    read_u8      = makeMemoryReader(memory.readbyte)
+    read_u16_le  = makeMemoryReader(memory.readword)
+    read_s8      = makeMemoryReader(memory.readsbyte)
+    read_s16_le  = makeMemoryReader(memory.readsword)
+    write_u8     = makeMemoryWriter(memory.writebyte)
+    write_u16_le = makeMemoryWriter(memory.writeword)
 end
 
 recordLagHotspots = true
@@ -68,16 +117,16 @@ if client and client.SetGameExtraPadding then
     client.SetGameExtraPadding(xExtra, yExtra, xExtra, yExtra)
 end
 
-xExtraBlocks = bit.rshift(xExtra, 4)
-yExtraBlocks = bit.rshift(yExtra, 4)
+xExtraBlocks = rshift(xExtra, 4)
+yExtraBlocks = rshift(yExtra, 4)
 
 -- Adjust drawing to account for the borders
-function drawText(x, y, text, fg, bg, fontSize)
+function drawText(x, y, text, fg, bg)
     gui.drawText(x + xExtra, y + yExtra, text, fg, bg or "clear")
 end
 
 function drawBox(x0, y0, x1, y1, fg, bg)
-    gui.drawBox(x0 + xExtra, y0 + yExtra, x1 + xExtra, y1 + yExtra, fg, bg)
+    gui.drawBox(x0 + xExtra, y0 + yExtra, x1 + xExtra, y1 + yExtra, fg, bg or "clear")
 end
 
 function drawLine(x0, y0, x1, y1, fg)
@@ -108,21 +157,21 @@ if event and event.onmemoryexecute then
             console.log(string.format("%d: %f", emu.framecount(), cpu))
         end
         drawText(4, 36, string.format('CPU used: %.2f%%', cpu), cpu < 100 and "white" or "red", 0xC0000000)
-        
+
         idling = true
         lagFrames = 0
     end
-    
+
     function nmiHook()
         if not idling then
             lagFrames = lagFrames + 1
             drawText(4, 36, string.format('CPU used: %.2f%%', lagFrames * 100), "red", 0xC0000000)
         end
-        
+
         idling = false
         local v = emu.getregister('V')
     end
-    
+
     event.onmemoryexecute(nmiHook, 0x009583)
     event.onmemoryexecute(idleHook, 0x82897A)
 end
@@ -312,7 +361,7 @@ outline = {
         end
 
         blockIndex = blockIndex + bts
-        outline[bit.rshift(sm.getLevelDatum(blockIndex), 12)](blockX, blockY, blockIndex, stackLimit)
+        outline[rshift(sm.getLevelDatum(blockIndex), 12)](blockX, blockY, blockIndex, stackLimit)
     end,
 
     -- Unused air
@@ -362,7 +411,7 @@ outline = {
         end
 
         blockIndex = blockIndex + bts * sm.getRoomWidth()
-        outline[bit.rshift(sm.getLevelDatum(blockIndex), 12)](blockX, blockY, blockIndex, stackLimit)
+        outline[rshift(sm.getLevelDatum(blockIndex), 12)](blockX, blockY, blockIndex, stackLimit)
     end,
 
     -- Grapple block
@@ -374,7 +423,7 @@ outline = {
 
 
 -- Finally, the main loop
-while true do
+function on_paint()
     -- Constrain when we show hitboxes to avoid displaying garbage
     local gameState = sm.getGameState()
     local doorTransitionFunction = sm.getDoorTransitionFunction()
@@ -391,14 +440,14 @@ while true do
         -- Debug controls
         local input = sm.getInput()
         local changedInput = sm.getChangedInput()
-        
+
         if debugControlsEnabled ~= 0 and bit.band(input, sm.button_select) ~= 0 then
             -- Show the clipdata and BTS of every block on screen
             debugFlag = bit.bxor(debugFlag, bit.band(changedInput, sm.button_A))
-            
+
             -- Show the list of (possibly OoB) door block BTS that exist
             doorListFlag = debugFlag
-            
+
             -- Lock camera to Samus' position
             followSamusFlag = bit.bxor(followSamusFlag, bit.band(changedInput, sm.button_B))
 
@@ -409,18 +458,18 @@ while true do
 
             if bit.band(input, sm.button_A) ~= 0 then
                 -- These move the Samus around
-                samusXPosition = bit.band(samusXPosition +            bit.band(changedInput, sm.button_right),    0xFFFF)
-                samusXPosition = bit.band(samusXPosition - bit.rshift(bit.band(changedInput, sm.button_left), 1), 0xFFFF)
-                samusYPosition = bit.band(samusYPosition + bit.rshift(bit.band(changedInput, sm.button_down), 2), 0xFFFF)
-                samusYPosition = bit.band(samusYPosition - bit.rshift(bit.band(changedInput, sm.button_up),   3), 0xFFFF)
+                samusXPosition = bit.band(samusXPosition +        bit.band(changedInput, sm.button_right),    0xFFFF)
+                samusXPosition = bit.band(samusXPosition - rshift(bit.band(changedInput, sm.button_left), 1), 0xFFFF)
+                samusYPosition = bit.band(samusYPosition + rshift(bit.band(changedInput, sm.button_down), 2), 0xFFFF)
+                samusYPosition = bit.band(samusYPosition - rshift(bit.band(changedInput, sm.button_up),   3), 0xFFFF)
                 sm.setSamusXPosition(samusXPosition)
                 sm.setSamusYPosition(samusYPosition)
             else
                 -- These move the camera around
-                xAdjust = xAdjust + bit.rshift(bit.band(changedInput, sm.button_right), 8) * 256
-                xAdjust = xAdjust - bit.rshift(bit.band(changedInput, sm.button_left),  9) * 256
-                yAdjust = yAdjust + bit.rshift(bit.band(changedInput, sm.button_down), 10) * 224
-                yAdjust = yAdjust - bit.rshift(bit.band(changedInput, sm.button_up),   11) * 224
+                xAdjust = xAdjust + rshift(bit.band(changedInput, sm.button_right), 8) * 256
+                xAdjust = xAdjust - rshift(bit.band(changedInput, sm.button_left),  9) * 256
+                yAdjust = yAdjust + rshift(bit.band(changedInput, sm.button_down), 10) * 224
+                yAdjust = yAdjust - rshift(bit.band(changedInput, sm.button_up),   11) * 224
             end
         end
 
@@ -457,11 +506,11 @@ while true do
                 local blockY = y * 16 - bit.band(cameraY, 0xF)
 
                 -- Blocks are 16x16 px², using a right shift to avoid dealing with floats
-                local blockIndex = bit.rshift(bit.band(cameraY + y * 16, 0xFFF), 4) * roomWidth
-                                 + bit.rshift(bit.band(cameraX + x * 16, 0xFFFF), 4)
+                local blockIndex = rshift(bit.band(cameraY + y * 16, 0xFFF), 4) * roomWidth
+                                 + rshift(bit.band(cameraX + x * 16, 0xFFFF), 4)
 
                 -- Block type is the most significant 4 bits of level data
-                local blockType = bit.rshift(sm.getLevelDatum(blockIndex), 12)
+                local blockType = rshift(sm.getLevelDatum(blockIndex), 12)
                 if debugFlag ~= 0 then
                     -- Show the block type and BTS of every block
                     drawText(blockX + 4, blockY, string.format("%02X", blockType), "red")
@@ -476,8 +525,8 @@ while true do
 
         -- Debug info, including door list
         if debugInfoFlag ~= 0 then
-            local cameraXBlock = bit.rshift(cameraX, 4)
-            local cameraYBlock = bit.rshift(bit.band(cameraY, 0xFFF), 4)
+            local cameraXBlock = rshift(cameraX, 4)
+            local cameraYBlock = rshift(bit.band(cameraY, 0xFFF), 4)
             local clip = 0x7F0000 + bit.band(2 + (cameraXBlock + cameraYBlock * roomWidth) * 2, 0xFFFF)
             local clip_end = 0x7F0002 + 0x1FE * roomWidth + 0x1FFE
             local bts_end = 0x7F6402 + roomWidth * sm.getRoomHeight()
@@ -486,7 +535,7 @@ while true do
             if debugFlag ~= 0 then
                 if doorListFlag ~= 0 then
                     p_doorList = sm.getDoorListPointer()
-                    for i = 0,bit.rshift(clip_end - 0x7F0002, 1) do
+                    for i = 0,rshift(clip_end - 0x7F0002, 1) do
                         if bit.band(sm.getLevelDatum(i), 0xF000) == 0x9000 then
                             bts = bit.band(sm.getBts(i), 0x7F)
                             if doors[read_u16_le(0x8F0000 + p_doorList + bts * 2)] then
@@ -597,7 +646,7 @@ while true do
                         p_spritemap = bank + p_spritemap
                         local n_spritemap = read_u8(p_spritemap)
                         if n_spritemap ~= 0 then
-                            for ii=0,0 do
+                            for ii=0,n_spritemap-1 do
                                 local entryPointer = p_spritemap + 2 + ii*8
                                 local entryXOffset = read_s16_le(entryPointer)
                                 local entryYOffset = read_s16_le(entryPointer + 2)
@@ -664,13 +713,13 @@ while true do
                 local top    = spriteObjectYPosition - spriteObjectYRadius - cameraY
                 local right  = spriteObjectXPosition + spriteObjectXRadius - cameraX
                 local bottom = spriteObjectYPosition + spriteObjectYRadius - cameraY
-        
+
                 -- Draw sprite object
                 drawBox(left, top, right, bottom, 0xFF0080FF, "clear")
-        
+
                 -- Show sprite object index and ID
                 drawText(left, top, string.format("%u: %04X", i, spriteObjectId), 0xFF0080FF)
-        
+
                 -- Log sprite object index and ID to list in top-left
                 if logFlag ~= 0 then
                     drawText(0, y, string.format("%u: %04X", i, spriteObjectId), 0xFF0080FF)
@@ -722,7 +771,7 @@ while true do
             -- Draw power bomb hitbox
             drawBox(left, top, right, bottom, 0xFFFFFF80, "clear")
         end
-        
+
         -- Projectiles
         for i=0,9 do
             local projectileXPosition = sm.getProjectileXPosition(i)
@@ -804,6 +853,11 @@ while true do
             drawText(216, 0, string.format("%d:%d:%d.%d", sm.getGameTimeHours(), sm.getGameTimeMinutes(), sm.getGameTimeSeconds(), sm.getGameTimeFrames()), 0xFFFFFFFF)
         end
     end
+end
 
-    emu.frameadvance()
+if emu and emu.frameadvance then
+    while true do
+        on_paint();
+        emu.frameadvance()
+    end
 end

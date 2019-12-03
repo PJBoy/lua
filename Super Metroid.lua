@@ -1,9 +1,27 @@
--- Also patch some functions for cross-emu compatibility (at least between snes9x and BizHawk)
-if memory.usememorydomain then -- if bizhawk:
-    function snes2pc(p)
-        return bit.band(bit.rshift(p, 1), 0x3F8000) + bit.band(p, 0x7FFF)
-    end
+-- Patch some functions for cross-emu compatibility
+emuId_bizhawk = 0
+emuId_snes9x  = 1
+emuId_lsnes   = 2
 
+if memory.usememorydomain then
+    emuId = emuId_bizhawk
+elseif memory.readshort then
+    emuId = emuId_snes9x
+else
+    emuId = emuId_lsnes
+end
+
+if emuId == emuId_lsnes then
+    rshift = bit.lrshift
+else
+    rshift = bit.rshift
+end
+
+function snes2pc(p)
+    return bit.band(rshift(p, 1), 0x3F8000) + bit.band(p, 0x7FFF)
+end
+
+if emuId == emuId_bizhawk then
     function makeMemoryReader(f)
         return function(p)
             if p < 0x800000 then
@@ -20,30 +38,119 @@ if memory.usememorydomain then -- if bizhawk:
                 return f(bit.band(p, 0x1FFFF), v, "WRAM")
             else
                 print(string.format('Error: trying to write to ROM address %X', p))
-                -- Writing to ROM in Bizhawk doesn't actually work, but hoping it might one day...
-                return f(snes2pc(p), v, "CARTROM")
             end
         end
     end
 
-    read_u8   = makeMemoryReader(memory.read_u8)
-    read_u16  = makeMemoryReader(memory.read_u16_le)
-    read_s8   = makeMemoryReader(memory.read_s8)
-    read_s16  = makeMemoryReader(memory.read_s16_le)
-    write_u8  = makeMemoryWriter(memory.write_u8)
-    write_u16 = makeMemoryWriter(memory.write_u16_le)
-else -- else not bizhawk:
-    read_u8   = memory.readbyte
-    read_u16  = memory.readshort
-    read_s8   = memory.readbytesigned
-    read_s16  = memory.readshortsigned
-    write_u8  = memory.writebyte
-    write_u16 = memory.writeshort
-end
+    read_u8      = makeMemoryReader(memory.read_u8)
+    read_u16_le  = makeMemoryReader(memory.read_u16_le)
+    read_s8      = makeMemoryReader(memory.read_s8)
+    read_s16_le  = makeMemoryReader(memory.read_s16_le)
+    write_u8     = makeMemoryWriter(memory.write_u8)
+    write_u16_le = makeMemoryWriter(memory.write_u16_le)
+    
+    gui.drawBox  = gui.drawBox or function(x0, y0, x1, y1, fg, bg) gui.box(x0, y0, x1, y1, bg, fg) end
+    gui.drawLine = gui.drawLine or gui.line
+    gui.drawText = gui.pixelText or gui.text
+elseif emuId == emuId_snes9x then
+    read_u8      = memory.readbyte
+    read_u16_le  = memory.readshort
+    read_s8      = memory.readbytesigned
+    read_s16_le  = memory.readshortsigned
+    write_u8     = memory.writebyte
+    write_u16_le = memory.writeshort
+    
+    gui.drawBox  = function(x0, y0, x1, y1, fg, bg) gui.box(x0, y0, x1, y1, bg, fg) end
+    gui.drawLine = gui.line
+    gui.drawText = gui.text
+else -- emuId == lsnes
+    function makeMemoryReader(f)
+        return function(p)
+            if p < 0x800000 then
+                return f(p)
+            else
+                return f("ROM", snes2pc(p))
+            end
+        end
+    end
 
-gui.drawBox  = gui.drawBox or function(x0, y0, x1, y1, fg, bg) gui.box(x0, y0, x1, y1, bg, fg) end
-gui.drawLine = gui.drawLine or gui.line
-gui.drawText = gui.pixelText or gui.text
+    function makeMemoryWriter(f)
+        return function(p, v)
+            if p < 0x800000 then
+                return f(p, v)
+            else
+                print(string.format('Error: trying to write to ROM address %X', p))
+            end
+        end
+    end
+    
+    read_u8      = makeMemoryReader(memory.readbyte)
+    read_u16_le  = makeMemoryReader(memory.readword)
+    read_s8      = makeMemoryReader(memory.readsbyte)
+    read_s16_le  = makeMemoryReader(memory.readsword)
+    write_u8     = makeMemoryWriter(memory.writebyte)
+    write_u16_le = makeMemoryWriter(memory.writeword)
+    
+    function decodeColour(colour)
+        if colour == "red" then
+            return 0xFF0000
+        elseif colour == "orange" then
+            return 0x808000
+        elseif colour == "white" then
+            return 0xFFFFFF
+        elseif colour == "black" then
+            return 0x000000
+        elseif colour == "green" then
+            return 0x00FF00
+        elseif colour == "purple" then
+            return 0xFF00FF
+        elseif colour == "cyan" then
+            return 0x00FFFF
+        elseif colour == "blue" then
+            return 0x0000FF
+        elseif colour == "clear" then
+            return 0xFF000000
+        else
+            if type(colour) == "string" then
+                print(string.format("Colour = %s", colour))
+            end
+            return bit.band(colour, 0xFFFFFF)
+        end
+    end
+    
+    gui.drawBox = function(x0, y0, x1, y1, fg, bg)
+        local n_x, n_y = gui.resolution()
+        local s_x = n_x / 256
+        local s_y = n_y / 224
+        x0, x1 = math.min(x0, x1), math.max(x0, x1)
+        y0, y1 = math.min(y0, y1), math.max(y0, y1)
+        x0 = math.floor(x0 * s_x)
+        y0 = math.floor(y0 * s_y)
+        x1 = math.floor(x1 * s_x)
+        y1 = math.floor(y1 * s_y)
+        gui.rectangle(x0, y0, x1 - x0, y1 - y0, 1, decodeColour(fg), decodeColour(bg))
+    end
+    
+    gui.drawLine = function(x0, y0, x1, y1, fg)
+        local n_x, n_y = gui.resolution()
+        local s_x = n_x / 256
+        local s_y = n_y / 224
+        x0 = math.floor(x0 * s_x)
+        y0 = math.floor(y0 * s_y)
+        x1 = math.floor(x1 * s_x)
+        y1 = math.floor(y1 * s_y)
+        gui.line(x0, y0, x1, y1, decodeColour(fg))
+    end
+    
+    gui.drawText = function(x, y, text, fg, bg)
+        local n_x, n_y = gui.resolution()
+        local s_x = n_x / 256
+        local s_y = n_y / 224
+        x = math.floor(x * s_x)
+        y = math.floor(y * s_y)
+        gui.text(x, y, text, decodeColour(fg), decodeColour(bg))
+    end
+end
 
 function makeReader(p, n, signed, interval)
     -- p: Pointer to WRAM
@@ -58,11 +165,11 @@ function makeReader(p, n, signed, interval)
 
     local unsignedReaders = {
         [1] = read_u8,
-        [2] = read_u16
+        [2] = read_u16_le
     }
     local signedReaders = {
         [1] = read_s8,
-        [2] = read_s16
+        [2] = read_s16_le
     }
 
     local reader = unsignedReaders[n]
@@ -89,7 +196,7 @@ function makeWriter(p, n, interval)
 
     local writers = {
         [1] = write_u8,
-        [2] = write_u16
+        [2] = write_u16_le
     }
 
     local writer = writers[n]

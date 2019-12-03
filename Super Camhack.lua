@@ -60,6 +60,7 @@ The third problem - Samus goes off-screen:
         (BizHawk can't read registers, emu.getregister(s) returns garbage values)
         Optional: Draw off-screen sprites, including: (not done)
             Samus
+            Projectiles
             Enemies
             Enemy projectiles
             Sprite objects
