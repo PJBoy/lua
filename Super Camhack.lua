@@ -272,24 +272,6 @@ function getScrolls()
         end
     end
 
-    -- Hardcoded scroll hacks
-    local p_room = sm.getRoomPointer()
-
-    -- Kraid's room
-    if p_room == 0xA59F then
-        scrolls[1][1] = 1
-    end
-
-    -- Wrecked Ship spike floor hall
-    if p_room == 0xC98E then
-        scrolls[2][1] = 1
-    end
-
-    -- Sandy Maridia mainstreet
-    if p_room == 0xD340 then
-        scrolls[1][3] = 1
-    end
-
     return scrolls
 end
 
