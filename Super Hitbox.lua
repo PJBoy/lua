@@ -108,7 +108,7 @@ debugInfoFlag = 0
 doorListFlag = 0
 followSamusFlag = 0--sm.button_B
 tasFlag = 0
-logFlag = 0
+logFlag = 1
 xAdjust = 0
 yAdjust = 0
 doorList = {}
@@ -633,6 +633,74 @@ function displayKraidHitbox(cameraX, cameraY)
     end
 end
 
+function displayMotherBrainHitbox(cameraX, cameraY)
+    if sm.getEnemyId(0) ~= 0xEC7F then
+        return
+    end
+    
+    local p_motherBrainBodyHitbox = 0xA9B427
+    local p_motherBrainBrainHitbox = 0xA9B439
+    local p_motherBrainOtherHitbox = 0xA9B44B
+    
+    local motherBrainHitboxFlags = read_u16_le(0x7E7808)
+    
+    if bit.band(motherBrainHitboxFlags, 1) ~= 0 then
+        local xPosition = sm.getEnemyXPosition(0)
+        local yPosition = sm.getEnemyYPosition(0)
+        local n_hitboxes = read_u16_le(p_motherBrainBodyHitbox)
+        local p_hitboxes = p_motherBrainBodyHitbox + 2
+        for i = 0,n_hitboxes-1 do
+            local leftOffset   = math.abs(read_s16_le(p_hitboxes + i * 8))
+            local topOffset    = math.abs(read_s16_le(p_hitboxes + i * 8 + 2))
+            local rightOffset  = math.abs(read_s16_le(p_hitboxes + i * 8 + 4))
+            local bottomOffset = math.abs(read_s16_le(p_hitboxes + i * 8 + 6))
+            local left   = xPosition - leftOffset   - cameraX
+            local top    = yPosition - topOffset    - cameraY
+            local right  = xPosition + rightOffset  - cameraX
+            local bottom = yPosition + bottomOffset - cameraY
+            drawBox(left, top, right, bottom, "green")
+        end
+    end
+    
+    if bit.band(motherBrainHitboxFlags, 2) ~= 0 then
+        local xPosition = sm.getEnemyXPosition(1)
+        local yPosition = sm.getEnemyYPosition(1)
+        local n_hitboxes = read_u16_le(p_motherBrainBrainHitbox)
+        local p_hitboxes = p_motherBrainBrainHitbox + 2
+        for i = 0,n_hitboxes-1 do
+            local leftOffset   = math.abs(read_s16_le(p_hitboxes + i * 8))
+            local topOffset    = math.abs(read_s16_le(p_hitboxes + i * 8 + 2))
+            local rightOffset  = math.abs(read_s16_le(p_hitboxes + i * 8 + 4))
+            local bottomOffset = math.abs(read_s16_le(p_hitboxes + i * 8 + 6))
+            local left   = xPosition - leftOffset   - cameraX
+            local top    = yPosition - topOffset    - cameraY
+            local right  = xPosition + rightOffset  - cameraX
+            local bottom = yPosition + bottomOffset - cameraY
+            drawBox(left, top, right, bottom, "blue")
+        end
+    end
+    
+    if bit.band(motherBrainHitboxFlags, 4) ~= 0 then
+        local n_hitboxes = read_u16_le(p_motherBrainOtherHitbox)
+        local p_hitboxes = p_motherBrainOtherHitbox + 2
+        for i = 0,2 do
+            local xPosition = read_u16_le(0x7E804A + i * 6)
+            local yPosition = read_u16_le(0x7E804C + i * 6)
+            for ii = 0,n_hitboxes-1 do
+                local leftOffset   = math.abs(read_s16_le(p_hitboxes + ii * 8))
+                local topOffset    = math.abs(read_s16_le(p_hitboxes + ii * 8 + 2))
+                local rightOffset  = math.abs(read_s16_le(p_hitboxes + ii * 8 + 4))
+                local bottomOffset = math.abs(read_s16_le(p_hitboxes + ii * 8 + 6))
+                local left   = xPosition - leftOffset   - cameraX
+                local top    = yPosition - topOffset    - cameraY
+                local right  = xPosition + rightOffset  - cameraX
+                local bottom = yPosition + bottomOffset - cameraY
+                drawBox(left, top, right, bottom, "cyan")
+            end
+        end
+    end
+end
+
 function displayEnemyHitboxes(cameraX, cameraY)
     local y = 0
     local n_enemies = sm.getNEnemies()
@@ -645,81 +713,82 @@ function displayEnemyHitboxes(cameraX, cameraY)
     for j=1,n_enemies do
         local i = n_enemies - j
         local enemyId = sm.getEnemyId(i)
-        local enemyXPosition = sm.getEnemyXPosition(i)
-        local enemyYPosition = sm.getEnemyYPosition(i)
-        local enemyXRadius   = sm.getEnemyXRadius(i)
-        local enemyYRadius   = sm.getEnemyYRadius(i)
-        local left   = enemyXPosition - enemyXRadius - cameraX
-        local top    = enemyYPosition - enemyYRadius - cameraY
-        local right  = enemyXPosition + enemyXRadius - cameraX
-        local bottom = enemyYPosition + enemyYRadius - cameraY
+        if enemyId ~= 0 then
+            local enemyXPosition = sm.getEnemyXPosition(i)
+            local enemyYPosition = sm.getEnemyYPosition(i)
+            local enemyXRadius   = sm.getEnemyXRadius(i)
+            local enemyYRadius   = sm.getEnemyYRadius(i)
+            local left   = enemyXPosition - enemyXRadius - cameraX
+            local top    = enemyYPosition - enemyYRadius - cameraY
+            local right  = enemyXPosition + enemyXRadius - cameraX
+            local bottom = enemyYPosition + enemyYRadius - cameraY
 
-        -- Draw enemy hitbox
-        -- If not using extended spritemap format or frozen, draw simple hitbox
-        if bit.band(sm.getEnemyExtraProperties(i), 4) == 0 or sm.getEnemyAiHandler(i) == 4 then
-            drawBox(left, top, right, bottom, 0xFF808080, "clear")
-        else
-            -- Process extended spritemap format
-            local p_spritemap = sm.getEnemySpritemap(i)
-            if p_spritemap ~= 0 then
-                local bank = bit.lshift(sm.getEnemyBank(i), 16)
-                p_spritemap = bank + p_spritemap
-                local n_spritemap = read_u8(p_spritemap)
-                if n_spritemap ~= 0 then
-                    for ii=0,n_spritemap-1 do
-                        local entryPointer = p_spritemap + 2 + ii*8
-                        local entryXOffset = read_s16_le(entryPointer)
-                        local entryYOffset = read_s16_le(entryPointer + 2)
-                        local entryHitboxPointer = read_u16_le(entryPointer + 6)
-                        if entryHitboxPointer ~= 0 then
-                            entryHitboxPointer = bank + entryHitboxPointer
-                            local n_hitbox = read_u16_le(entryHitboxPointer)
-                            if n_hitbox ~= 0 then
-                                for iii=0,n_hitbox-1 do
-                                    local entryLeft   = read_s16_le(entryHitboxPointer + 2 + iii*12)
-                                    local entryTop    = read_s16_le(entryHitboxPointer + 2 + iii*12 + 2)
-                                    local entryRight  = read_s16_le(entryHitboxPointer + 2 + iii*12 + 4)
-                                    local entryBottom = read_s16_le(entryHitboxPointer + 2 + iii*12 + 6)
-                                    drawBox(
-                                        enemyXPosition - cameraX + entryXOffset + entryLeft,
-                                        enemyYPosition - cameraY + entryYOffset + entryTop,
-                                        enemyXPosition - cameraX + entryXOffset + entryRight,
-                                        enemyYPosition - cameraY + entryYOffset + entryBottom,
-                                        0xFF808080, "clear"
-                                    )
+            -- Draw enemy hitbox
+            -- If not using extended spritemap format or frozen, draw simple hitbox
+            if bit.band(sm.getEnemyExtraProperties(i), 4) == 0 or sm.getEnemyAiHandler(i) == 4 then
+                drawBox(left, top, right, bottom, "red", "clear")
+            else
+                -- Process extended spritemap format
+                local p_spritemap = sm.getEnemySpritemap(i)
+                if p_spritemap ~= 0 then
+                    local bank = bit.lshift(sm.getEnemyBank(i), 16)
+                    p_spritemap = bank + p_spritemap
+                    local n_spritemap = read_u8(p_spritemap)
+                    if n_spritemap ~= 0 then
+                        for ii=0,n_spritemap-1 do
+                            local entryPointer = p_spritemap + 2 + ii*8
+                            local entryXOffset = read_s16_le(entryPointer)
+                            local entryYOffset = read_s16_le(entryPointer + 2)
+                            local entryHitboxPointer = read_u16_le(entryPointer + 6)
+                            if entryHitboxPointer ~= 0 then
+                                entryHitboxPointer = bank + entryHitboxPointer
+                                local n_hitbox = read_u16_le(entryHitboxPointer)
+                                if n_hitbox ~= 0 then
+                                    for iii=0,n_hitbox-1 do
+                                        local entryLeft   = read_s16_le(entryHitboxPointer + 2 + iii*12)
+                                        local entryTop    = read_s16_le(entryHitboxPointer + 2 + iii*12 + 2)
+                                        local entryRight  = read_s16_le(entryHitboxPointer + 2 + iii*12 + 4)
+                                        local entryBottom = read_s16_le(entryHitboxPointer + 2 + iii*12 + 6)
+                                        drawBox(
+                                            enemyXPosition - cameraX + entryXOffset + entryLeft,
+                                            enemyYPosition - cameraY + entryYOffset + entryTop,
+                                            enemyXPosition - cameraX + entryXOffset + entryRight,
+                                            enemyYPosition - cameraY + entryYOffset + entryBottom,
+                                            "red", "clear"
+                                        )
+                                    end
                                 end
                             end
                         end
                     end
                 end
             end
-        end
 
-        -- Show enemy index and ID
-        --drawText(left, top, string.format("%u: %04X", i, enemyId), 0xFF808080)
+            -- Show enemy index and ID
+            --drawText(left, top, string.format("%u: %04X", i, enemyId), 0xFF808080)
 
-        -- Log enemy index and ID to list in top-right
-        if logFlag ~= 0 then
-            drawText(224, y, string.format("%u: %04X", i, enemyId), 0xFF808080)
-            y = y + 8
-        end
+            -- Log enemy index and ID to list in top-right
+            if logFlag ~= 0 then
+                drawText(224, y, string.format("%u: %04X", i, enemyId), "red")
+                y = y + 8
+            end
 
-        -- Show enemy health
-        local enemySpawnHealth = read_u16_le(0xA00004 + enemyId)
-        if enemySpawnHealth ~= 0 then
-            local enemyHealth = sm.getEnemyHealth(i)
-            drawText(left, top - 16, string.format("%u/%u", enemyHealth, enemySpawnHealth), 0xFF808080)
-            -- Draw enemy health bar
-            if enemyHealth ~= 0 then
-                drawBox(left, top - 8, left + enemyHealth / enemySpawnHealth * 32, top - 5, 0xFF606060)
-                drawBox(left, top - 8, left + 32, top - 5, 0xFF808080, "clear")
+            -- Show enemy health
+            local enemySpawnHealth = read_u16_le(0xA00004 + enemyId)
+            if enemySpawnHealth ~= 0 then
+                local enemyHealth = sm.getEnemyHealth(i)
+                drawText(left, top - 16, string.format("%u/%u", enemyHealth, enemySpawnHealth), "red")
+                -- Draw enemy health bar
+                if enemyHealth ~= 0 then
+                    drawBox(left, top - 8, left + enemyHealth / enemySpawnHealth * 32, top - 5, "red")
+                    drawBox(left, top - 8, left + 32, top - 5, "red", "clear")
+                end
             end
         end
     end
 end
 
 function displaySpriteObjects(cameraX, cameraY)
-    y = 0
     for j=1,32 do
         -- Iterate backwards, I want earlier sprite objects drawn on top of later ones
         local i = 32 - j
@@ -735,14 +804,14 @@ function displaySpriteObjects(cameraX, cameraY)
             local bottom = spriteObjectYPosition + spriteObjectYRadius - cameraY
 
             -- Draw sprite object
-            drawBox(left, top, right, bottom, 0xFF0080FF, "clear")
+            drawBox(left, top, right, bottom, "yellow", "clear")
 
             -- Show sprite object index and ID
-            drawText(left, top, string.format("%u: %04X", i, spriteObjectId), 0xFF0080FF)
+            drawText(left, top, string.format("%u: %04X", i, spriteObjectId), "yellow")
 
             -- Log sprite object index and ID to list in top-left
             if logFlag ~= 0 then
-                drawText(0, y, string.format("%u: %04X", i, spriteObjectId), 0xFF0080FF)
+                drawText(0, y, string.format("%u: %04X", i, spriteObjectId), "yellow")
                 y = y + 8
             end
         end
@@ -765,14 +834,14 @@ function displayEnemyProjectileHitboxes(cameraX, cameraY)
             local bottom = enemyProjectileYPosition + enemyProjectileYRadius - cameraY
 
             -- Draw enemy projectile hitbox
-            drawBox(left, top, right, bottom, 0xFFFF80FF, "clear")
+            drawBox(left, top, right, bottom, "green", "clear")
 
             -- Show enemy index and ID
             --drawText(left, top, string.format("%u: %04X", i, enemyProjectileId), 0xFFFF80FF)
 
             -- Log enemy index and ID to list in top-right (after sprite objects)
             if logFlag ~= 0 then
-                drawText(0, y, string.format("%u: %04X", i, enemyProjectileId), 0xFFFF80FF)
+                drawText(0, y, string.format("%u: %04X", i, enemyProjectileId), "green")
                 y = y + 8
             end
         end
@@ -821,7 +890,7 @@ function displayProjectileHitboxes(cameraX, cameraY)
     end
 end
 
-function displaySamusHitbox(cameraX, cameraY)
+function displaySamusHitbox(cameraX, cameraY, samusXPosition, samusYPosition)
     samusXRadius = sm.getSamusXRadius(i)
     samusYRadius = sm.getSamusYRadius(i)
     if followSamusFlag ~= 0 then
@@ -879,8 +948,8 @@ function on_paint()
         return
     end
     
-    local samusXPosition = sm.getSamusXPosition()
-    local samusYPosition = sm.getSamusYPosition()
+    samusXPosition = sm.getSamusXPosition()
+    samusYPosition = sm.getSamusYPosition()
 
     -- Debug controls
     if debugControlsEnabled ~= 0 then
@@ -900,15 +969,18 @@ function on_paint()
     local roomWidth = sm.getRoomWidth()
 
     displayScrollBoundaries(cameraX, cameraY)
-    displayBlocks(cameraX, cameraY, roomWidth)
+    --displayBlocks(cameraX, cameraY, roomWidth)
     displayDebugInfo(cameraX, cameraY, roomWidth)
     displayKraidHitbox(cameraX, cameraY)
+    displayMotherBrainHitbox(cameraX, cameraY)
     displayEnemyHitboxes(cameraX, cameraY)
+    y = 0
     displaySpriteObjects(cameraX, cameraY)
     displayEnemyProjectileHitboxes(cameraX, cameraY)
+    
     displayPowerBombExplosionHitbox(cameraX, cameraY)
     displayProjectileHitboxes(cameraX, cameraY)
-    displaySamusHitbox(cameraX, cameraY)
+    displaySamusHitbox(cameraX, cameraY, samusXPosition, samusYPosition)
 
     if tasFlag ~= 0 then
         -- Show in-game time
