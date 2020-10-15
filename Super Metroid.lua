@@ -338,6 +338,7 @@ return {
     setFxYPosition            = makeWriter(0x7E195E, 2),
     getLavaAcidYPosition      = makeReader(0x7E1962, 2),
     setLavaAcidYPosition      = makeWriter(0x7E1962, 2),
+    getFxTargetYPosition      = makeReader(0x7E197A, 2),
 
     -- OAM
     getOamXLow                = makeReader(0x7E0370, 1, false, 4),
