@@ -215,9 +215,9 @@ function displayBlocks(cameraX, cameraY, roomWidth)
 
             -- Get tilemap entry and translate into block data via $7E:2000 table
             local tilemapEntry = read_u16_le(0x7E3000 + blockIndex * 2)
-            local blockData = bit.band(tilemapEntry, 0x4000) + read_u16_le(0x7E2000 + rshift(bit.band(tilemapEntry, 0x3F0), 1) + bit.band(tilemapEntry, 0xF))
+            local blockData = bit.band(tilemapEntry, 0xC000) + read_u16_le(0x7E2000 + rshift(bit.band(tilemapEntry, 0x3F0), 1) + bit.band(tilemapEntry, 0xF))
             
-            -- 0x4000 is X flip flag, 0x8000 might be Y flip?
+            -- 0x4000 is X flip flag, 0x8000 is Y flip flag
             local blockType = bit.band(blockData, 0xFFF)
             
             if debugFlag ~= 0 then
@@ -230,17 +230,22 @@ function displayBlocks(cameraX, cameraY, roomWidth)
 
             -- Draw the block outline depending on its block type
             if blockType == 1 then
-                -- Spike?
-                drawBox(blockX, blockY, blockX + 15, blockY + 15, 0xFF00FF00)
-            elseif blockType == 2 then
                 -- Solid block
                 drawBox(blockX, blockY, blockX + 15, blockY + 15, 0xFF000000)
+            elseif blockType == 2 then
+                -- Jump through block
+                drawBox(blockX, blockY, blockX + 15, blockY + 15, 0xFF800000)
             elseif blockType >= 3 then
                 -- Slope
                 local flipX = 1
                 if bit.band(tilemapEntry, 0x4000) ~= 0 then
                     flipX = -1
                     blockX = blockX + 15
+                end
+                local flipY = 1
+                if bit.band(tilemapEntry, 0x8000) ~= 0 then
+                    flipY = -1
+                    blockY = blockY + 15
                 end
 
                 local slopeType = blockType - 3
@@ -249,7 +254,7 @@ function displayBlocks(cameraX, cameraY, roomWidth)
                     local yy_from = read_s16_le(p_slopeDefinition + xx * 2)
                     local yy_to = read_s16_le(p_slopeDefinition + xx * 2 + 2)
                     if yy_from ~= -1 and yy_from ~= 0x11 and yy_to ~= -1 and yy_to ~= 0x11 then
-                        drawLine(blockX + xx * flipX, blockY + yy_from, blockX + (xx + 1) * flipX, blockY + yy_to, 0x00FF0000)
+                        drawLine(blockX + xx * flipX, blockY + yy_from * flipY, blockX + (xx + 1) * flipX, blockY + yy_to * flipY, 0x00FF0000)
                     end
                 end
             end
