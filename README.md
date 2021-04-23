@@ -16,3 +16,5 @@ Lua scripts for lua-supporting emulators
 * `Fusion Hitbox.lua`: Hitbox viewer for Metroid Fusion. Supports room data, Samus, enemies and projectiles
 * `RoS.lua`: Hitbox viewer for Metroid II. Supports room data and enemies.
 * `Castlevania 2.lua`: Hitbox viewer for Castlevania II. Level data only. This one was the hardest hitbox viewer to make, Simon's Quest is weird.
+* `Super charge shinespark.lua`: Requires `Super Metroid.lua`. Shows a rhythm game style chart on top of the HUD minimap to help learn the quick charge timing
+* `smz3.lua`: BizHawk only. Simple script that lets the user take notes for the smz3 randomiser. Works via a text box whose text is persisted to disk and a dropdown for switching between areas
