@@ -1,5 +1,6 @@
 -- If lsnes complains about "module 'Super Metroid' not found", uncomment the next line and provide the path to the "Super Metroid.lua" file
--- package.path = "D:\\Games\\Lua\\Super Metroid.lua"
+-- package.path = "C:\\Games\\Lua\\Super Metroid.lua"
+xemu = require("cross emu")
 sm = require("Super Metroid")
 
 if console and console.clear then
@@ -9,96 +10,9 @@ elseif print then
     print("\n\n\n\n\n\n\n\n")
 end
 
--- Patch some functions for cross-emu compatibility
-emuId_bizhawk = 0
-emuId_snes9x  = 1
-emuId_lsnes   = 2
-
-if memory.usememorydomain then
-    emuId = emuId_bizhawk
-elseif memory.readshort then
-    emuId = emuId_snes9x
-else
-    emuId = emuId_lsnes
+if gui.clearGraphics then
+    gui.clearGraphics()
 end
-
-if emuId == emuId_lsnes then
-    rshift = bit.lrshift
-else
-    rshift = bit.rshift
-end
-
--- Converts from SNES address model to flat address model (for ROM access)
-function snes2pc(p)
-    return bit.band(rshift(p, 1), 0x3F8000) + bit.band(p, 0x7FFF)
-end
-
--- Define memory access functions
-if emuId == emuId_bizhawk then
-    function makeMemoryReader(f)
-        return function(p)
-            if p < 0x800000 then
-                return f(bit.band(p, 0x1FFFF), "WRAM")
-            else
-                return f(snes2pc(p), "CARTROM")
-            end
-        end
-    end
-
-    function makeMemoryWriter(f)
-        return function(p, v)
-            if p < 0x800000 then
-                return f(bit.band(p, 0x1FFFF), v, "WRAM")
-            else
-                print(string.format('Error: trying to write to ROM address %X', p))
-                -- Writing to ROM in Bizhawk doesn't actually work, but hoping it might one day...
-                return f(snes2pc(p), v, "CARTROM")
-            end
-        end
-    end
-
-    read_u8      = makeMemoryReader(memory.read_u8)
-    read_u16_le  = makeMemoryReader(memory.read_u16_le)
-    read_s8      = makeMemoryReader(memory.read_s8)
-    read_s16_le  = makeMemoryReader(memory.read_s16_le)
-    write_u8     = makeMemoryWriter(memory.write_u8)
-    write_u16_le = makeMemoryWriter(memory.write_u16_le)
-elseif emuId == emuId_snes9x then
-    read_u8      = memory.readbyte
-    read_u16_le  = memory.readshort
-    read_s8      = memory.readbytesigned
-    read_s16_le  = memory.readshortsigned
-    write_u8     = memory.writebyte
-    write_u16_le = memory.writeshort
-else -- emuId == lsnes
-    function makeMemoryReader(f)
-        return function(p)
-            if p < 0x800000 then
-                return f(p)
-            else
-                return f("ROM", snes2pc(p))
-            end
-        end
-    end
-
-    function makeMemoryWriter(f)
-        return function(p, v)
-            if p < 0x800000 then
-                return f(p, v)
-            else
-                print(string.format('Error: trying to write to ROM address %X', p))
-            end
-        end
-    end
-    
-    read_u8      = makeMemoryReader(memory.readbyte)
-    read_u16_le  = makeMemoryReader(memory.readword)
-    read_s8      = makeMemoryReader(memory.readsbyte)
-    read_s16_le  = makeMemoryReader(memory.readsword)
-    write_u8     = makeMemoryWriter(memory.writebyte)
-    write_u16_le = makeMemoryWriter(memory.writeword)
-end
-
 
 -- Globals
 recordLagHotspots = true
@@ -116,26 +30,29 @@ doorList = {}
 -- Add padding borders in BizHawk (highly resource intensive)
 xExtra = 0
 yExtra = 0
-if emuId == emuId_bizhawk then
+if xemu.emuId == xemu.emuId_bizhawk then
     --xExtra = 256
     --yExtra = 224
     client.SetGameExtraPadding(xExtra, yExtra, xExtra, yExtra)
 end
 
-xExtraBlocks = rshift(xExtra, 4)
-yExtraBlocks = rshift(yExtra, 4)
+xExtraBlocks = xemu.rshift(xExtra, 4)
+yExtraBlocks = xemu.rshift(yExtra, 4)
+
+xExtraScrolls = xemu.rshift(xExtraBlocks, 4)
+yExtraScrolls = xemu.rshift(yExtraBlocks, 4)
 
 -- Adjust drawing to account for the borders
 function drawText(x, y, text, fg, bg)
-    gui.drawText(x + xExtra, y + yExtra, text, fg, bg or "clear")
+    xemu.drawText(x + xExtra, y + yExtra, text, fg, bg or "clear")
 end
 
 function drawBox(x0, y0, x1, y1, fg, bg)
-    gui.drawBox(x0 + xExtra, y0 + yExtra, x1 + xExtra, y1 + yExtra, fg, bg or "clear")
+    xemu.drawBox(x0 + xExtra, y0 + yExtra, x1 + xExtra, y1 + yExtra, fg, bg or "clear")
 end
 
 function drawLine(x0, y0, x1, y1, fg)
-    gui.drawLine(x0 + xExtra, y0 + yExtra, x1 + xExtra, y1 + yExtra, fg)
+    xemu.drawLine(x0 + xExtra, y0 + yExtra, x1 + xExtra, y1 + yExtra, fg)
 end
 
 function drawRightTriangle(x0, y0, x1, y1, fg)
@@ -145,7 +62,7 @@ function drawRightTriangle(x0, y0, x1, y1, fg)
 end
 
 -- Display CPU usage
-if emuId == emuId_bizhawk then
+if xemu.emuId == xemu.emuId_bizhawk and false then -- GUI drawing functions from on_paint are clearing this text output for some reason...
     idling = false
     lagFrames = 0
     if recordLagHotspots then
@@ -161,7 +78,7 @@ if emuId == emuId_bizhawk then
             outfile:write(string.format("%d: %f\n", emu.framecount(), cpu))
             console.log(string.format("%d: %f", emu.framecount(), cpu))
         end
-        drawText(4, 36, string.format('CPU used: %.2f%%', cpu), cpu < 100 and "white" or "red", 0xC0000000)
+        drawText(4, 36, string.format('CPU used: %.2f%%', cpu), cpu < 100 and "white" or "red", 0x000000FF)
 
         idling = true
         lagFrames = 0
@@ -170,7 +87,7 @@ if emuId == emuId_bizhawk then
     function nmiHook()
         if not idling then
             lagFrames = lagFrames + 1
-            drawText(4, 36, string.format('CPU used: %.2f%%', lagFrames * 100), "red", 0xC0000000)
+            drawText(4, 36, string.format('CPU used: %.2f%%', lagFrames * 100), "red", 0x000000FF)
         end
 
         idling = false
@@ -179,6 +96,38 @@ if emuId == emuId_bizhawk then
 
     event.onmemoryexecute(nmiHook, 0x009583)
     event.onmemoryexecute(idleHook, 0x82897A)
+end
+
+-- Extra GUI
+if xemu.emuId == xemu.emuId_bizhawk then
+    forms.destroyall()
+
+    local x = 0
+    local y = 0
+    local width = 500
+    local height = 480
+    local fixedWidth = true
+    local boxType = nil
+    local multiline = true
+    local scrollbars = "both"
+    
+    superform_sound1 = forms.newform(width, height, "ARAM - sound 1")
+    superform_sound2 = forms.newform(width, height, "ARAM - sound 2")
+    superform_sound3 = forms.newform(width, height, "ARAM - sound 3")
+    form_sound1 = forms.label(superform_sound1, "", x, y, width, height, fixedWidth)
+    form_sound2 = forms.label(superform_sound2, "", x, y, width, height, fixedWidth)
+    form_sound3 = forms.label(superform_sound3, "", x, y, width, height, fixedWidth)
+    
+    width = 708
+    height = 480
+    superform_sound1Tracker = forms.newform(width, height, "ARAM - sound 1 tracker")
+    superform_sound2Tracker = forms.newform(width, height, "ARAM - sound 2 tracker")
+    superform_sound3Tracker = forms.newform(width, height, "ARAM - sound 3 tracker")
+    -- int forms.textbox(int formhandle, [string caption = null], [int? width = null], [int? height = null], [string boxtype = null],
+    --     [int? x = null], [int? y = null], [bool multiline = False], [bool fixedwidth = False], [string scrollbars = null])
+    form_sound1tracker = forms.textbox(superform_sound1Tracker, "", width, height, boxType, x, y, multiline, fixedWidth, scrollbars)
+    form_sound2tracker = forms.textbox(superform_sound2Tracker, "", width, height, boxType, x, y, multiline, fixedWidth, scrollbars)
+    form_sound3tracker = forms.textbox(superform_sound3Tracker, "", width, height, boxType, x, y, multiline, fixedWidth, scrollbars)
 end
 
 
@@ -329,7 +278,7 @@ outline = {
         local bts = sm.getBts(blockIndex)
 
         -- X flip
-        if bit.band(bts, 0x40) ~= 0 then
+        if xemu.and_(bts, 0x40) ~= 0 then
             blockX = blockX + 15
             flipX = -1
         else
@@ -337,14 +286,14 @@ outline = {
         end
 
         -- Y flip
-        if bit.band(bts, 0x80) ~= 0 then
+        if xemu.and_(bts, 0x80) ~= 0 then
             blockY = blockY + 15
             flipY = -1
         else
             flipY = 1
         end
 
-        slopeFunction = slope[bit.band(bts, 0x1F)] or standardOutline("purple")
+        slopeFunction = slope[xemu.and_(bts, 0x1F)] or standardOutline("purple")
         slopeFunction(blockX, blockY, flipX, flipY)
     end,
 
@@ -375,7 +324,7 @@ outline = {
         end
 
         blockIndex = blockIndex + bts
-        outline[rshift(sm.getLevelDatum(blockIndex), 12)](blockX, blockY, blockIndex, stackLimit)
+        outline[xemu.rshift(sm.getLevelDatum(blockIndex), 12)](blockX, blockY, blockIndex, stackLimit)
     end,
 
     -- Unused air
@@ -425,7 +374,7 @@ outline = {
         end
 
         blockIndex = blockIndex + bts * sm.getRoomWidth()
-        outline[rshift(sm.getLevelDatum(blockIndex), 12)](blockX, blockY, blockIndex, stackLimit)
+        outline[xemu.rshift(sm.getLevelDatum(blockIndex), 12)](blockX, blockY, blockIndex, stackLimit)
     end,
 
     -- Grapple block
@@ -459,50 +408,60 @@ end
 function handleDebugControls()
     local input = sm.getInput()
     local changedInput = sm.getChangedInput()
-    
-    if bit.band(input, sm.button_select) == 0 then
+
+    if xemu.and_(input, sm.button_select) == 0 then
         return
     end
-    
+
     -- Show the clipdata and BTS of every block on screen
-    debugFlag = bit.bxor(debugFlag, bit.band(changedInput, sm.button_A))
+    debugFlag = xemu.xor(debugFlag, xemu.and_(changedInput, sm.button_A))
 
     -- Show the list of (possibly OoB) door block BTS that exist
     doorListFlag = debugFlag
 
     -- Lock camera to Samus' position
-    followSamusFlag = bit.bxor(followSamusFlag, bit.band(changedInput, sm.button_B))
+    followSamusFlag = xemu.xor(followSamusFlag, xemu.and_(changedInput, sm.button_B))
 
     -- Initialise door list
     for i = 0,0x7F do
         doorList[i] = 0
     end
 
-    if bit.band(input, sm.button_A) ~= 0 then
+    if xemu.and_(input, sm.button_A) ~= 0 then
         -- These move the Samus around
-        samusXPosition = bit.band(samusXPosition +        bit.band(changedInput, sm.button_right),    0xFFFF)
-        samusXPosition = bit.band(samusXPosition - rshift(bit.band(changedInput, sm.button_left), 1), 0xFFFF)
-        samusYPosition = bit.band(samusYPosition + rshift(bit.band(changedInput, sm.button_down), 2), 0xFFFF)
-        samusYPosition = bit.band(samusYPosition - rshift(bit.band(changedInput, sm.button_up),   3), 0xFFFF)
+        samusXPosition = xemu.and_(samusXPosition +             xemu.and_(changedInput, sm.button_right),    0xFFFF)
+        samusXPosition = xemu.and_(samusXPosition - xemu.rshift(xemu.and_(changedInput, sm.button_left), 1), 0xFFFF)
+        samusYPosition = xemu.and_(samusYPosition + xemu.rshift(xemu.and_(changedInput, sm.button_down), 2), 0xFFFF)
+        samusYPosition = xemu.and_(samusYPosition - xemu.rshift(xemu.and_(changedInput, sm.button_up),   3), 0xFFFF)
         sm.setSamusXPosition(samusXPosition)
         sm.setSamusYPosition(samusYPosition)
     else
         -- These move the camera around
-        xAdjust = xAdjust + rshift(bit.band(changedInput, sm.button_right), 8) * 256
-        xAdjust = xAdjust - rshift(bit.band(changedInput, sm.button_left),  9) * 256
-        yAdjust = yAdjust + rshift(bit.band(changedInput, sm.button_down), 10) * 224
-        yAdjust = yAdjust - rshift(bit.band(changedInput, sm.button_up),   11) * 224
+        xAdjust = xAdjust + xemu.rshift(xemu.and_(changedInput, sm.button_right), 8) * 256
+        xAdjust = xAdjust - xemu.rshift(xemu.and_(changedInput, sm.button_left),  9) * 256
+        yAdjust = yAdjust + xemu.rshift(xemu.and_(changedInput, sm.button_down), 10) * 224
+        yAdjust = yAdjust - xemu.rshift(xemu.and_(changedInput, sm.button_up),   11) * 224
     end
 end
 
-function displayScrollBoundaries(cameraX, cameraY)
-    for i=0,1 + xExtra * 2 / 256 do
-        local x = 256 + xExtra - i * 256 - bit.band(cameraX, 0xFF)
-        drawLine(x, -yExtra, x, 223 + yExtra, 0xFFFFFF80)
-    end
-    for i=0,1 + yExtra * 2 / 256 do
-        local y = 256 + yExtra - i * 256 - bit.band(cameraY, 0xFF)
-        drawLine(-xExtra, y, 255 + xExtra, y, 0xFFFFFF80)
+function displayScrollBoundaries(cameraX, cameraY, roomWidth)
+    for y = -yExtraScrolls, yExtraScrolls + 1 do
+        for x = -xExtraScrolls, xExtraScrolls + 1 do
+            local scrollX = x * 0x100 - xemu.and_(cameraX, 0xFF)
+            local scrollY = y * 0x100 - xemu.and_(cameraY, 0xFF)
+
+            local scroll = sm.getScroll((xemu.rshift(cameraY + y * 0x100, 8)) * xemu.rshift(roomWidth, 4) + xemu.rshift(cameraX + x * 0x100, 8))
+
+            local colour = 0xFF000080
+            if scroll == 1 then
+                colour = 0x0000FF80
+            elseif scroll == 2 then
+                colour = 0x00FF0080
+            end
+
+            drawBox(scrollX, scrollY, scrollX + 0xFF, scrollY + 0xFF, colour)
+            --drawBox(scrollX, scrollY, scrollX + 0xFF, scrollY + 0xFF, colour, colour)
+        end
     end
 end
 
@@ -513,16 +472,16 @@ function displayBlocks(cameraX, cameraY, roomWidth)
             local stackLimit = 224
 
             -- Align block outlines graphically
-            local blockX = x * 16 - bit.band(cameraX, 0xF)
-            local blockY = y * 16 - bit.band(cameraY, 0xF)
+            local blockX = x * 0x10 - xemu.and_(cameraX, 0xF)
+            local blockY = y * 0x10 - xemu.and_(cameraY, 0xF)
 
             -- Blocks are 16x16 px², using a right shift to avoid dealing with floats
-            local blockIndex = rshift(bit.band(cameraY + y * 16, 0xFFF), 4) * roomWidth
-                             + rshift(bit.band(cameraX + x * 16, 0xFFFF), 4)
+            local blockIndex = xemu.rshift(xemu.and_(cameraY + y * 0x10, 0xFFF), 4) * roomWidth
+                             + xemu.rshift(xemu.and_(cameraX + x * 0x10, 0xFFFF), 4)
 
             -- Block type is the most significant 4 bits of level data
-            local blockType = rshift(sm.getLevelDatum(blockIndex), 12)
-            if debugFlag ~= 0 then
+            local blockType = xemu.rshift(sm.getLevelDatum(blockIndex), 12)
+            if debugFlag ~= 0 or blockType == 6 then
                 -- Show the block type and BTS of every block
                 drawText(blockX + 4, blockY, string.format("%02X", blockType), "red")
                 drawText(blockX + 4, blockY + 8, string.format("%02X", sm.getBts(blockIndex)), "red")
@@ -539,10 +498,10 @@ function displayDebugInfo(cameraX, cameraY, roomWidth)
     if debugInfoFlag == 0 then
         return
     end
-    
-    local cameraXBlock = rshift(cameraX, 4)
-    local cameraYBlock = rshift(bit.band(cameraY, 0xFFF), 4)
-    local clip = 0x7F0000 + bit.band(2 + (cameraXBlock + cameraYBlock * roomWidth) * 2, 0xFFFF)
+
+    local cameraXBlock = xemu.rshift(cameraX, 4)
+    local cameraYBlock = xemu.rshift(xemu.and_(cameraY, 0xFFF), 4)
+    local clip = 0x7F0000 + xemu.and_(2 + (cameraXBlock + cameraYBlock * roomWidth) * 2, 0xFFFF)
     local clip_end = 0x7F0002 + 0x1FE * roomWidth + 0x1FFE
     local bts_end = 0x7F6402 + roomWidth * sm.getRoomHeight()
     drawText(0, 0, string.format("cameraX: %03X\ncameraY: %03X\nClip: %X\nClip end: %X\nBTS end: %X", cameraXBlock, cameraYBlock, clip, clip_end, bts_end), "cyan")
@@ -553,10 +512,10 @@ function displayDebugInfo(cameraX, cameraY, roomWidth)
 
     if doorListFlag ~= 0 then
         p_doorList = sm.getDoorListPointer()
-        for i = 0,rshift(clip_end - 0x7F0002, 1) do
-            if bit.band(sm.getLevelDatum(i), 0xF000) == 0x9000 then
-                bts = bit.band(sm.getBts(i), 0x7F)
-                if doors[read_u16_le(0x8F0000 + p_doorList + bts * 2)] then
+        for i = 0,xemu.rshift(clip_end - 0x7F0002, 1) do
+            if xemu.and_(sm.getLevelDatum(i), 0xF000) == 0x9000 then
+                bts = xemu.and_(sm.getBts(i), 0x7F)
+                if doors[xemu.read_u16_le(0x8F0000 + p_doorList + bts * 2)] then
                     doorList[bts] = doorList[bts] + 1
                 end
             end
@@ -587,17 +546,17 @@ function displayKraidHitbox(cameraX, cameraY)
     if sm.getEnemyId(0) ~= 0xE2BF then
         return
     end
-    
+
     local kraidXPosition = sm.getEnemyXPosition(0)
     local kraidYPosition = sm.getEnemyYPosition(0)
-    local p_kraidInstructionList = 0xA70000 + read_u16_le(0x7E0FAA)
+    local p_kraidInstructionList = 0xA70000 + xemu.read_u16_le(0x7E0FAA)
 
     -- Vulnerable hitbox for Kraid's mouth
-    local p_projectileHitbox = read_u16_le(p_kraidInstructionList - 2)
+    local p_projectileHitbox = xemu.read_u16_le(p_kraidInstructionList - 2)
     if p_projectileHitbox ~= 0xFFFF then
-        local kraidLeftOffset   = read_s16_le(0xA70000 + p_projectileHitbox)
-        local kraidTopOffset    = read_s16_le(0xA70000 + p_projectileHitbox + 2)
-        local kraidBottomOffset = read_s16_le(0xA70000 + p_projectileHitbox + 6)
+        local kraidLeftOffset   = xemu.read_s16_le(0xA70000 + p_projectileHitbox)
+        local kraidTopOffset    = xemu.read_s16_le(0xA70000 + p_projectileHitbox + 2)
+        local kraidBottomOffset = xemu.read_s16_le(0xA70000 + p_projectileHitbox + 6)
         local left   = kraidXPosition + kraidLeftOffset   - cameraX
         local top    = kraidYPosition + kraidTopOffset    - cameraY
         local bottom = kraidYPosition + kraidBottomOffset - cameraY
@@ -605,10 +564,10 @@ function displayKraidHitbox(cameraX, cameraY)
     end
 
     -- Invulnerable hitbox for Kraid's mouth
-    p_projectileHitbox = read_u16_le(p_kraidInstructionList - 4)
-    local kraidLeftOffset   = read_s16_le(0xA70000 + p_projectileHitbox)
-    local kraidTopOffset    = read_s16_le(0xA70000 + p_projectileHitbox + 2)
-    local kraidBottomOffset = read_s16_le(0xA70000 + p_projectileHitbox + 6)
+    p_projectileHitbox = xemu.read_u16_le(p_kraidInstructionList - 4)
+    local kraidLeftOffset   = xemu.read_s16_le(0xA70000 + p_projectileHitbox)
+    local kraidTopOffset    = xemu.read_s16_le(0xA70000 + p_projectileHitbox + 2)
+    local kraidBottomOffset = xemu.read_s16_le(0xA70000 + p_projectileHitbox + 6)
     local left   = kraidXPosition + kraidLeftOffset   - cameraX
     local top    = kraidYPosition + kraidTopOffset    - cameraY
     local bottom = kraidYPosition + kraidBottomOffset - cameraY
@@ -620,8 +579,8 @@ function displayKraidHitbox(cameraX, cameraY)
     local kraidSectionRightOffset = kraidLeftOffset
     for j = 1,8 do
         local i = 8 - j
-        local kraidSectionBottomOffset = read_s16_le(0xA7B161 + i * 4)
-        local kraidSectionLeftOffset   = read_s16_le(0xA7B161 + i * 4 + 2)
+        local kraidSectionBottomOffset = xemu.read_s16_le(0xA7B161 + i * 4)
+        local kraidSectionLeftOffset   = xemu.read_s16_le(0xA7B161 + i * 4 + 2)
         local left   = kraidXPosition + kraidSectionLeftOffset   - cameraX
         local right  = kraidXPosition + kraidSectionRightOffset  - cameraX
         local top    = kraidYPosition + kraidSectionTopOffset    - cameraY
@@ -641,7 +600,7 @@ function displayKraidHitbox(cameraX, cameraY)
             drawLine(left, top, right, top, 0xFFFFC0C0)
             drawLine(left, top, left, bottom, 0xFFFFC0C0)
         end
-        
+
         kraidSectionTopOffset   = kraidSectionBottomOffset
         kraidSectionRightOffset = kraidSectionLeftOffset
     end
@@ -651,23 +610,23 @@ function displayMotherBrainHitbox(cameraX, cameraY)
     if sm.getEnemyId(0) ~= 0xEC7F then
         return
     end
-    
+
     local p_motherBrainBodyHitbox = 0xA9B427
     local p_motherBrainBrainHitbox = 0xA9B439
     local p_motherBrainNeckHitbox = 0xA9B44B
-    
-    local motherBrainHitboxFlags = read_u16_le(0x7E7808)
-    
-    if bit.band(motherBrainHitboxFlags, 1) ~= 0 then
+
+    local motherBrainHitboxFlags = xemu.read_u16_le(0x7E7808)
+
+    if xemu.and_(motherBrainHitboxFlags, 1) ~= 0 then
         local xPosition = sm.getEnemyXPosition(0)
         local yPosition = sm.getEnemyYPosition(0)
-        local n_hitboxes = read_u16_le(p_motherBrainBodyHitbox)
+        local n_hitboxes = xemu.read_u16_le(p_motherBrainBodyHitbox)
         local p_hitboxes = p_motherBrainBodyHitbox + 2
         for i = 0,n_hitboxes-1 do
-            local leftOffset   = math.abs(read_s16_le(p_hitboxes + i * 8))
-            local topOffset    = math.abs(read_s16_le(p_hitboxes + i * 8 + 2))
-            local rightOffset  = math.abs(read_s16_le(p_hitboxes + i * 8 + 4))
-            local bottomOffset = math.abs(read_s16_le(p_hitboxes + i * 8 + 6))
+            local leftOffset   = math.abs(xemu.read_s16_le(p_hitboxes + i * 8))
+            local topOffset    = math.abs(xemu.read_s16_le(p_hitboxes + i * 8 + 2))
+            local rightOffset  = math.abs(xemu.read_s16_le(p_hitboxes + i * 8 + 4))
+            local bottomOffset = math.abs(xemu.read_s16_le(p_hitboxes + i * 8 + 6))
             local left   = xPosition - leftOffset   - cameraX
             local top    = yPosition - topOffset    - cameraY
             local right  = xPosition + rightOffset  - cameraX
@@ -675,17 +634,17 @@ function displayMotherBrainHitbox(cameraX, cameraY)
             drawBox(left, top, right, bottom, "green")
         end
     end
-    
-    if bit.band(motherBrainHitboxFlags, 2) ~= 0 then
+
+    if xemu.and_(motherBrainHitboxFlags, 2) ~= 0 then
         local xPosition = sm.getEnemyXPosition(1)
         local yPosition = sm.getEnemyYPosition(1)
-        local n_hitboxes = read_u16_le(p_motherBrainBrainHitbox)
+        local n_hitboxes = xemu.read_u16_le(p_motherBrainBrainHitbox)
         local p_hitboxes = p_motherBrainBrainHitbox + 2
         for i = 0,n_hitboxes-1 do
-            local leftOffset   = math.abs(read_s16_le(p_hitboxes + i * 8))
-            local topOffset    = math.abs(read_s16_le(p_hitboxes + i * 8 + 2))
-            local rightOffset  = math.abs(read_s16_le(p_hitboxes + i * 8 + 4))
-            local bottomOffset = math.abs(read_s16_le(p_hitboxes + i * 8 + 6))
+            local leftOffset   = math.abs(xemu.read_s16_le(p_hitboxes + i * 8))
+            local topOffset    = math.abs(xemu.read_s16_le(p_hitboxes + i * 8 + 2))
+            local rightOffset  = math.abs(xemu.read_s16_le(p_hitboxes + i * 8 + 4))
+            local bottomOffset = math.abs(xemu.read_s16_le(p_hitboxes + i * 8 + 6))
             local left   = xPosition - leftOffset   - cameraX
             local top    = yPosition - topOffset    - cameraY
             local right  = xPosition + rightOffset  - cameraX
@@ -693,18 +652,18 @@ function displayMotherBrainHitbox(cameraX, cameraY)
             drawBox(left, top, right, bottom, "blue")
         end
     end
-    
-    if bit.band(motherBrainHitboxFlags, 4) ~= 0 then
-        local n_hitboxes = read_u16_le(p_motherBrainNeckHitbox)
+
+    if xemu.and_(motherBrainHitboxFlags, 4) ~= 0 then
+        local n_hitboxes = xemu.read_u16_le(p_motherBrainNeckHitbox)
         local p_hitboxes = p_motherBrainNeckHitbox + 2
         for i = 1,3 do
-            local xPosition = read_u16_le(0x7E8044 + i * 6)
-            local yPosition = read_u16_le(0x7E8046 + i * 6)
+            local xPosition = xemu.read_u16_le(0x7E8044 + i * 6)
+            local yPosition = xemu.read_u16_le(0x7E8046 + i * 6)
             for ii = 0,n_hitboxes-1 do
-                local leftOffset   = math.abs(read_s16_le(p_hitboxes + ii * 8))
-                local topOffset    = math.abs(read_s16_le(p_hitboxes + ii * 8 + 2))
-                local rightOffset  = math.abs(read_s16_le(p_hitboxes + ii * 8 + 4))
-                local bottomOffset = math.abs(read_s16_le(p_hitboxes + ii * 8 + 6))
+                local leftOffset   = math.abs(xemu.read_s16_le(p_hitboxes + ii * 8))
+                local topOffset    = math.abs(xemu.read_s16_le(p_hitboxes + ii * 8 + 2))
+                local rightOffset  = math.abs(xemu.read_s16_le(p_hitboxes + ii * 8 + 4))
+                local bottomOffset = math.abs(xemu.read_s16_le(p_hitboxes + ii * 8 + 6))
                 local left   = xPosition - leftOffset   - cameraX
                 local top    = yPosition - topOffset    - cameraY
                 local right  = xPosition + rightOffset  - cameraX
@@ -713,10 +672,14 @@ function displayMotherBrainHitbox(cameraX, cameraY)
             end
         end
     end
-    
-    local x = read_s16_le(0x7E7814) - cameraX
-    local y = read_s16_le(0x7E7816) - cameraY
+
+    local x = xemu.read_s16_le(0x7E7814) - cameraX
+    local y = xemu.read_s16_le(0x7E7816) - cameraY
     drawRightTriangle(x, y, x + 0x70, y - 0x60, "white")
+    
+    --local xPositionBody = sm.getEnemyXPosition(0)
+    --local yPositionBody = sm.getEnemyYPosition(0)
+    --drawRightTriangle(xPositionBody, yPositionBody, x, y, "yellow")
 end
 
 function displayEnemyHitboxes(cameraX, cameraY)
@@ -726,7 +689,7 @@ function displayEnemyHitboxes(cameraX, cameraY)
     if n_enemies == 0 then
         return
     end
-    
+
     -- Iterate backwards, I want earlier enemies drawn on top of later ones
     for j=1,n_enemies do
         local i = n_enemies - j
@@ -743,30 +706,30 @@ function displayEnemyHitboxes(cameraX, cameraY)
 
             -- Draw enemy hitbox
             -- If not using extended spritemap format or frozen, draw simple hitbox
-            if bit.band(sm.getEnemyExtraProperties(i), 4) == 0 or sm.getEnemyAiHandler(i) == 4 then
+            if xemu.and_(sm.getEnemyExtraProperties(i), 4) == 0 or sm.getEnemyAiHandler(i) == 4 then
                 drawBox(left, top, right, bottom, 0xFFFFFF80, "clear")
             else
                 -- Process extended spritemap format
                 local p_spritemap = sm.getEnemySpritemap(i)
                 if p_spritemap ~= 0 then
-                    local bank = bit.lshift(sm.getEnemyBank(i), 16)
+                    local bank = xemu.lshift(sm.getEnemyBank(i), 16)
                     p_spritemap = bank + p_spritemap
-                    local n_spritemap = read_u8(p_spritemap)
+                    local n_spritemap = xemu.read_u8(p_spritemap)
                     if n_spritemap ~= 0 then
                         for ii=0,n_spritemap-1 do
                             local entryPointer = p_spritemap + 2 + ii*8
-                            local entryXOffset = read_s16_le(entryPointer)
-                            local entryYOffset = read_s16_le(entryPointer + 2)
-                            local entryHitboxPointer = read_u16_le(entryPointer + 6)
+                            local entryXOffset = xemu.read_s16_le(entryPointer)
+                            local entryYOffset = xemu.read_s16_le(entryPointer + 2)
+                            local entryHitboxPointer = xemu.read_u16_le(entryPointer + 6)
                             if entryHitboxPointer ~= 0 then
                                 entryHitboxPointer = bank + entryHitboxPointer
-                                local n_hitbox = read_u16_le(entryHitboxPointer)
+                                local n_hitbox = xemu.read_u16_le(entryHitboxPointer)
                                 if n_hitbox ~= 0 then
                                     for iii=0,n_hitbox-1 do
-                                        local entryLeft   = read_s16_le(entryHitboxPointer + 2 + iii*12)
-                                        local entryTop    = read_s16_le(entryHitboxPointer + 2 + iii*12 + 2)
-                                        local entryRight  = read_s16_le(entryHitboxPointer + 2 + iii*12 + 4)
-                                        local entryBottom = read_s16_le(entryHitboxPointer + 2 + iii*12 + 6)
+                                        local entryLeft   = xemu.read_s16_le(entryHitboxPointer + 2 + iii*12)
+                                        local entryTop    = xemu.read_s16_le(entryHitboxPointer + 2 + iii*12 + 2)
+                                        local entryRight  = xemu.read_s16_le(entryHitboxPointer + 2 + iii*12 + 4)
+                                        local entryBottom = xemu.read_s16_le(entryHitboxPointer + 2 + iii*12 + 6)
                                         drawBox(
                                             enemyXPosition - cameraX + entryXOffset + entryLeft,
                                             enemyYPosition - cameraY + entryYOffset + entryTop,
@@ -787,13 +750,14 @@ function displayEnemyHitboxes(cameraX, cameraY)
 
             -- Log enemy index and ID to list in top-right
             if logFlag ~= 0 then
-                drawText(224, y, string.format("%u: %04X", i, enemyId), 0xFFFFFF80)
+                --drawText(224, y, string.format("%u: %04X", i, enemyId), 0xFFFFFF80)
+                drawText(224, y, string.format("%u: %04X", i, sm.getEnemySpritemap(i)), 0xFFFFFFFF, 0xFF)
                 y = y + 8
             end
 
             -- Show enemy health
-            local enemySpawnHealth = read_u16_le(0xA00004 + enemyId)
-            if enemySpawnHealth ~= 0 and 0 == 1 then
+            local enemySpawnHealth = xemu.read_u16_le(0xA00004 + enemyId)
+            if enemySpawnHealth ~= 0 then
                 local enemyHealth = sm.getEnemyHealth(i)
                 drawText(left, top - 16, string.format("%u/%u", enemyHealth, enemySpawnHealth), 0xFFFFFF80)
                 -- Draw enemy health bar
@@ -856,6 +820,7 @@ function displayEnemyProjectileHitboxes(cameraX, cameraY)
 
             -- Show enemy projectile index and ID
             drawText(left, top, string.format("%u: %04X", i, enemyProjectileId), 0x00FF00FF)
+            --drawText(left, top, string.format("%04X", xemu.read_u16_le(0x7E1B6B + i * 2)), 0x00FFFFFF, 0x000000FF)
 
             -- Log enemy projectile index and ID to list in top-right (after sprite objects)
             if logFlag ~= 0 then
@@ -960,35 +925,225 @@ function displaySamusHitbox(cameraX, cameraY, samusXPosition, samusYPosition)
     end
 end
 
+function updateForm_sound(form, i_sound, n_voices)
+    local soundInstructionListPointers = {}
+    for i = 0, n_voices - 1 do
+        soundInstructionListPointers[i] = sm.getAram_sound_p_instructionList(i_sound)(i)()
+    end
+    
+    local soundAdsrSettings = {}
+    for i = 0, n_voices - 1 do
+        soundAdsrSettings[i] = sm.getAram_sound_adsrSettings(i_sound)(i)
+    end
+
+    local text_soundInstructionListPointers           = "Instruction list pointers:             "
+    local text_soundInstructionListIndices            = "Instruction list indices:              "
+    local text_soundInstructionListTimers             = "Instruction list timers:               "
+    local text_soundDisableBytes                      = "Disable bytes:                         "
+    local text_soundVoiceBitsets                      = "Voice bitsets:                         "
+    local text_soundVoiceMasks                        = "Voice masks:                           "
+    local text_soundVoiceIndices                      = "Voice indices:                         "
+    local text_soundDspIndices                        = "DSP indices:                           "
+    local text_soundTrackOutputVolumeBackups          = "Track output volume backups:           "
+    local text_soundTrackPhaseInversionOptionsBackups = "Track phase inversion options backups: "
+    local text_soundReleaseFlags                      = "Release flags:                         "
+    local text_soundReleaseTimers                     = "Release timers:                        "
+    local text_soundRepeatCounters                    = "Repeat counters:                       "
+    local text_soundRepeatPoints                      = "Repeat points:                         "
+    local text_soundAdsrSettings                      = "ADSR settings:                         "
+    local text_soundUpdateAdsrSettingsFlags           = "Update ADSR settings flags:            "
+    local text_soundNotes                             = "Notes:                                 "
+    local text_soundSubnotes                          = "Subnotes:                              "
+    local text_soundSubnoteDeltas                     = "Subnote deltas:                        "
+    local text_soundTargetNotes                       = "Target notes:                          "
+    local text_soundPitchSlideFlags                   = "Pitch slide flags:                     "
+    local text_soundLegatoFlags                       = "Legato flags:                          "
+    local text_soundPitchSlideLegatoFlags             = "Pitch slide legato flags:              "
+
+    local separator = ""
+    for i = 0, n_voices - 1 do
+        text_soundInstructionListPointers           = text_soundInstructionListPointers           .. separator .. string.format("$%04X", soundInstructionListPointers[i])
+        text_soundInstructionListIndices            = text_soundInstructionListIndices            .. separator .. string.format("% 4Xh", sm.getAram_sound_i_instructionLists(i_sound)(i))
+        text_soundInstructionListTimers             = text_soundInstructionListTimers             .. separator .. string.format("% 4Xh", sm.getAram_sound_instructionTimers(i_sound)(i))
+        text_soundDisableBytes                      = text_soundDisableBytes                      .. separator .. string.format("% 4Xh", sm.getAram_sound_disableBytes(i_sound)(i))
+        text_soundVoiceBitsets                      = text_soundVoiceBitsets                      .. separator .. string.format("% 4Xh", sm.getAram_sound_voiceBitsets(i_sound)(i))
+        text_soundVoiceMasks                        = text_soundVoiceMasks                        .. separator .. string.format("% 4Xh", sm.getAram_sound_voiceMasks(i_sound)(i))
+        text_soundVoiceIndices                      = text_soundVoiceIndices                      .. separator .. string.format("% 4Xh", sm.getAram_sound_voiceIndices(i_sound)(i))
+        text_soundDspIndices                        = text_soundDspIndices                        .. separator .. string.format("% 4Xh", sm.getAram_sound_dspIndices(i_sound)(i))
+        text_soundTrackOutputVolumeBackups          = text_soundTrackOutputVolumeBackups          .. separator .. string.format("% 4Xh", sm.getAram_sound_trackOutputVolumeBackups(i_sound)(i))
+        text_soundTrackPhaseInversionOptionsBackups = text_soundTrackPhaseInversionOptionsBackups .. separator .. string.format("% 4Xh", sm.getAram_sound_trackPhaseInversionOptionsBackups(i_sound)(i))
+        text_soundReleaseFlags                      = text_soundReleaseFlags                      .. separator .. string.format("% 4Xh", sm.getAram_sound_releaseFlags(i_sound)(i))
+        text_soundReleaseTimers                     = text_soundReleaseTimers                     .. separator .. string.format("% 4Xh", sm.getAram_sound_releaseTimers(i_sound)(i))
+        text_soundRepeatCounters                    = text_soundRepeatCounters                    .. separator .. string.format("% 4Xh", sm.getAram_sound_repeatCounters(i_sound)(i))
+        text_soundRepeatPoints                      = text_soundRepeatPoints                      .. separator .. string.format("% 4Xh", sm.getAram_sound_repeatPoints(i_sound)(i))
+        text_soundAdsrSettings                      = text_soundAdsrSettings                      .. separator .. string.format("% 4Xh", soundAdsrSettings[i])
+        text_soundUpdateAdsrSettingsFlags           = text_soundUpdateAdsrSettingsFlags           .. separator .. string.format("% 4Xh", sm.getAram_sound_updateAdsrSettingsFlags(i_sound)(i))
+        text_soundNotes                             = text_soundNotes                             .. separator .. string.format("% 4Xh", sm.getAram_sound_notes(i_sound)(i))
+        text_soundSubnotes                          = text_soundSubnotes                          .. separator .. string.format("% 4Xh", sm.getAram_sound_subnotes(i_sound)(i))
+        text_soundSubnoteDeltas                     = text_soundSubnoteDeltas                     .. separator .. string.format("% 4Xh", sm.getAram_sound_subnoteDeltas(i_sound)(i))
+        text_soundTargetNotes                       = text_soundTargetNotes                       .. separator .. string.format("% 4Xh", sm.getAram_sound_targetNotes(i_sound)(i))
+        text_soundPitchSlideFlags                   = text_soundPitchSlideFlags                   .. separator .. string.format("% 4Xh", sm.getAram_sound_pitchSlideFlags(i_sound)(i))
+        text_soundLegatoFlags                       = text_soundLegatoFlags                       .. separator .. string.format("% 4Xh", sm.getAram_sound_legatoFlags(i_sound)(i))
+        text_soundPitchSlideLegatoFlags             = text_soundPitchSlideLegatoFlags             .. separator .. string.format("% 4Xh", sm.getAram_sound_pitchSlideLegatoFlags(i_sound)(i))
+
+        separator = " | "
+    end
+
+    forms.settext(form, ""
+        .. string.format("Current sound %d:             %Xh\n",  i_sound + 1, sm.getAram_sound(i_sound)())
+        .. string.format("Sound %d initialisation flag: %02X\n", i_sound + 1, sm.getAram_sound_initialisationFlag(i_sound)())
+        .. string.format("Sound %d enabled voices:      %Xh\n",  i_sound + 1, sm.getAram_sound_enabledVoices(i_sound)())
+        .. "\n"
+        .. text_soundInstructionListPointers           .. "\n"
+        .. text_soundInstructionListIndices            .. "\n"
+        .. text_soundInstructionListTimers             .. "\n"
+        .. text_soundDisableBytes                      .. "\n"
+        .. text_soundVoiceBitsets                      .. "\n"
+        .. text_soundVoiceMasks                        .. "\n"
+        .. text_soundVoiceIndices                      .. "\n"
+        .. text_soundDspIndices                        .. "\n"
+        .. text_soundTrackOutputVolumeBackups          .. "\n"
+        .. text_soundTrackPhaseInversionOptionsBackups .. "\n"
+        .. text_soundReleaseFlags                      .. "\n"
+        .. text_soundReleaseTimers                     .. "\n"
+        .. text_soundRepeatCounters                    .. "\n"
+        .. text_soundRepeatPoints                      .. "\n"
+        .. text_soundAdsrSettings                      .. "\n"
+        .. text_soundUpdateAdsrSettingsFlags           .. "\n"
+        .. text_soundNotes                             .. "\n"
+        .. text_soundSubnotes                          .. "\n"
+        .. text_soundSubnoteDeltas                     .. "\n"
+        .. text_soundTargetNotes                       .. "\n"
+        .. text_soundPitchSlideFlags                   .. "\n"
+        .. text_soundLegatoFlags                       .. "\n"
+        .. text_soundPitchSlideLegatoFlags             .. "\n"
+    )
+    forms.refresh(form)
+end
+
+function updateForm_soundTracker(form, i_sound, n_voices)
+    local text_legatoPitchSlide = "F5 %02X %02X       ; Legato pitch slide with subnote delta = %02Xh, target note = %02Xh\r\n"
+    local text_pitchSlide       = "F8 %02X %02X       ; Pitch slide with subnote delta = %02Xh, target note = %02Xh\r\n"
+    local text_adsr             = "F9 %04X        ; Voice ADSR settings = %04Xh\r\n"
+    local text_repeat           = "FB             ; Repeat\r\n"
+    local text_noise            = "FC             ; Enable noise\r\n"
+    local text_maybeRepeat      = "FD             ; Decrement repeat counter and repeat if non-zero\r\n"
+    local text_repeatPoint      = "FE %02X          ; Set repeat pointer with repeat counter = %Xh\r\n"
+    local text_eof              = "FF             ; EOF\r\n"
+    local text_note             = "%02X %02X %02X %02X %02X ; Instrument = % 2Xh, volume = % 2Xh, panning = % 2Xh, note = % 2Xh, length = % 2Xh\r\n"
+    
+    local text = ""
+    for i_voice = 0, n_voices - 1 do
+        text = text .. string.format("Sound %d voice %d:\r\n", i_sound, i_voice)
+        if sm.getAram_sound_disableBytes(i_sound)(i_voice) == 0xFF then
+            text = text .. "[disabled]\r\n"
+        else
+            local p_begin_soundInstructionList = sm.getAram_sound_p_instructionList(i_sound)(i_voice)()
+            local i_soundInstructionList = sm.getAram_sound_i_instructionLists(i_sound)(i_voice)
+            local p_soundInstructionList = p_begin_soundInstructionList + i_soundInstructionList
+            
+            local i = 0
+            while true do
+                if i == i_soundInstructionList then
+                    text = text .. "> "
+                else
+                    text = text .. "  "
+                end
+                
+                text = text .. string.format("$%04X: ", p_begin_soundInstructionList + i)
+                
+                local command = xemu.read_aram_u8(p_begin_soundInstructionList + i)
+                i = i + 1
+                if command == 0xFF then
+                    text = text .. text_eof
+                    break
+                elseif command == 0xF5 then
+                    local delta = xemu.read_aram_u8(p_begin_soundInstructionList + i)
+                    local note = xemu.read_aram_u8(p_begin_soundInstructionList + i + 1)
+                    i = i + 2
+                    text = text .. string.format(text_legatoPitchSlide, delta, note, delta, note)
+                elseif command == 0xF8 then
+                    local delta = xemu.read_aram_u8(p_begin_soundInstructionList + i)
+                    local note = xemu.read_aram_u8(p_begin_soundInstructionList + i + 1)
+                    i = i + 2
+                    text = text .. string.format(text_pitchSlide, delta, note, delta, note)
+                elseif command == 0xF9 then
+                    local adsr = xemu.read_aram_u16_le(p_begin_soundInstructionList + i)
+                    i = i + 2
+                    text = text .. string.format(text_adsr, adsr, adsr)
+                elseif command == 0xFB then
+                    text = text .. text_repeat
+                elseif command == 0xFC then
+                    text = text .. text_noise
+                elseif command == 0xFD then
+                    text = text .. text_maybeRepeat
+                elseif command == 0xFE then
+                    local counter = xemu.read_aram_u8(p_begin_soundInstructionList + i)
+                    i = i + 1
+                    text = text .. string.format(text_repeatPoint, counter, counter)
+                else
+                    local i_instrument = command
+                    local volume  = xemu.read_aram_u8(p_begin_soundInstructionList + i)
+                    local panning = xemu.read_aram_u8(p_begin_soundInstructionList + i + 1)
+                    local note    = xemu.read_aram_u8(p_begin_soundInstructionList + i + 2)
+                    local length  = xemu.read_aram_u8(p_begin_soundInstructionList + i + 3)
+                    i = i + 4
+                    text = text .. string.format(text_note, i_instrument, volume, panning, note, length, i_instrument, volume, panning, note, length)
+                end
+            end
+    
+            if i == i_soundInstructionList then
+                text = text .. ">\r\n"
+            end
+
+        end
+        
+        text = text .. "\r\n"
+    end
+
+    forms.settext(form, text)
+    forms.refresh(form)
+end
+
+function extraGui()
+    updateForm_sound(form_sound1, 0, 4)
+    updateForm_sound(form_sound2, 1, 2)
+    updateForm_sound(form_sound3, 2, 2)
+    updateForm_soundTracker(form_sound1tracker, 0, 4)
+    updateForm_soundTracker(form_sound2tracker, 1, 2)
+    updateForm_soundTracker(form_sound3tracker, 2, 2)
+end
+
 -- Finally, the main loop
 function on_paint()
     if not isValidLevelData() then
         return
     end
     
-    samusXPosition = sm.getSamusXPosition()
-    samusYPosition = sm.getSamusYPosition()
-
+    samusXPosition = sm.getSamusXPositionSigned()
+    samusYPosition = sm.getSamusYPositionSigned()
+    
     -- Debug controls
     if debugControlsEnabled ~= 0 then
         handleDebugControls()
     end
-
+    
     -- Co-ordinates of the top-left of the screen
     if followSamusFlag ~= 0 then
-        cameraX = bit.band(samusXPosition - 128 + xAdjust, 0xFFFF)
-        cameraY = bit.band(samusYPosition - 112 + yAdjust, 0xFFFF)
+        cameraX = samusXPosition - 128 + xAdjust
+        cameraY = samusYPosition - 112 + yAdjust
     else
         cameraX = sm.getLayer1XPosition()
         cameraY = sm.getLayer1YPosition()
     end
-
+    
     -- Width of the room in blocks
     local roomWidth = sm.getRoomWidth()
-
-    --displayScrollBoundaries(cameraX, cameraY)
-    displayBlocks(cameraX, cameraY, roomWidth)
+    
+    -- [[
+    displayScrollBoundaries(cameraX, cameraY, roomWidth)
     displayDebugInfo(cameraX, cameraY, roomWidth)
+    displayBlocks(cameraX, cameraY, roomWidth)
     displayFx(cameraX, cameraY)
     
     displayKraidHitbox(cameraX, cameraY)
@@ -1001,16 +1156,21 @@ function on_paint()
     displayPowerBombExplosionHitbox(cameraX, cameraY)
     displayProjectileHitboxes(cameraX, cameraY)
     displaySamusHitbox(cameraX, cameraY, samusXPosition, samusYPosition)
-
+    --]]
+    
     if tasFlag ~= 0 then
         -- Show in-game time
         drawText(216, 0, string.format("%d:%d:%d.%d", sm.getGameTimeHours(), sm.getGameTimeMinutes(), sm.getGameTimeSeconds(), sm.getGameTimeFrames()), 0xFFFFFFFF)
     end
+
+    if xemu.emuId == xemu.emuId_bizhawk then
+        extraGui()
+    end
 end
 
-if emuId ~= emuId_lsnes then
+if xemu.emuId ~= xemu.emuId_lsnes then
     while true do
-        on_paint();
+        on_paint()
         emu.frameadvance()
     end
 end
