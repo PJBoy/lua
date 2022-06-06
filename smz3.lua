@@ -48,7 +48,11 @@ read_aram_s16_le = makeAramReader(memory.read_s16_le)
 
 
 function loadNotes()
-    local filepath = notes_filenames[i_dropdown]
+    if i_dropdown == 14 then
+        return ""
+    end
+    
+    local filepath = notes_directory .. notes_filenames[i_dropdown]
     io.open(filepath, "a"):close()
     local file = io.open(filepath, "r")
     local text = file:read("*all")
@@ -58,13 +62,20 @@ function loadNotes()
 end
 
 function saveNotes()
-    local notes_file = io.open(notes_filenames[i_dropdown], "w")
+    local notes_file = io.open(notes_directory .. notes_filenames[i_dropdown], "w")
     notes_file:write(notes_text)
     notes_file:close()
 end
 
+function deleteNotes()
+    for k, notes_filename in pairs(notes_filenames) do
+        os.remove(notes_directory .. notes_filename)
+    end
+end
+
 
 -- Create files as needed
+notes_directory = "smz3/"
 notes_filenames = {
     [0] = "smz3notes_00.txt",
     [1] = "smz3notes_01.txt",
@@ -101,20 +112,21 @@ local scrollbars = "both"
 superform_notes = forms.newform(width, height, "Notes")
 
 local labels = {
-    "00 Overworld - light world",
-    "01 Overworld - dark world",
+    "00 Super Metroid",
+    "01 Overworld",
     "02 Light world 0 - Hyrule Castle",
     "03 Light world 1 - Eastern Palace",
     "04 Light world 2 - Desert Palace",
-    "05 Light world 3 - Tower of Hera",
-    "06 Dark world 1 - Palace of Darkness",
+    "05 Light world 3 - Hera's Tower",
+    "06 Dark world 1 - Dark Palace",
     "07 Dark world 2 - Swamp Palace",
     "08 Dark world 3 - Skull Woods",
     "09 Dark world 4 - Thieves' Town",
     "10 Dark world 5 - Ice Palace",
     "11 Dark world 6 - Misery Mire",
     "12 Dark world 7 - Turtle Rock",
-    "13 Ganon's Tower"
+    "13 Ganon's Tower",
+    "14 Clear notes"
 }
 height = 16
 dropdown_notes = forms.dropdown(superform_notes, labels, x, y, width, height)
@@ -127,6 +139,7 @@ forms.settext(form_notes, notes_text)
 
 -- Finally, the main loop
 while true do
+    -- Unfortunately this property does change index even as the mouse is hovering over dropdown menu entries
     local i_dropdown_new = tonumber(forms.getproperty(dropdown_notes, "SelectedIndex"))
     
     if i_dropdown_new ~= i_dropdown then
@@ -135,7 +148,13 @@ while true do
         forms.settext(form_notes, notes_text)
     else
         local notes_text_new = forms.gettext(form_notes)
-        if notes_text_new ~= notes_text then
+        if i_dropdown == 14 then
+            if notes_text_new == 'delete' or notes_text_new == 'clear' or notes_text_new == 'rm' then
+                deleteNotes()
+                print("Deleted notes")
+                forms.setproperty(dropdown_notes, "SelectedIndex", "0")
+            end
+        elseif notes_text_new ~= notes_text then
             notes_text = notes_text_new
             saveNotes()
         end

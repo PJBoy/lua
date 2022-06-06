@@ -98,38 +98,6 @@ if xemu.emuId == xemu.emuId_bizhawk and false then -- GUI drawing functions from
     event.onmemoryexecute(idleHook, 0x82897A)
 end
 
--- Extra GUI
-if xemu.emuId == xemu.emuId_bizhawk then
-    forms.destroyall()
-
-    local x = 0
-    local y = 0
-    local width = 500
-    local height = 480
-    local fixedWidth = true
-    local boxType = nil
-    local multiline = true
-    local scrollbars = "both"
-    
-    superform_sound1 = forms.newform(width, height, "ARAM - sound 1")
-    superform_sound2 = forms.newform(width, height, "ARAM - sound 2")
-    superform_sound3 = forms.newform(width, height, "ARAM - sound 3")
-    form_sound1 = forms.label(superform_sound1, "", x, y, width, height, fixedWidth)
-    form_sound2 = forms.label(superform_sound2, "", x, y, width, height, fixedWidth)
-    form_sound3 = forms.label(superform_sound3, "", x, y, width, height, fixedWidth)
-    
-    width = 708
-    height = 480
-    superform_sound1Tracker = forms.newform(width, height, "ARAM - sound 1 tracker")
-    superform_sound2Tracker = forms.newform(width, height, "ARAM - sound 2 tracker")
-    superform_sound3Tracker = forms.newform(width, height, "ARAM - sound 3 tracker")
-    -- int forms.textbox(int formhandle, [string caption = null], [int? width = null], [int? height = null], [string boxtype = null],
-    --     [int? x = null], [int? y = null], [bool multiline = False], [bool fixedwidth = False], [string scrollbars = null])
-    form_sound1tracker = forms.textbox(superform_sound1Tracker, "", width, height, boxType, x, y, multiline, fixedWidth, scrollbars)
-    form_sound2tracker = forms.textbox(superform_sound2Tracker, "", width, height, boxType, x, y, multiline, fixedWidth, scrollbars)
-    form_sound3tracker = forms.textbox(superform_sound3Tracker, "", width, height, boxType, x, y, multiline, fixedWidth, scrollbars)
-end
-
 
 -- A door database for finding valid OoB doors
 doors = {[0x88FE]=true, [0x890A]=true, [0x8916]=true, [0x8922]=true, [0x892E]=true, [0x893A]=true, [0x8946]=true, [0x8952]=true, [0x895E]=true, [0x896A]=true, [0x8976]=true, [0x8982]=true, [0x898E]=true, [0x899A]=true, [0x89A6]=true, [0x89B2]=true, [0x89BE]=true, [0x89CA]=true, [0x89D6]=true, [0x89E2]=true, [0x89EE]=true, [0x89FA]=true, [0x8A06]=true, [0x8A12]=true, [0x8A1E]=true, [0x8A2A]=true, [0x8A36]=true, [0x8A42]=true, [0x8A4E]=true, [0x8A5A]=true, [0x8A66]=true, [0x8A72]=true, [0x8A7E]=true, [0x8A8A]=true, [0x8A96]=true, [0x8AA2]=true, [0x8AAE]=true, [0x8ABA]=true, [0x8AC6]=true, [0x8AD2]=true, [0x8ADE]=true, [0x8AEA]=true, [0x8AF6]=true, [0x8B02]=true, [0x8B0E]=true, [0x8B1A]=true, [0x8B26]=true, [0x8B32]=true, [0x8B3E]=true, [0x8B4A]=true, [0x8B56]=true, [0x8B62]=true, [0x8B6E]=true, [0x8B7A]=true, [0x8B86]=true, [0x8B92]=true, [0x8B9E]=true, [0x8BAA]=true, [0x8BB6]=true, [0x8BC2]=true, [0x8BCE]=true, [0x8BDA]=true, [0x8BE6]=true, [0x8BF2]=true, [0x8BFE]=true, [0x8C0A]=true, [0x8C16]=true, [0x8C22]=true, [0x8C2E]=true, [0x8C3A]=true, [0x8C46]=true, [0x8C52]=true, [0x8C5E]=true, [0x8C6A]=true, [0x8C76]=true, [0x8C82]=true, [0x8C8E]=true, [0x8C9A]=true, [0x8CA6]=true, [0x8CB2]=true, [0x8CBE]=true, [0x8CCA]=true, [0x8CD6]=true, [0x8CE2]=true, [0x8CEE]=true, [0x8CFA]=true, [0x8D06]=true, [0x8D12]=true, [0x8D1E]=true, [0x8D2A]=true, [0x8D36]=true, [0x8D42]=true, [0x8D4E]=true, [0x8D5A]=true, [0x8D66]=true, [0x8D72]=true, [0x8D7E]=true, [0x8D8A]=true, [0x8D96]=true, [0x8DA2]=true, [0x8DAE]=true, [0x8DBA]=true, [0x8DC6]=true, [0x8DD2]=true, [0x8DDE]=true, [0x8DEA]=true, [0x8DF6]=true, [0x8E02]=true, [0x8E0E]=true, [0x8E1A]=true, [0x8E26]=true, [0x8E32]=true, [0x8E3E]=true, [0x8E4A]=true, [0x8E56]=true, [0x8E62]=true, [0x8E6E]=true, [0x8E7A]=true, [0x8E86]=true, [0x8E92]=true, [0x8E9E]=true, [0x8EAA]=true, [0x8EB6]=true, [0x8EC2]=true, [0x8ECE]=true, [0x8EDA]=true, [0x8EE6]=true, [0x8EF2]=true, [0x8EFE]=true, [0x8F0A]=true, [0x8F16]=true, [0x8F22]=true, [0x8F2E]=true, [0x8F3A]=true, [0x8F46]=true, [0x8F52]=true, [0x8F5E]=true, [0x8F6A]=true, [0x8F76]=true, [0x8F82]=true, [0x8F8E]=true, [0x8F9A]=true, [0x8FA6]=true, [0x8FB2]=true, [0x8FBE]=true, [0x8FCA]=true, [0x8FD6]=true, [0x8FE2]=true, [0x8FEE]=true, [0x8FFA]=true, [0x9006]=true, [0x9012]=true, [0x901E]=true, [0x902A]=true, [0x9036]=true, [0x9042]=true, [0x904E]=true, [0x905A]=true, [0x9066]=true, [0x9072]=true, [0x907E]=true, [0x908A]=true, [0x9096]=true, [0x90A2]=true, [0x90AE]=true, [0x90BA]=true, [0x90C6]=true, [0x90D2]=true, [0x90DE]=true, [0x90EA]=true, [0x90F6]=true, [0x9102]=true, [0x910E]=true, [0x911A]=true, [0x9126]=true, [0x9132]=true, [0x913E]=true, [0x914A]=true, [0x9156]=true, [0x9162]=true, [0x916E]=true, [0x917A]=true, [0x9186]=true, [0x9192]=true, [0x919E]=true, [0x91AA]=true, [0x91B6]=true, [0x91C2]=true, [0x91CE]=true, [0x91DA]=true, [0x91E6]=true, [0x91F2]=true, [0x91FE]=true, [0x920A]=true, [0x9216]=true, [0x9222]=true, [0x922E]=true, [0x923A]=true, [0x9246]=true, [0x9252]=true, [0x925E]=true, [0x926A]=true, [0x9276]=true, [0x9282]=true, [0x928E]=true, [0x929A]=true, [0x92A6]=true, [0x92B2]=true, [0x92BE]=true, [0x92CA]=true, [0x92D6]=true, [0x92E2]=true, [0x92EE]=true, [0x92FA]=true, [0x9306]=true, [0x9312]=true, [0x931E]=true, [0x932A]=true, [0x9336]=true, [0x9342]=true, [0x934E]=true, [0x935A]=true, [0x9366]=true, [0x9372]=true, [0x937E]=true, [0x938A]=true, [0x9396]=true, [0x93A2]=true, [0x93AE]=true, [0x93BA]=true, [0x93C6]=true, [0x93D2]=true, [0x93DE]=true, [0x93EA]=true, [0x93F6]=true, [0x9402]=true, [0x940E]=true, [0x941A]=true, [0x9426]=true, [0x9432]=true, [0x943E]=true, [0x944A]=true, [0x9456]=true, [0x9462]=true, [0x946E]=true, [0x947A]=true, [0x9486]=true, [0x9492]=true, [0x949E]=true, [0x94AA]=true, [0x94B6]=true, [0x94C2]=true, [0x94CE]=true, [0x94DA]=true, [0x94E6]=true, [0x94F2]=true, [0x94FE]=true, [0x950A]=true, [0x9516]=true, [0x9522]=true, [0x952E]=true, [0x953A]=true, [0x9546]=true, [0x9552]=true, [0x955E]=true, [0x956A]=true, [0x9576]=true, [0x9582]=true, [0x958E]=true, [0x959A]=true, [0x95A6]=true, [0x95B2]=true, [0x95BE]=true, [0x95CA]=true, [0x95D6]=true, [0x95E2]=true, [0x95EE]=true, [0x95FA]=true, [0x9606]=true, [0x9612]=true, [0x961E]=true, [0x962A]=true, [0x9636]=true, [0x9642]=true, [0x964E]=true, [0x965A]=true, [0x9666]=true, [0x9672]=true, [0x967E]=true, [0x968A]=true, [0x9696]=true, [0x96A2]=true, [0x96AE]=true, [0x96BA]=true, [0x96C6]=true, [0x96D2]=true, [0x96DE]=true, [0x96EA]=true, [0x96F6]=true, [0x9702]=true, [0x970E]=true, [0x971A]=true, [0x9726]=true, [0x9732]=true, [0x973E]=true, [0x974A]=true, [0x9756]=true, [0x9762]=true, [0x976E]=true, [0x977A]=true, [0x9786]=true, [0x9792]=true, [0x979E]=true, [0x97AA]=true, [0x97B6]=true, [0x97C2]=true, [0x97CE]=true, [0x97DA]=true, [0x97E6]=true, [0x97F2]=true, [0x97FE]=true, [0x980A]=true, [0x9816]=true, [0x9822]=true, [0x982E]=true, [0x983A]=true, [0x9846]=true, [0x9852]=true, [0x985E]=true, [0x986A]=true, [0x9876]=true, [0x9882]=true, [0x988E]=true, [0x989A]=true, [0x98A6]=true, [0x98B2]=true, [0x98BE]=true, [0x98CA]=true, [0x98D6]=true, [0x98E2]=true, [0x98EE]=true, [0x98FA]=true, [0x9906]=true, [0x9912]=true, [0x991E]=true, [0x992A]=true, [0x9936]=true, [0x9942]=true, [0x994E]=true, [0x995A]=true, [0x9966]=true, [0x9972]=true, [0x997E]=true, [0x998A]=true, [0x9996]=true, [0x99A2]=true, [0x99AE]=true, [0x99BA]=true, [0x99C6]=true, [0x99D2]=true, [0x99DE]=true, [0x99EA]=true, [0x99F6]=true, [0x9A02]=true, [0x9A0E]=true, [0x9A1A]=true, [0x9A26]=true, [0x9A32]=true, [0x9A3E]=true, [0x9A4A]=true, [0x9A56]=true, [0x9A62]=true, [0x9A6E]=true, [0x9A7A]=true, [0x9A86]=true, [0x9A92]=true, [0x9A9E]=true, [0x9AAA]=true, [0x9AB6]=true, [0xA18C]=true, [0xA198]=true, [0xA1A4]=true, [0xA1B0]=true, [0xA1BC]=true, [0xA1C8]=true, [0xA1D4]=true, [0xA1E0]=true, [0xA1EC]=true, [0xA1F8]=true, [0xA204]=true, [0xA210]=true, [0xA21C]=true, [0xA228]=true, [0xA234]=true, [0xA240]=true, [0xA24C]=true, [0xA258]=true, [0xA264]=true, [0xA270]=true, [0xA27C]=true, [0xA288]=true, [0xA294]=true, [0xA2A0]=true, [0xA2AC]=true, [0xA2B8]=true, [0xA2C4]=true, [0xA2D0]=true, [0xA2DC]=true, [0xA2E8]=true, [0xA2F4]=true, [0xA300]=true, [0xA30C]=true, [0xA318]=true, [0xA324]=true, [0xA330]=true, [0xA33C]=true, [0xA348]=true, [0xA354]=true, [0xA360]=true, [0xA36C]=true, [0xA378]=true, [0xA384]=true, [0xA390]=true, [0xA39C]=true, [0xA3A8]=true, [0xA3B4]=true, [0xA3C0]=true, [0xA3CC]=true, [0xA3D8]=true, [0xA3E4]=true, [0xA3F0]=true, [0xA3FC]=true, [0xA408]=true, [0xA414]=true, [0xA420]=true, [0xA42C]=true, [0xA438]=true, [0xA444]=true, [0xA450]=true, [0xA45C]=true, [0xA468]=true, [0xA474]=true, [0xA480]=true, [0xA48C]=true, [0xA498]=true, [0xA4A4]=true, [0xA4B0]=true, [0xA4BC]=true, [0xA4C8]=true, [0xA4D4]=true, [0xA4E0]=true, [0xA4EC]=true, [0xA4F8]=true, [0xA504]=true, [0xA510]=true, [0xA51C]=true, [0xA528]=true, [0xA534]=true, [0xA540]=true, [0xA54C]=true, [0xA558]=true, [0xA564]=true, [0xA570]=true, [0xA57C]=true, [0xA588]=true, [0xA594]=true, [0xA5A0]=true, [0xA5AC]=true, [0xA5B8]=true, [0xA5C4]=true, [0xA5D0]=true, [0xA5DC]=true, [0xA5E8]=true, [0xA5F4]=true, [0xA600]=true, [0xA60C]=true, [0xA618]=true, [0xA624]=true, [0xA630]=true, [0xA63C]=true, [0xA648]=true, [0xA654]=true, [0xA660]=true, [0xA66C]=true, [0xA678]=true, [0xA684]=true, [0xA690]=true, [0xA69C]=true, [0xA6A8]=true, [0xA6B4]=true, [0xA6C0]=true, [0xA6CC]=true, [0xA6D8]=true, [0xA6E4]=true, [0xA6F0]=true, [0xA6FC]=true, [0xA708]=true, [0xA714]=true, [0xA720]=true, [0xA72C]=true, [0xA738]=true, [0xA744]=true, [0xA750]=true, [0xA75C]=true, [0xA768]=true, [0xA774]=true, [0xA780]=true, [0xA78C]=true, [0xA798]=true, [0xA7A4]=true, [0xA7B0]=true, [0xA7BC]=true, [0xA7C8]=true, [0xA7D4]=true, [0xA7E0]=true, [0xA7EC]=true, [0xA7F8]=true, [0xA810]=true, [0xA828]=true, [0xA834]=true, [0xA840]=true, [0xA84C]=true, [0xA858]=true, [0xA864]=true, [0xA870]=true, [0xA87C]=true, [0xA888]=true, [0xA894]=true, [0xA8A0]=true, [0xA8AC]=true, [0xA8B8]=true, [0xA8C4]=true, [0xA8D0]=true, [0xA8DC]=true, [0xA8E8]=true, [0xA8F4]=true, [0xA900]=true, [0xA90C]=true, [0xA918]=true, [0xA924]=true, [0xA930]=true, [0xA93C]=true, [0xA948]=true, [0xA954]=true, [0xA960]=true, [0xA96C]=true, [0xA978]=true, [0xA984]=true, [0xA990]=true, [0xA99C]=true, [0xA9A8]=true, [0xA9B4]=true, [0xA9C0]=true, [0xA9CC]=true, [0xA9D8]=true, [0xA9E4]=true, [0xA9F0]=true, [0xA9FC]=true, [0xAA08]=true, [0xAA14]=true, [0xAA20]=true, [0xAA2C]=true, [0xAA38]=true, [0xAA44]=true, [0xAA50]=true, [0xAA5C]=true, [0xAA68]=true, [0xAA74]=true, [0xAA80]=true, [0xAA8C]=true, [0xAA98]=true, [0xAAA4]=true, [0xAAB0]=true, [0xAABC]=true, [0xAAC8]=true, [0xAAD4]=true, [0xAAE0]=true, [0xAAEC]=true, [0xAAF8]=true, [0xAB04]=true, [0xAB10]=true, [0xAB1C]=true, [0xAB28]=true, [0xAB34]=true, [0xAB40]=true, [0xAB4C]=true, [0xAB58]=true, [0xAB64]=true, [0xAB70]=true, [0xAB7C]=true, [0xAB88]=true, [0xAB94]=true, [0xABA0]=true, [0xABAC]=true, [0xABB8]=true, [0xABC4]=true, [0xABCF]=true, [0xABDA]=true, [0xABE5]=true}
@@ -750,8 +718,9 @@ function displayEnemyHitboxes(cameraX, cameraY)
 
             -- Log enemy index and ID to list in top-right
             if logFlag ~= 0 then
-                --drawText(224, y, string.format("%u: %04X", i, enemyId), 0xFFFFFF80)
-                drawText(224, y, string.format("%u: %04X", i, sm.getEnemySpritemap(i)), 0xFFFFFFFF, 0xFF)
+                drawText(224, y, string.format("%u: %04X", i, enemyId), 0xFFFFFFFF, 0xFF)
+                --drawText(192, y, string.format("%u: %04X", i, sm.getEnemyInstructionList(i)), 0xFFFFFFFF, 0xFF)
+                --drawText(160, y, string.format("%u: %04X", i, sm.getEnemyAiVariable5(i)), 0xFFFFFFFF, 0xFF)
                 y = y + 8
             end
 
@@ -762,7 +731,7 @@ function displayEnemyHitboxes(cameraX, cameraY)
                 drawText(left, top - 16, string.format("%u/%u", enemyHealth, enemySpawnHealth), 0xFFFFFF80)
                 -- Draw enemy health bar
                 if enemyHealth ~= 0 then
-                    drawBox(left, top - 8, left + enemyHealth / enemySpawnHealth * 32, top - 5, 0xFFFFFF80)
+                    drawBox(left, top - 8, left + enemyHealth * 32 / enemySpawnHealth, top - 5, 0xFFFFFF80, 0xFFFFFF80)
                     drawBox(left, top - 8, left + 32, top - 5, 0xFFFFFF80, "clear")
                 end
             end
@@ -789,11 +758,11 @@ function displaySpriteObjects(cameraX, cameraY)
             drawBox(left, top, right, bottom, 0xFF800080, "clear")
 
             -- Show sprite object index and ID
-            --drawText(left, top, string.format("%u: %04X", i, spriteObjectId), "yellow")
+            drawText(left, top, string.format("%u: %04X", i, spriteObjectId), "yellow", "black")
 
             -- Log sprite object index and ID to list in top-left
             if logFlag ~= 0 then
-                drawText(0, y, string.format("%u: %04X", i, spriteObjectId), "yellow")
+                drawText(0, y, string.format("%u: %04X", i, spriteObjectId), "yellow", "black")
                 y = y + 8
             end
         end
@@ -817,6 +786,7 @@ function displayEnemyProjectileHitboxes(cameraX, cameraY)
 
             -- Draw enemy projectile hitbox
             drawBox(left, top, right, bottom, 0x00FF0080, "clear")
+            --drawBox(math.min(left, right - 2), math.min(top, bottom - 2), math.max(right, left + 2), math.max(bottom, top + 2), 0x00FF0080, "clear")
 
             -- Show enemy projectile index and ID
             drawText(left, top, string.format("%u: %04X", i, enemyProjectileId), 0x00FF00FF)
@@ -925,195 +895,6 @@ function displaySamusHitbox(cameraX, cameraY, samusXPosition, samusYPosition)
     end
 end
 
-function updateForm_sound(form, i_sound, n_voices)
-    local soundInstructionListPointers = {}
-    for i = 0, n_voices - 1 do
-        soundInstructionListPointers[i] = sm.getAram_sound_p_instructionList(i_sound)(i)()
-    end
-    
-    local soundAdsrSettings = {}
-    for i = 0, n_voices - 1 do
-        soundAdsrSettings[i] = sm.getAram_sound_adsrSettings(i_sound)(i)
-    end
-
-    local text_soundInstructionListPointers           = "Instruction list pointers:             "
-    local text_soundInstructionListIndices            = "Instruction list indices:              "
-    local text_soundInstructionListTimers             = "Instruction list timers:               "
-    local text_soundDisableBytes                      = "Disable bytes:                         "
-    local text_soundVoiceBitsets                      = "Voice bitsets:                         "
-    local text_soundVoiceMasks                        = "Voice masks:                           "
-    local text_soundVoiceIndices                      = "Voice indices:                         "
-    local text_soundDspIndices                        = "DSP indices:                           "
-    local text_soundTrackOutputVolumeBackups          = "Track output volume backups:           "
-    local text_soundTrackPhaseInversionOptionsBackups = "Track phase inversion options backups: "
-    local text_soundReleaseFlags                      = "Release flags:                         "
-    local text_soundReleaseTimers                     = "Release timers:                        "
-    local text_soundRepeatCounters                    = "Repeat counters:                       "
-    local text_soundRepeatPoints                      = "Repeat points:                         "
-    local text_soundAdsrSettings                      = "ADSR settings:                         "
-    local text_soundUpdateAdsrSettingsFlags           = "Update ADSR settings flags:            "
-    local text_soundNotes                             = "Notes:                                 "
-    local text_soundSubnotes                          = "Subnotes:                              "
-    local text_soundSubnoteDeltas                     = "Subnote deltas:                        "
-    local text_soundTargetNotes                       = "Target notes:                          "
-    local text_soundPitchSlideFlags                   = "Pitch slide flags:                     "
-    local text_soundLegatoFlags                       = "Legato flags:                          "
-    local text_soundPitchSlideLegatoFlags             = "Pitch slide legato flags:              "
-
-    local separator = ""
-    for i = 0, n_voices - 1 do
-        text_soundInstructionListPointers           = text_soundInstructionListPointers           .. separator .. string.format("$%04X", soundInstructionListPointers[i])
-        text_soundInstructionListIndices            = text_soundInstructionListIndices            .. separator .. string.format("% 4Xh", sm.getAram_sound_i_instructionLists(i_sound)(i))
-        text_soundInstructionListTimers             = text_soundInstructionListTimers             .. separator .. string.format("% 4Xh", sm.getAram_sound_instructionTimers(i_sound)(i))
-        text_soundDisableBytes                      = text_soundDisableBytes                      .. separator .. string.format("% 4Xh", sm.getAram_sound_disableBytes(i_sound)(i))
-        text_soundVoiceBitsets                      = text_soundVoiceBitsets                      .. separator .. string.format("% 4Xh", sm.getAram_sound_voiceBitsets(i_sound)(i))
-        text_soundVoiceMasks                        = text_soundVoiceMasks                        .. separator .. string.format("% 4Xh", sm.getAram_sound_voiceMasks(i_sound)(i))
-        text_soundVoiceIndices                      = text_soundVoiceIndices                      .. separator .. string.format("% 4Xh", sm.getAram_sound_voiceIndices(i_sound)(i))
-        text_soundDspIndices                        = text_soundDspIndices                        .. separator .. string.format("% 4Xh", sm.getAram_sound_dspIndices(i_sound)(i))
-        text_soundTrackOutputVolumeBackups          = text_soundTrackOutputVolumeBackups          .. separator .. string.format("% 4Xh", sm.getAram_sound_trackOutputVolumeBackups(i_sound)(i))
-        text_soundTrackPhaseInversionOptionsBackups = text_soundTrackPhaseInversionOptionsBackups .. separator .. string.format("% 4Xh", sm.getAram_sound_trackPhaseInversionOptionsBackups(i_sound)(i))
-        text_soundReleaseFlags                      = text_soundReleaseFlags                      .. separator .. string.format("% 4Xh", sm.getAram_sound_releaseFlags(i_sound)(i))
-        text_soundReleaseTimers                     = text_soundReleaseTimers                     .. separator .. string.format("% 4Xh", sm.getAram_sound_releaseTimers(i_sound)(i))
-        text_soundRepeatCounters                    = text_soundRepeatCounters                    .. separator .. string.format("% 4Xh", sm.getAram_sound_repeatCounters(i_sound)(i))
-        text_soundRepeatPoints                      = text_soundRepeatPoints                      .. separator .. string.format("% 4Xh", sm.getAram_sound_repeatPoints(i_sound)(i))
-        text_soundAdsrSettings                      = text_soundAdsrSettings                      .. separator .. string.format("% 4Xh", soundAdsrSettings[i])
-        text_soundUpdateAdsrSettingsFlags           = text_soundUpdateAdsrSettingsFlags           .. separator .. string.format("% 4Xh", sm.getAram_sound_updateAdsrSettingsFlags(i_sound)(i))
-        text_soundNotes                             = text_soundNotes                             .. separator .. string.format("% 4Xh", sm.getAram_sound_notes(i_sound)(i))
-        text_soundSubnotes                          = text_soundSubnotes                          .. separator .. string.format("% 4Xh", sm.getAram_sound_subnotes(i_sound)(i))
-        text_soundSubnoteDeltas                     = text_soundSubnoteDeltas                     .. separator .. string.format("% 4Xh", sm.getAram_sound_subnoteDeltas(i_sound)(i))
-        text_soundTargetNotes                       = text_soundTargetNotes                       .. separator .. string.format("% 4Xh", sm.getAram_sound_targetNotes(i_sound)(i))
-        text_soundPitchSlideFlags                   = text_soundPitchSlideFlags                   .. separator .. string.format("% 4Xh", sm.getAram_sound_pitchSlideFlags(i_sound)(i))
-        text_soundLegatoFlags                       = text_soundLegatoFlags                       .. separator .. string.format("% 4Xh", sm.getAram_sound_legatoFlags(i_sound)(i))
-        text_soundPitchSlideLegatoFlags             = text_soundPitchSlideLegatoFlags             .. separator .. string.format("% 4Xh", sm.getAram_sound_pitchSlideLegatoFlags(i_sound)(i))
-
-        separator = " | "
-    end
-
-    forms.settext(form, ""
-        .. string.format("Current sound %d:             %Xh\n",  i_sound + 1, sm.getAram_sound(i_sound)())
-        .. string.format("Sound %d initialisation flag: %02X\n", i_sound + 1, sm.getAram_sound_initialisationFlag(i_sound)())
-        .. string.format("Sound %d enabled voices:      %Xh\n",  i_sound + 1, sm.getAram_sound_enabledVoices(i_sound)())
-        .. "\n"
-        .. text_soundInstructionListPointers           .. "\n"
-        .. text_soundInstructionListIndices            .. "\n"
-        .. text_soundInstructionListTimers             .. "\n"
-        .. text_soundDisableBytes                      .. "\n"
-        .. text_soundVoiceBitsets                      .. "\n"
-        .. text_soundVoiceMasks                        .. "\n"
-        .. text_soundVoiceIndices                      .. "\n"
-        .. text_soundDspIndices                        .. "\n"
-        .. text_soundTrackOutputVolumeBackups          .. "\n"
-        .. text_soundTrackPhaseInversionOptionsBackups .. "\n"
-        .. text_soundReleaseFlags                      .. "\n"
-        .. text_soundReleaseTimers                     .. "\n"
-        .. text_soundRepeatCounters                    .. "\n"
-        .. text_soundRepeatPoints                      .. "\n"
-        .. text_soundAdsrSettings                      .. "\n"
-        .. text_soundUpdateAdsrSettingsFlags           .. "\n"
-        .. text_soundNotes                             .. "\n"
-        .. text_soundSubnotes                          .. "\n"
-        .. text_soundSubnoteDeltas                     .. "\n"
-        .. text_soundTargetNotes                       .. "\n"
-        .. text_soundPitchSlideFlags                   .. "\n"
-        .. text_soundLegatoFlags                       .. "\n"
-        .. text_soundPitchSlideLegatoFlags             .. "\n"
-    )
-    forms.refresh(form)
-end
-
-function updateForm_soundTracker(form, i_sound, n_voices)
-    local text_legatoPitchSlide = "F5 %02X %02X       ; Legato pitch slide with subnote delta = %02Xh, target note = %02Xh\r\n"
-    local text_pitchSlide       = "F8 %02X %02X       ; Pitch slide with subnote delta = %02Xh, target note = %02Xh\r\n"
-    local text_adsr             = "F9 %04X        ; Voice ADSR settings = %04Xh\r\n"
-    local text_repeat           = "FB             ; Repeat\r\n"
-    local text_noise            = "FC             ; Enable noise\r\n"
-    local text_maybeRepeat      = "FD             ; Decrement repeat counter and repeat if non-zero\r\n"
-    local text_repeatPoint      = "FE %02X          ; Set repeat pointer with repeat counter = %Xh\r\n"
-    local text_eof              = "FF             ; EOF\r\n"
-    local text_note             = "%02X %02X %02X %02X %02X ; Instrument = % 2Xh, volume = % 2Xh, panning = % 2Xh, note = % 2Xh, length = % 2Xh\r\n"
-    
-    local text = ""
-    for i_voice = 0, n_voices - 1 do
-        text = text .. string.format("Sound %d voice %d:\r\n", i_sound, i_voice)
-        if sm.getAram_sound_disableBytes(i_sound)(i_voice) == 0xFF then
-            text = text .. "[disabled]\r\n"
-        else
-            local p_begin_soundInstructionList = sm.getAram_sound_p_instructionList(i_sound)(i_voice)()
-            local i_soundInstructionList = sm.getAram_sound_i_instructionLists(i_sound)(i_voice)
-            local p_soundInstructionList = p_begin_soundInstructionList + i_soundInstructionList
-            
-            local i = 0
-            while true do
-                if i == i_soundInstructionList then
-                    text = text .. "> "
-                else
-                    text = text .. "  "
-                end
-                
-                text = text .. string.format("$%04X: ", p_begin_soundInstructionList + i)
-                
-                local command = xemu.read_aram_u8(p_begin_soundInstructionList + i)
-                i = i + 1
-                if command == 0xFF then
-                    text = text .. text_eof
-                    break
-                elseif command == 0xF5 then
-                    local delta = xemu.read_aram_u8(p_begin_soundInstructionList + i)
-                    local note = xemu.read_aram_u8(p_begin_soundInstructionList + i + 1)
-                    i = i + 2
-                    text = text .. string.format(text_legatoPitchSlide, delta, note, delta, note)
-                elseif command == 0xF8 then
-                    local delta = xemu.read_aram_u8(p_begin_soundInstructionList + i)
-                    local note = xemu.read_aram_u8(p_begin_soundInstructionList + i + 1)
-                    i = i + 2
-                    text = text .. string.format(text_pitchSlide, delta, note, delta, note)
-                elseif command == 0xF9 then
-                    local adsr = xemu.read_aram_u16_le(p_begin_soundInstructionList + i)
-                    i = i + 2
-                    text = text .. string.format(text_adsr, adsr, adsr)
-                elseif command == 0xFB then
-                    text = text .. text_repeat
-                elseif command == 0xFC then
-                    text = text .. text_noise
-                elseif command == 0xFD then
-                    text = text .. text_maybeRepeat
-                elseif command == 0xFE then
-                    local counter = xemu.read_aram_u8(p_begin_soundInstructionList + i)
-                    i = i + 1
-                    text = text .. string.format(text_repeatPoint, counter, counter)
-                else
-                    local i_instrument = command
-                    local volume  = xemu.read_aram_u8(p_begin_soundInstructionList + i)
-                    local panning = xemu.read_aram_u8(p_begin_soundInstructionList + i + 1)
-                    local note    = xemu.read_aram_u8(p_begin_soundInstructionList + i + 2)
-                    local length  = xemu.read_aram_u8(p_begin_soundInstructionList + i + 3)
-                    i = i + 4
-                    text = text .. string.format(text_note, i_instrument, volume, panning, note, length, i_instrument, volume, panning, note, length)
-                end
-            end
-    
-            if i == i_soundInstructionList then
-                text = text .. ">\r\n"
-            end
-
-        end
-        
-        text = text .. "\r\n"
-    end
-
-    forms.settext(form, text)
-    forms.refresh(form)
-end
-
-function extraGui()
-    updateForm_sound(form_sound1, 0, 4)
-    updateForm_sound(form_sound2, 1, 2)
-    updateForm_sound(form_sound3, 2, 2)
-    updateForm_soundTracker(form_sound1tracker, 0, 4)
-    updateForm_soundTracker(form_sound2tracker, 1, 2)
-    updateForm_soundTracker(form_sound3tracker, 2, 2)
-end
-
 -- Finally, the main loop
 function on_paint()
     if not isValidLevelData() then
@@ -1161,10 +942,6 @@ function on_paint()
     if tasFlag ~= 0 then
         -- Show in-game time
         drawText(216, 0, string.format("%d:%d:%d.%d", sm.getGameTimeHours(), sm.getGameTimeMinutes(), sm.getGameTimeSeconds(), sm.getGameTimeFrames()), 0xFFFFFFFF)
-    end
-
-    if xemu.emuId == xemu.emuId_bizhawk then
-        extraGui()
     end
 end
 
