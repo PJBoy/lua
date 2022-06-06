@@ -1,0 +1,99 @@
+CFBF
+{
+    name: Thin hopping blob
+    0FA8: Unused
+    0FAA: Y speed table index
+    0FAC: Hop cooldown timer
+    0FAE: Function
+    {
+        9B65: Grounded
+        9B81: Airborne
+    }
+    0FB0: Airborne function
+    {
+        9D0B: Normal - short hop
+        9D2B: Normal - big hop
+        9D4B: Normal - long hop
+        9D6B: Giant hop
+        9D98: Dropping
+        9DCD: Dropped
+    }
+    0FB2: Hop table index
+    7E7800: Hop type
+    {
+        0: Normal - Samus not in proximity
+        1: Normal - Samus in proximity
+        2: Cannot be used
+        3: Giant hop
+        4: Dropping
+        5: Dropped - small hop
+        6: Dropped - big hop
+    }
+    7E7802: Hopping animation flag
+    7E7804: Direction
+    {
+        0: Right
+        1: Left
+    }
+    7E7806: Falling flag
+    7E7808: Invert direction flag
+    7E780A: Inverted direction
+    7E780C: Initial Y speed table index * 3/4
+    7E780E: Initial Y speed table index * 1/2
+}
+
+DF3F
+{
+    name: Spore Spawn
+    0FA8: Function
+    {
+        EB1B: Descent
+        EB52: Moving
+        EB9B: Set up death
+        EBEE: Dying
+    }
+    0FAC: X origin
+    0FAE: Y origin
+    7E7814: Angle
+    7E7816: Speed
+    7E7818: Angle delta
+}
+
+E7BF
+{
+    name: Yapping maw
+    0FA8: Function
+    {
+        A235: Neutral
+        A445: Attacking
+        A68A: Cooldown
+    }
+    7E7800: Body segment 1 X offset
+    7E7802: Body segment 1 Y offset
+    7E7804: Body segment 2 X offset
+    7E7806: Body segment 2 Y offset
+    7E7808: Body segment 3 X offset
+    7E780A: Body segment 3 Y offset
+    7E7818: Body segment base X position
+    7E781A: Body segment base Y position
+    7E8800: Body segment 0 enemy projectile index
+    7E8802: Body segment 1 enemy projectile index
+    7E8804: Body segment 2 enemy projectile index
+    7E8806: Body segment 3 enemy projectile index
+}
+
+E8FF
+{
+    name: Wrecked Ship robot
+    0FA8: Laser X velocity
+    0FAA: Laser cooldown
+    0FAC: X position backup during approaching fall detection
+    0FAE: Y position backup during approaching fall detection
+    0FB0: Y subvelocity
+    0FB2: Y velocity
+}
+
+E93F
+{
+    name: Wrecked Ship robot, deactivated
+}
