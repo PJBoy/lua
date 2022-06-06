@@ -13,6 +13,8 @@ Lua scripts for lua-supporting emulators
   * Bind the hitbox display origin around Samus for navigation out of bounds (via select + B), origin can then be moved arbitrarily via select + d-pad to easily explore an entire room without moving
   * Move Samus around arbitrarily via select + A + d-pad
   * Show enemy health (with health bar); projectile damage; Samus' cooldown time, beam charge, recoil time and i-frame time
+* `super audio.lua`: BizHawk only. WIP script for looking at sound effects ARAM state
+* `super enemy.lua`: BizHawk only. WIP script for looking at enemy RAM. Uses `enemy data.txt` for labelling AI variables and any known values
 * `Fusion Hitbox.lua`: Hitbox viewer for Metroid Fusion. Supports room data, Samus, enemies and projectiles
 * `RoS.lua`: Hitbox viewer for Metroid II. Supports room data and enemies.
 * `Castlevania 2.lua`: Hitbox viewer for Castlevania II. Level data only. This one was the hardest hitbox viewer to make, Simon's Quest is weird.
