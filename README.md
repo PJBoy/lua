@@ -1,11 +1,11 @@
 # lua
 Lua scripts for lua-supporting emulators
 
-* `Super Camhack.lua`: Requires `Super Metroid.lua`. BizHawk only. Non-intrusively fixes graphical errors caused by:
+* `Super Camhack.lua`: Requires `Super Metroid.lua` + `cross emu.lua`. BizHawk only. Non-intrusively fixes graphical errors caused by:
   * Misaligned doors
   * Scrolling too fast
   * Glitches allowing freedom of movement during x-ray
-* `Super Hitbox.lua`: Requires `Super Metroid.lua`. Draws hitboxes around just about everything and some additional features:
+* `Super Hitbox.lua`: Requires `Super Metroid.lua` + `cross emu.lua`. Draws hitboxes around just about everything and some additional features:
   * Can show hitboxes beyond the screen boundaries in BizHawk (using the extra padding feature)
   * CPU usage monitor (BizHawk only)
   * Show the raw block/BTS data of blocks on screen (via select + A)
@@ -16,7 +16,7 @@ Lua scripts for lua-supporting emulators
 * `Fusion Hitbox.lua`: Hitbox viewer for Metroid Fusion. Supports room data, Samus, enemies and projectiles
 * `RoS.lua`: Hitbox viewer for Metroid II. Supports room data and enemies.
 * `Castlevania 2.lua`: Hitbox viewer for Castlevania II. Level data only. This one was the hardest hitbox viewer to make, Simon's Quest is weird.
-* `Super charge shinespark.lua`: Requires `Super Metroid.lua`. Shows a rhythm game style chart on top of the HUD minimap to help learn the quick charge timing
-* `super audio.lua`: BizHawk only. Requires `Super Metroid.lua`. WIP script for looking at sound effects ARAM state
-* `super enemy.lua`: BizHawk only. Requires `Super Metroid.lua`. WIP script for looking at enemy RAM. Uses `enemy data.txt` for labelling AI variables and any known values
+* `Super charge shinespark.lua`: Requires `Super Metroid.lua` + `cross emu.lua`. Shows a rhythm game style chart on top of the HUD minimap to help learn the quick charge timing
+* `super audio.lua`: BizHawk only. Requires `Super Metroid.lua` + `cross emu.lua`. WIP script for looking at sound effects ARAM state
+* `super enemy.lua`: BizHawk only. Requires `Super Metroid.lua` + `cross emu.lua`. WIP script for looking at enemy RAM. Uses `enemy data.txt` for labelling AI variables and any known values
 * `smz3.lua`: BizHawk only. Simple script that lets the user take notes for the smz3 randomiser. Works via a text box whose text is persisted to disk and a dropdown for switching between areas
