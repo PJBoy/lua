@@ -91,7 +91,6 @@ if xemu.emuId == xemu.emuId_bizhawk and false then -- GUI drawing functions from
         end
 
         idling = false
-        local v = emu.getregister('V')
     end
 
     event.onmemoryexecute(nmiHook, 0x009583)
@@ -937,12 +936,12 @@ function on_paint()
     displayPowerBombExplosionHitbox(cameraX, cameraY)
     displayProjectileHitboxes(cameraX, cameraY)
     displaySamusHitbox(cameraX, cameraY, samusXPosition, samusYPosition)
-    --]]
     
     if tasFlag ~= 0 then
         -- Show in-game time
         drawText(216, 0, string.format("%d:%d:%d.%d", sm.getGameTimeHours(), sm.getGameTimeMinutes(), sm.getGameTimeSeconds(), sm.getGameTimeFrames()), 0xFFFFFFFF)
     end
+    --]]
 end
 
 if xemu.emuId ~= xemu.emuId_lsnes then
