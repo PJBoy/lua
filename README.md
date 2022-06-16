@@ -19,4 +19,5 @@ Lua scripts for lua-supporting emulators
 * `Super charge shinespark.lua`: Requires `Super Metroid.lua` + `cross emu.lua`. Shows a rhythm game style chart on top of the HUD minimap to help learn the quick charge timing
 * `super audio.lua`: BizHawk only. Requires `Super Metroid.lua` + `cross emu.lua`. WIP script for looking at sound effects ARAM state
 * `super enemy.lua`: BizHawk only. Requires `Super Metroid.lua` + `cross emu.lua`. WIP script for looking at enemy RAM. Uses `enemy data.txt` for labelling AI variables and any known values
+* `super cpu.lua`: BizHawk only. Requires `cross emu.lua`. Colours the screen according to execution time of registered functions
 * `smz3.lua`: BizHawk only. Simple script that lets the user take notes for the smz3 randomiser. Works via a text box whose text is persisted to disk and a dropdown for switching between areas
