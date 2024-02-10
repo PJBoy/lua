@@ -97,3 +97,980 @@ E93F
 {
     name: Wrecked Ship robot, deactivated
 }
+
+CEBF
+{
+    name: Bouncing gooball
+}
+
+CEFF
+{
+    name: Mini-Crocomire
+}
+
+CF3F
+{
+    name: Maridia beyblade turtle
+}
+
+CF7F
+{
+    name: Mini-tatori
+}
+
+CFFF
+{
+    name: Spike shooting plant
+}
+
+D03F
+{
+    name: Maridia spikey shells
+}
+
+D07F
+{
+    name: Gunship top
+}
+
+D0BF
+{
+    name: Gunship bottom / entrance pad
+}
+
+D0FF
+{
+    name: Pre-Bomb Torizo fly
+}
+
+D13F
+{
+    name: Under ice beam fly
+}
+
+D17F
+{
+    name: Pre-spring ball fly
+}
+
+D1BF
+{
+    name: Norfair erratic fireball
+}
+
+D1FF
+{
+    name: Lavaquake rocks
+}
+
+D23F
+{
+    name: Rinka
+}
+
+D27F
+{
+    name: Rio
+}
+
+D2BF
+{
+    name: Norfair lava-jumping enemy
+}
+
+D2FF
+{
+    name: Norfair rio
+    0FA8: Y velocity
+    0FAA: X velocity
+    0FB2: Function
+    {
+        C281: Flames
+        C2E7: Idle
+        C33F: Start swoop
+        C361: Swoop - descending
+        C3B1: Swoop - ascending
+        C406: Finish swoop
+    }
+    0FB4: Part
+    {
+        0: Main
+        8000: Flames
+    }
+    7E7800: Instruction list
+    {
+        C0F1: Main - idle
+        C107: Main - swoop - start descending
+        C12F: Main - swoop - descending
+        C145: Main - swoop - start ascending
+        C179: Main - swoop - ascending
+        C18F: Flames - ascending
+        C1A3: Flames - descending
+    }
+    7E7802: Finished swoop start animation flag
+    7E7804: Flames offset
+}
+
+D33F
+{
+    name: Lower Norfair rio
+}
+
+D37F
+{
+    name: Maridia large indestructible snails
+}
+
+D3BF
+{
+    name: High-rising slow-falling enemy
+}
+
+D3FF
+{
+    name: Grapplable jet powered ripper
+}
+
+D43F
+{
+    name: Jet powered ripper
+}
+
+D47F
+{
+    name: Ripper
+}
+
+D4BF
+{
+    name: Lava seahorse
+}
+
+D4FF
+{
+    name: Timed shutter
+}
+
+D53F
+{
+    name: Shootable shutter
+}
+
+D57F
+{
+    name: Horizontal shootable shutter
+}
+
+D5BF
+{
+    name: Destroyable timed shutter
+}
+
+D5FF
+{
+    name: Rising and falling platform
+}
+
+D63F
+{
+    name: Waver
+}
+
+D67F
+{
+    name: Metal skree
+}
+
+D6BF
+{
+    name: Fireflea
+}
+
+D6FF
+{
+    name: Maridia fish
+}
+
+D73F
+{
+    name: Elevator
+}
+
+D77F
+{
+    name: Crab
+}
+
+D7BF
+{
+    name: Slug
+}
+
+D7FF
+{
+    name: Fast-moving slowly-sinking platform
+}
+
+D83F
+{
+    name: Platform that falls with Samus' weight
+}
+
+D87F
+{
+    name: Roach, flies away from Samus
+}
+
+D8BF
+{
+    name: Roach, unused/broken
+}
+
+D8FF
+{
+    name: Mochtroid
+}
+
+D93F
+{
+    name: Sidehopper
+}
+
+D97F
+{
+    name: Desgeega
+}
+
+D9BF
+{
+    name: Super-sidehopper
+}
+
+D9FF
+{
+    name: Tourian super-sidehopper
+}
+
+DA3F
+{
+    name: Super-desgeega
+}
+
+DA7F
+{
+    name: Maridia refill candy
+    0FAA: Spawn X position
+    0FAC: Spawn Y position
+    0FAE: Instruction list table index
+    {
+        0: Facing left - shooting
+        1: Facing left - rising
+        2: Facing right - shooting
+        3: Facing right - rising
+    }
+    0FB0: Previous instruction list table index
+    {
+        0: Facing left - shooting
+        1: Facing left - rising
+        2: Facing right - shooting
+        3: Facing right - rising
+    }
+    0FB4: Function
+    {
+        B482: Wait for Samus to get near
+        B4A8: Rising
+        B4D6: Shooting
+    }
+    7E7800: X speed table index
+}
+
+DABF
+{
+    name: Norfair slow fireball
+}
+
+DAFF
+{
+    name: Respawning enemy placeholder
+}
+
+DB3F
+{
+    name: Bang
+}
+
+DB7F
+{
+    name: Skree
+}
+
+DBBF
+{
+    name: Maridia snail
+}
+
+DBFF
+{
+    name: Reflec
+}
+
+DC3F
+{
+    name: Wrecked Ship orange zoomer
+}
+
+DC7F
+{
+    name: Big eye bugs
+}
+
+DCBF
+{
+    name: Fire zoomer
+}
+
+DCFF
+{
+    name: Zoomer
+}
+
+DD3F
+{
+    name: Stone zoomer
+}
+
+DD7F
+{
+    name: Metroid
+}
+
+DDBF
+{
+    name: Crocomire
+}
+
+DDFF
+{
+    name: Crocomire's tongue
+}
+
+DE3F
+{
+    name: Draygon
+}
+
+DE7F
+{
+    name: Draygon's eye
+}
+
+DEBF
+{
+    name: Draygon's tail
+}
+
+DEFF
+{
+    name: Draygon's arms
+}
+
+DF3F
+{
+    name: Spore Spawn
+}
+
+DF7F
+{
+    name: Spore Spawn
+}
+
+DFBF
+{
+    name: Boulder
+}
+
+DFFF
+{
+    name: Spikey platform
+}
+
+E03F
+{
+    name: Spikey platform, part 2: redundant
+}
+
+E07F
+{
+    name: Fire geyser
+}
+
+E0BF
+{
+    name: Nuclear waffle
+}
+
+E0FF
+{
+    name: Fake Kraid
+}
+
+E13F
+{
+    name: Ceres Ridley
+}
+
+E17F
+{
+    name: Ridley
+}
+
+E1BF
+{
+    name: Ridley's explosion
+}
+
+E1FF
+{
+    name: Ceres steam
+}
+
+E23F
+{
+    name: Ceres door
+}
+
+E27F
+{
+    name: Zebetites
+}
+
+E2BF
+{
+    name: Kraid
+}
+
+E2FF
+{
+    name: Kraid's arm
+}
+
+E33F
+{
+    name: Kraid top lint
+}
+
+E37F
+{
+    name: Kraid middle lint
+}
+
+E3BF
+{
+    name: Kraid bottom lint
+}
+
+E3FF
+{
+    name: Kraid's foot
+}
+
+E43F
+{
+    name: Kraid good fingernail
+}
+
+E47F
+{
+    name: Kraid bad fingernail
+}
+
+E4BF
+{
+    name: Phantoon body
+}
+
+E4FF
+{
+    name: Phantoon eye
+}
+
+E53F
+{
+    name: Phantoon tentacles
+}
+
+E57F
+{
+    name: Phantoon mouth
+}
+
+E5BF
+{
+    name: Etecoon
+    0FA8: Y velocity
+    0FAA: Y subvelocity
+    0FAC: X velocity
+    0FAE: X subvelocity
+    0FB0: Function timer
+    0FB2: Function
+    {
+        E9AF: Initial
+        EA00: Start hop - bottom of room
+        EA37: Hopping - bottom of room
+        EAB5: Look at Samus
+        EB02: Running left
+        EB2C: Running right
+        EB50: Jumping
+        EBCD: Wall jump
+        EC1B: Landed from jump
+        EC97: Run to left run-up point
+        ECBB: Run to right run-up point
+        ECDF: Running for successful morph tunnel jump
+        ED09: Successful morph tunnel jump
+        ED2A: Running through morph tunnel
+        ED54: Falling from morph tunnel ledge
+        ED75: Hopping - top of room
+        EDC7: Start hop - top of room
+        EE3E: Hop until Samus is near
+        EE9A: Running for failed morph tunnel jump
+        EEB8: Failed tunnel jump
+        
+    }
+    0FB4: Direction
+    {
+        0: Left
+        1: Right
+    }
+    0FB5: Hop counter
+    0FB6: ID
+    0FB7: Freeze timer
+}
+
+E5FF
+{
+    name: Dachora
+    0FA8: Speed / function timer / position update timer
+    0FAA: Subspeed
+    0FAC: Y acceleration
+    0FAE: Y subacceleration / visibility timer
+    0FB0: Palette animation timer
+    0FB1: Palette animation index
+    0FB2: Function
+    {
+        F570: Wait for Samus to be near
+        F5BC: Start running
+        F5ED: Running left
+        F65E: Running right
+        F78F: Activate shinespark
+        F806: Shinesparking
+        F935: Falling
+        F98C: Echo
+    }
+    0FB4: Direction
+    {
+        0: Left
+        1: Right
+    }
+}
+
+E63F
+{
+    name: Mini-Draygon
+}
+
+E67F
+{
+    name: Evir projectile
+}
+
+E6BF
+{
+    name: Morph ball eye
+}
+
+E6FF
+{
+    name: Fune
+}
+
+E73F
+{
+    name: Fune with eyes
+}
+
+E77F
+{
+    name: Wrecked Ship ghost
+}
+
+E7FF
+{
+    name: Kago
+}
+
+E83F
+{
+    name: Norfair lava creature
+}
+
+E87F
+{
+    name: Beetom
+    0FAA: Y speed table index
+    0FAC: Function
+    {
+        B814: Decide action
+        B82F: Decide action - Samus not in proximity
+        B84F: Start idling
+        B85F: Start crawling left
+        B873: Start crawling right
+        B887: Start short hop left
+        B8A9: Start short hop right
+        B8CB: Start long hop left
+        B8ED: Start long hop right
+        B90F: Decide action - Samus in proximity
+        B952: Start draining Samus - facing left
+        B966: Start draining Samus - facing right
+        B97A: Start dropping
+        B9A2: Start being flung
+        B9B2: Idling
+        B9C1: Crawling left
+        BA24: Crawling right
+        BA84: Short hop left
+        BAB7: Short hop right
+        BB55: Long hop left
+        BB88: Long hop right
+        BC26: Lunge left
+        BC5A: Lunge right
+        BCF8: Draining Samus - facing left
+        BD42: Draining Samus - facing right
+        BD9D: Dropping
+        BDC5: Being flung
+    }
+    0FAE: Function timer
+    0FB0: Button counter
+    0FB2: Previous controller 1 input
+    7E7800: Instruction list
+    {
+        B696: Crawling       - facing left
+        B6AC: Hop            - facing left
+        B6CC: Draining Samus - facing left
+        B6F2: Crawling       - facing right
+        B708: Hop            - facing right
+        B728: Draining Samus - facing right
+    }
+    7E7804: Initial short leap Y speed table index
+    7E7806: Initial long leap Y speed table index
+    7E7808: Initial lunge Y speed table index
+    7E780A: Falling flag
+    7E7810: Attached to Samus flag
+    7E7812: Direction
+}
+
+E8BF
+{
+    name: Maridia floater
+}
+
+E8FF
+{
+    name: Wrecked Ship robot
+}
+
+E97F
+{
+    name: Mardia puffer
+}
+
+E9BF
+{
+    name: Walking lava seahorse
+}
+
+E9FF
+{
+    name: Wrecked Ship orb
+}
+
+EA3F
+{
+    name: Wrecked Ship spark
+}
+
+EA7F
+{
+    name: Blue Brinstar face block
+}
+
+EABF
+{
+    name: Green ki-hunter
+}
+
+EAFF
+{
+    name: Green ki-hunter wings
+}
+
+EB3F
+{
+    name: Yellow ki-hunter
+}
+
+EB7F
+{
+    name: Yellow ki-hunter wings
+}
+
+EBBF
+{
+    name: Red ki-hunter
+}
+
+EBFF
+{
+    name: Red ki-hunter wings
+}
+
+EC3F
+{
+    name: Mother Brain's brain
+}
+
+EC7F
+{
+    name: Mother Brain's body
+}
+
+ECBF
+{
+    name: Shitroid in cutscene
+}
+
+ECFF
+{
+    name: Mother Brain's tubes falling
+}
+
+ED3F
+{
+    name: Dead Torizo
+}
+
+ED7F
+{
+    name: Dead sidehopper
+}
+
+EDBF
+{
+    name: Dead sidehopper, part 2
+}
+
+EDFF
+{
+    name: Dead zoomer
+}
+
+EE3F
+{
+    name: Dead ripper
+}
+
+EE7F
+{
+    name: Dead skree
+}
+
+EEBF
+{
+    name: Shitroid
+    0FA8: Function
+    0FAA: X velocity
+    0FAC: Y velocity
+    0FAE: Palette frame timer
+    0FAF: Palette handler timer
+    0FB0: Palette handler delay
+    0FB2: Function timer
+    0FB6: Contact reaction flag
+    7E7802: Aggro timer
+    7E7804: Stare down contact counter
+    7E7808: Cry sound effect flag
+    7E780A: Cry sound effect timer
+}
+
+EEFF
+{
+    name: Bomb Torizo
+}
+
+EF3F
+{
+    name: Bomb Torizo orb
+}
+
+EF7F
+{
+    name: Gold Torizo
+}
+
+EFBF
+{
+    name: Gold Torizo orb
+}
+
+EFFF
+{
+    name: Tourian entrance statue
+}
+
+F03F
+{
+    name: Tourian entrance statue ghost
+}
+
+F07F
+{
+    name: Shaktool
+}
+
+F0BF
+{
+    name: n00b tube cracks
+}
+
+F0FF
+{
+    name: Chozo statue
+}
+
+F153
+{
+    name: Unused spinning turtle eye
+}
+
+F193
+{
+    name: Brinstar red pipe bug
+}
+
+F1D3
+{
+    name: Brinstar green pipe bug
+}
+
+F213
+{
+    name: Norfair pipe bug
+}
+
+F253
+{
+    name: Brinstar yellow pipe bug
+}
+
+F293
+{
+    name: Botwoon
+}
+
+F2D3
+{
+    name: Escape etecoon
+}
+
+F313
+{
+    name: Escape dachora
+}
+
+F353
+{
+    name: Old Tourian grey wall space pirate
+}
+
+F393
+{
+    name: Kraid green wall space pirate
+}
+
+F3D3
+{
+    name: Norfair red wall space pirate
+}
+
+F413
+{
+    name: Lower Norfair gold wall space pirate
+}
+
+F453
+{
+    name: Maridia wall space pirate
+}
+
+F493
+{
+    name: Escape silver wall space pirate
+}
+
+F4D3
+{
+    name: Grey ninja space pirate
+}
+
+F513
+{
+    name: Green ninja space pirate
+}
+
+F553
+{
+    name: Red ninja space pirate
+}
+
+F593
+{
+    name: Gold ninja space pirate
+}
+
+F5D3
+{
+    name: Magenta ninja space pirate
+}
+
+F613
+{
+    name: Escape silver ninja space pirate
+}
+
+F653
+{
+    name: Grey walking space pirate
+}
+
+F693
+{
+    name: Green walking space pirate
+}
+
+F6D3
+{
+    name: Red walking space pirate
+}
+
+F713
+{
+    name: Gold walking space pirate
+}
+
+F753
+{
+    name: Magenta walking space pirate
+}
+
+F793
+{
+    name: Escape silver walking space pirate
+}
+

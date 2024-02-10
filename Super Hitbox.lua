@@ -16,16 +16,35 @@ end
 
 -- Globals
 recordLagHotspots = true
-debugControlsEnabled = 0
+debugControlsEnabled = 1
 debugFlag = 0
 debugInfoFlag = 0
 doorListFlag = 0
 followSamusFlag = 0--sm.button_B
 tasFlag = 0
-logFlag = 0
+logFlag = 1
 xAdjust = 0
 yAdjust = 0
 doorList = {}
+
+-- Colour constants
+colour_opacity = 0x80
+
+colour_slope        = 0x00FF0000 + xemu.rshift(colour_opacity, 1)
+colour_solidBlock   = 0xFF000000 + colour_opacity
+colour_specialBlock = 0x0000FF00 + colour_opacity
+
+colour_scroll_red   = 0xFF000000 + colour_opacity
+colour_scroll_blue  = 0x0000FF00 + colour_opacity
+colour_scroll_green = 0x00FF0000 + colour_opacity
+
+colour_enemy           = 0xFFFFFF00 + colour_opacity
+colour_spriteObject    = 0xFF800000 + colour_opacity
+colour_enemyProjectile = 0x00FF0000 + colour_opacity
+colour_powerBomb       = 0xFFFFFF00 + colour_opacity
+colour_projectile      = 0xFFFF0000 + colour_opacity
+colour_samus           = 0x00FFFF00 + colour_opacity
+colour_camera          = 0x80808000 + colour_opacity
 
 -- Add padding borders in BizHawk (highly resource intensive)
 xExtra = 0
@@ -44,7 +63,7 @@ yExtraScrolls = xemu.rshift(yExtraBlocks, 4)
 
 -- Adjust drawing to account for the borders
 function drawText(x, y, text, fg, bg)
-    xemu.drawText(x + xExtra, y + yExtra, text, fg, bg or "clear")
+    xemu.drawText(x + xExtra, y + yExtra, text, fg, bg or "black")
 end
 
 function drawBox(x0, y0, x1, y1, fg, bg)
@@ -109,132 +128,6 @@ function standardOutline(colour)
     end
 end
 
--- Slope drawing functions
-slope = {
-    [0x00] = function(blockX, blockY, flipX, flipY)
-        drawBox(blockX, blockY + 8 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040, "clear")
-    end,
-    [0x01] = function(blockX, blockY, flipX, flipY)
-        drawBox(blockX + 8 * flipX, blockY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040, "clear")
-    end,
-    [0x02] = function(blockX, blockY, flipX, flipY)
-        drawBox(blockX + 8 * flipX, blockY + 8 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040, "clear")
-    end,
-    [0x03] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX + 8 * flipX, blockY, blockX + 15 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX + 8 * flipX, blockY, blockX + 8 * flipX, blockY + 7 * flipY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 8 * flipY, blockX + 7 * flipX, blockY + 8 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 8 * flipY, blockX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x05] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 7 * flipX, blockY + 8 * flipY, 0x00FF0040)
-        drawLine(blockX + 8 * flipX, blockY + 8 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x06] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 7 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX + 8 * flipX, blockY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x07] = function(blockX, blockY, flipX, flipY)
-        drawBox(blockX, blockY + 8 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040, "clear")
-    end,
-    [0x0E] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX, blockY + 13 * flipY, blockX + 13 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX, blockY + 13 * flipY, blockX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX + 13 * flipX, blockY, blockX + 15 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x0F] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 5 * flipX, blockY + 14 * flipY, 0x00FF0040)
-        drawLine(blockX + 6 * flipX, blockY + 13 * flipY, blockX + 9 * flipX, blockY + 12 * flipY, 0x00FF0040)
-        drawLine(blockX + 10 * flipX, blockY + 11 * flipY, blockX + 11 * flipX, blockY + 10 * flipY, 0x00FF0040)
-        drawLine(blockX + 12 * flipX, blockY + 9 * flipY, blockX + 13 * flipX, blockY + 6 * flipY, 0x00FF0040)
-        drawLine(blockX + 14 * flipX, blockY + 5 * flipY, blockX + 15 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x12] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x13] = function(blockX, blockY, flipX, flipY)
-        drawBox(blockX, blockY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040, "clear")
-    end,
-    [0x14] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX + 8 * flipX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 8 * flipY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY + 8 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX + 8 * flipX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x15] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX + 8 * flipX, blockY, blockX + 15 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 7 * flipY, blockX + 7 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX, blockY + 8 * flipY, blockX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x16] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 8 * flipY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY + 8 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x17] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX, blockY + 7 * flipY, blockX + 15 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX, blockY + 8 * flipY, blockX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x18] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 11 * flipY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY + 11 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x19] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX, blockY + 10 * flipY, blockX + 15 * flipX, blockY + 5 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 10 * flipY, blockX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY + 5 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x1A] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX, blockY + 4 * flipY, blockX + 15 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX, blockY + 4 * flipY, blockX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x1B] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX + 8 * flipX, blockY + 15 * flipY, blockX + 15 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX + 8 * flipX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x1C] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 7 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX + 8 * flipX, blockY, blockX + 15 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x1D] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX + 10 * flipX, blockY + 15 * flipY, blockX + 15 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX + 10 * flipX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x1E] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX + 5 * flipX, blockY + 15 * flipY, blockX + 10 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX + 10 * flipX, blockY, blockX + 15 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX + 5 * flipX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end,
-    [0x1F] = function(blockX, blockY, flipX, flipY)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 5 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX + 5 * flipX, blockY, blockX + 15 * flipX, blockY, 0x00FF0040)
-        drawLine(blockX + 15 * flipX, blockY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-        drawLine(blockX, blockY + 15 * flipY, blockX + 15 * flipX, blockY + 15 * flipY, 0x00FF0040)
-    end
-}
-
 -- Block drawing functions
 outline = {
     -- Air
@@ -243,32 +136,124 @@ outline = {
     -- Slope
     [0x01] = function(blockX, blockY, blockIndex, stackLimit)
         local bts = sm.getBts(blockIndex)
-
-        -- X flip
-        if xemu.and_(bts, 0x40) ~= 0 then
-            blockX = blockX + 15
-            flipX = -1
-        else
-            flipX = 1
+        local i_slope = xemu.and_(bts, 0x1F)
+        local flip_x = xemu.and_(bts, 0x40) ~= 0
+        local flip_y = xemu.and_(bts, 0x80) ~= 0
+        
+    -- [[
+        local p_slope = 0x948B2B + i_slope * 0x10
+        
+        local ys = {}
+        for x = 0, 0xF do
+            local i = x
+            if flip_x then
+                i = 0xF - x
+            end
+            
+            local y = xemu.read_u8(p_slope + i)
+            if flip_y and y < 0x10 then
+                y = 0xF - y
+            end
+            
+            ys[x] = y
         end
-
-        -- Y flip
-        if xemu.and_(bts, 0x80) ~= 0 then
-            blockY = blockY + 15
-            flipY = -1
-        else
-            flipY = 1
+        
+        local x_min
+        for x = 0, 0xF do
+            if ys[x] < 0x10 then
+                x_min = x
+                break
+            end
         end
-
-        slopeFunction = slope[xemu.and_(bts, 0x1F)] or standardOutline("purple")
-        slopeFunction(blockX, blockY, flipX, flipY)
+        
+        if x_min == nil then
+            return
+        end
+        
+        local x_max
+        for i = 0, 0xF do
+            local x = 0xF - i
+            if ys[x] < 0x10 then
+                x_max = x
+                break
+            end
+        end
+        
+        local y_base = 0xF
+        if flip_y then
+            y_base = 0xF - y_base
+        end
+        
+        xemu.drawLine(blockX + x_min, blockY + y_base, blockX + x_min, blockY + ys[x_min], colour_slope)
+        
+        for x = x_min + 1, x_max do
+            if ys[x - 1] < 0x10 and ys[x] < 0x10 then
+                xemu.drawLine(blockX + x, blockY + ys[x - 1], blockX + x, blockY + ys[x], colour_slope)
+            end
+        end
+        
+        xemu.drawLine(blockX + x_max, blockY + y_base, blockX + x_max, blockY + ys[x_max], colour_slope)
+        xemu.drawLine(blockX + x_min, blockY + y_base, blockX + x_max, blockY + y_base, colour_slope)
+    --]]
+        
+    --[[
+        local p_slope = 0x94892B + i_slope * 0x10
+        
+        local xs = {}
+        for y = 0, 0xF do
+            local i = y
+            if flip_y then
+                i = 0xF - y
+            end
+            
+            local x = xemu.read_u8(p_slope + i)
+            if flip_x and x < 0x10 then
+                x = 0xF - x
+            end
+            
+            xs[y] = x
+        end
+        
+        local y_min
+        for y = 0, 0xF do
+            if xs[y] < 0x10 then
+                y_min = y
+                break
+            end
+        end
+        
+        local y_max
+        for i = 0, 0xF do
+            local y = 0xF - i
+            if xs[y] < 0x10 then
+                y_max = y
+                break
+            end
+        end
+        
+        local x_base = 0xF
+        if flip_x then
+            x_base = 0xF - x_base
+        end
+        
+        xemu.drawLine(blockX + x_base, blockY + y_min, blockX + xs[y_min], blockY + y_min, colour_slope)
+        
+        for y = y_min, y_max - 1 do
+            if xs[y] < 0x10 and xs[y + 1] < 0x10 then
+                xemu.drawLine(blockX + xs[y], blockY + y, blockX + xs[y + 1], blockY + y + 1, colour_slope)
+            end
+        end
+        
+        xemu.drawLine(blockX + x_base, blockY + y_max, blockX + xs[y_max], blockY + y_max, colour_slope)
+        xemu.drawLine(blockX + x_base, blockY + y_min, blockX + x_base, blockY + y_max, colour_slope)
+    --]]
     end,
 
     -- Spike air
     [0x02] = function(blockX, blockY, blockIndex, stackLimit) end,
 
     -- Special air
-    [0x03] = standardOutline(0x0000FF80),
+    [0x03] = standardOutline(colour_specialBlock),
 
     -- Shootable air
     [0x04] = function(blockX, blockY, blockIndex, stackLimit) end,
@@ -301,16 +286,16 @@ outline = {
     [0x07] = function(blockX, blockY, blockIndex, stackLimit) end,
 
     -- Solid block
-    [0x08] = standardOutline(0xFF000040),
+    [0x08] = standardOutline(colour_solidBlock),
 
     -- Door block
-    [0x09] = standardOutline(0x0000FF80),
+    [0x09] = standardOutline(colour_specialBlock),
 
     -- Spike block
-    [0x0A] = standardOutline(0x0000FF80),
+    [0x0A] = standardOutline(colour_specialBlock),
 
     -- Special block
-    [0x0B] = standardOutline(0x0000FF80),
+    [0x0B] = standardOutline(colour_specialBlock),
 
     -- Shootable block
     [0x0C] = function(blockX, blockY, blockIndex, stackLimit)
@@ -319,7 +304,7 @@ outline = {
         if bts >= 0x40 and bts <= 0x43 then
             standardOutline("orange")(blockX, blockY, blockIndex, stackLimit)
         else
-            standardOutline(0x0000FF80)(blockX, blockY, blockIndex, stackLimit)
+            standardOutline(colour_specialBlock)(blockX, blockY, blockIndex, stackLimit)
         end
     end,
 
@@ -345,10 +330,10 @@ outline = {
     end,
 
     -- Grapple block
-    [0x0E] = standardOutline(0x0000FF80),
+    [0x0E] = standardOutline(colour_specialBlock),
 
     -- Bombable block
-    [0x0F] = standardOutline(0x0000FF80)
+    [0x0F] = standardOutline(colour_specialBlock)
 }
 
 
@@ -419,17 +404,28 @@ function displayScrollBoundaries(cameraX, cameraY, roomWidth)
 
             local scroll = sm.getScroll((xemu.rshift(cameraY + y * 0x100, 8)) * xemu.rshift(roomWidth, 4) + xemu.rshift(cameraX + x * 0x100, 8))
 
-            local colour = 0xFF000080
+            local colour = colour_scroll_red
             if scroll == 1 then
-                colour = 0x0000FF80
+                colour = colour_scroll_blue
             elseif scroll == 2 then
-                colour = 0x00FF0080
+                colour = colour_scroll_green
             end
 
             drawBox(scrollX, scrollY, scrollX + 0xFF, scrollY + 0xFF, colour)
             --drawBox(scrollX, scrollY, scrollX + 0xFF, scrollY + 0xFF, colour, colour)
         end
     end
+end
+
+function displayCameraMargin()
+    local cameraDistanceIndex = sm.getCameraDistanceIndex()
+    
+    local top = sm.getUpScroller()
+    local bottom = sm.getDownScroller()
+    local left = xemu.read_u16_le(0x90963F + cameraDistanceIndex)
+    local right = xemu.read_u16_le(0x909647 + cameraDistanceIndex)
+    
+    drawBox(left, top, right, bottom, colour_camera)
 end
 
 function displayBlocks(cameraX, cameraY, roomWidth)
@@ -504,9 +500,9 @@ function displayFx(cameraX, cameraY)
     local fxY = sm.getFxYPosition() - cameraY
     local lavaAcidY = sm.getLavaAcidYPosition() - cameraY
     local fxTargetY = sm.getFxTargetYPosition() - cameraY
-    drawLine(0, fxY, 255, fxY, 0x00408080)
-    drawLine(0, lavaAcidY, 255, lavaAcidY, 0xFFC08080)
-    drawLine(0, fxTargetY, 255, fxTargetY, 0xFFFFFF80)
+    drawLine(0, fxY, 255, fxY, 0x004080FF)
+    drawLine(0, lavaAcidY, 255, lavaAcidY, 0xFFC080FF)
+    drawLine(0, fxTargetY, 255, fxTargetY, 0xFFFFFFFF)
 end
 
 function displayKraidHitbox(cameraX, cameraY)
@@ -527,7 +523,7 @@ function displayKraidHitbox(cameraX, cameraY)
         local left   = kraidXPosition + kraidLeftOffset   - cameraX
         local top    = kraidYPosition + kraidTopOffset    - cameraY
         local bottom = kraidYPosition + kraidBottomOffset - cameraY
-        drawBox(left, top, 256, bottom, 0xFFFFFF80, "clear")
+        drawBox(left, top, 256, bottom, 0xFFFFFFFF, "clear")
     end
 
     -- Invulnerable hitbox for Kraid's mouth
@@ -538,8 +534,8 @@ function displayKraidHitbox(cameraX, cameraY)
     local left   = kraidXPosition + kraidLeftOffset   - cameraX
     local top    = kraidYPosition + kraidTopOffset    - cameraY
     local bottom = kraidYPosition + kraidBottomOffset - cameraY
-    drawLine(left, top, 256, top, 0xFFFF8080)
-    drawLine(left, top, left, bottom, 0xFFFF8080)
+    drawLine(left, top, 256, top, 0xFFFF80FF)
+    drawLine(left, top, left, bottom, 0xFFFF80FF)
 
     -- Kraid's body
     local kraidSectionTopOffset = -0x8000
@@ -555,13 +551,13 @@ function displayKraidHitbox(cameraX, cameraY)
 
         -- Projectile hitbox is only defined up to Kraid's head, Samus hitbox uses whole table
         if kraidSectionTopOffset <= kraidBottomOffset then
-            drawLine(left, top, right, top, 0xFF808080)
-            drawLine(left, top, left, bottom, 0xFF808080)
+            drawLine(left, top, right, top, 0xFF8080FF)
+            drawLine(left, top, left, bottom, 0xFF8080FF)
             local kraidSectionTopOffset    = math.max(kraidSectionTopOffset, kraidBottomOffset)
             local kraidSectionBottomOffset = math.max(kraidSectionBottomOffset, kraidBottomOffset)
             local top    = kraidYPosition + kraidSectionTopOffset    - cameraY
             local bottom = kraidYPosition + kraidSectionBottomOffset - cameraY
-            drawLine(left, top, right, top, 0xFFFF8080)
+            drawLine(left, top, right, top, 0xFFFF80FF)
             drawLine(left, top, left, bottom, 0xFFFFC0C0)
         else
             drawLine(left, top, right, top, 0xFFFFC0C0)
@@ -640,9 +636,9 @@ function displayMotherBrainHitbox(cameraX, cameraY)
         end
     end
 
-    local x = xemu.read_s16_le(0x7E7814) - cameraX
-    local y = xemu.read_s16_le(0x7E7816) - cameraY
-    drawRightTriangle(x, y, x + 0x70, y - 0x60, "white")
+    --local x = xemu.read_s16_le(0x7E7814) - cameraX
+    --local y = xemu.read_s16_le(0x7E7816) - cameraY
+    --drawRightTriangle(x, y, x + 0x70, y - 0x60, "white")
     
     --local xPositionBody = sm.getEnemyXPosition(0)
     --local yPositionBody = sm.getEnemyYPosition(0)
@@ -674,7 +670,7 @@ function displayEnemyHitboxes(cameraX, cameraY)
             -- Draw enemy hitbox
             -- If not using extended spritemap format or frozen, draw simple hitbox
             if xemu.and_(sm.getEnemyExtraProperties(i), 4) == 0 or sm.getEnemyAiHandler(i) == 4 then
-                drawBox(left, top, right, bottom, 0xFFFFFF80, "clear")
+                drawBox(left, top, right, bottom, colour_enemy, "clear")
             else
                 -- Process extended spritemap format
                 local p_spritemap = sm.getEnemySpritemap(i)
@@ -702,7 +698,7 @@ function displayEnemyHitboxes(cameraX, cameraY)
                                             enemyYPosition - cameraY + entryYOffset + entryTop,
                                             enemyXPosition - cameraX + entryXOffset + entryRight,
                                             enemyYPosition - cameraY + entryYOffset + entryBottom,
-                                            0xFFFFFF80, "clear"
+                                            colour_enemy, "clear"
                                         )
                                     end
                                 end
@@ -713,13 +709,13 @@ function displayEnemyHitboxes(cameraX, cameraY)
             end
 
             -- Show enemy index and ID
-            drawText(left + 16, top, string.format("%u: %04X", i, enemyId), 0xFFFFFFFF)
+            drawText(left + 16, top, string.format("%u: %04X", i, enemyId), colour_enemy)
 
             -- Log enemy index and ID to list in top-right
             if logFlag ~= 0 then
-                drawText(224, y, string.format("%u: %04X", i, enemyId), 0xFFFFFFFF, 0xFF)
-                --drawText(192, y, string.format("%u: %04X", i, sm.getEnemyInstructionList(i)), 0xFFFFFFFF, 0xFF)
-                --drawText(160, y, string.format("%u: %04X", i, sm.getEnemyAiVariable5(i)), 0xFFFFFFFF, 0xFF)
+                drawText(224, y, string.format("%u: %04X", i, enemyId), colour_enemy, 0xFF)
+                --drawText(192, y, string.format("%u: %04X", i, sm.getEnemyInstructionList(i)), colour_enemy, 0xFF)
+                --drawText(160, y, string.format("%u: %04X", i, sm.getEnemyAiVariable5(i)), colour_enemy, 0xFF)
                 y = y + 8
             end
 
@@ -727,11 +723,11 @@ function displayEnemyHitboxes(cameraX, cameraY)
             local enemySpawnHealth = xemu.read_u16_le(0xA00004 + enemyId)
             if enemySpawnHealth ~= 0 then
                 local enemyHealth = sm.getEnemyHealth(i)
-                drawText(left, top - 16, string.format("%u/%u", enemyHealth, enemySpawnHealth), 0xFFFFFF80)
+                drawText(left, top - 16, string.format("%u/%u", enemyHealth, enemySpawnHealth), colour_enemy)
                 -- Draw enemy health bar
                 if enemyHealth ~= 0 then
-                    drawBox(left, top - 8, left + enemyHealth * 32 / enemySpawnHealth, top - 5, 0xFFFFFF80, 0xFFFFFF80)
-                    drawBox(left, top - 8, left + 32, top - 5, 0xFFFFFF80, "clear")
+                    drawBox(left, top - 8, left + enemyHealth * 32 / enemySpawnHealth, top - 5, colour_enemy, colour_enemy)
+                    drawBox(left, top - 8, left + 32, top - 5, colour_enemy, "clear")
                 end
             end
         end
@@ -754,14 +750,14 @@ function displaySpriteObjects(cameraX, cameraY)
             local bottom = spriteObjectYPosition + spriteObjectYRadius - cameraY
 
             -- Draw sprite object
-            drawBox(left, top, right, bottom, 0xFF800080, "clear")
+            drawBox(left, top, right, bottom, colour_spriteObject, "clear")
 
             -- Show sprite object index and ID
-            drawText(left, top, string.format("%u: %04X", i, spriteObjectId), "yellow", "black")
+            drawText(left, top, string.format("%u: %04X", i, spriteObjectId), colour_spriteObject, "black")
 
             -- Log sprite object index and ID to list in top-left
             if logFlag ~= 0 then
-                drawText(0, y, string.format("%u: %04X", i, spriteObjectId), "yellow", "black")
+                drawText(0, y, string.format("%u: %04X", i, spriteObjectId), colour_spriteObject, "black")
                 y = y + 8
             end
         end
@@ -784,17 +780,19 @@ function displayEnemyProjectileHitboxes(cameraX, cameraY)
             local bottom = enemyProjectileYPosition + enemyProjectileYRadius - cameraY
 
             -- Draw enemy projectile hitbox
-            drawBox(left, top, right, bottom, 0x00FF0080, "clear")
-            --drawBox(math.min(left, right - 2), math.min(top, bottom - 2), math.max(right, left + 2), math.max(bottom, top + 2), 0x00FF0080, "clear")
+            drawBox(left, top, right, bottom, colour_enemyProjectile, "clear")
+            --drawBox(math.min(left, right - 2), math.min(top, bottom - 2), math.max(right, left + 2), math.max(bottom, top + 2), colour_enemyProjectile, "clear")
 
+            if enemyProjectileId == 0xDE88 then
             -- Show enemy projectile index and ID
-            drawText(left, top, string.format("%u: %04X", i, enemyProjectileId), 0x00FF00FF)
+            drawText(left, top, string.format("%u: %04X", i, xemu.read_u16_le(0x7E1B23 + i * 2)), colour_enemyProjectile)
             --drawText(left, top, string.format("%04X", xemu.read_u16_le(0x7E1B6B + i * 2)), 0x00FFFFFF, 0x000000FF)
 
             -- Log enemy projectile index and ID to list in top-right (after sprite objects)
             if logFlag ~= 0 then
-                drawText(0, y, string.format("%u: %04X", i, enemyProjectileId), "green")
+                drawText(0, y, string.format("%u: %04X", i, xemu.read_u16_le(0x7E1B23 + i * 2)), colour_enemyProjectile)
                 y = y + 8
+            end
             end
         end
     end
@@ -815,7 +813,7 @@ function displayPowerBombExplosionHitbox(cameraX, cameraY)
     local bottom = powerBombYPosition + powerBombYRadius - cameraY
 
     -- Draw power bomb hitbox
-    drawBox(left, top, right, bottom, 0xFFFFFF80, "clear")
+    drawBox(left, top, right, bottom, colour_powerBomb, "clear")
 end
 
 function displayProjectileHitboxes(cameraX, cameraY)
@@ -830,14 +828,18 @@ function displayProjectileHitboxes(cameraX, cameraY)
         local bottom = projectileYPosition + projectileYRadius - cameraY
 
         -- Draw projectile hitbox
-        drawBox(left, top, right, bottom, 0xFFFF0080, "clear")
+        drawBox(left, top, right, bottom, colour_projectile, "clear")
 
-        -- Show projectile damage
-        drawText(left, top - 8, sm.getProjectileDamage(i), 0xFFFF0080)
+        if sm.getBombTimer(i) ~= 0 then
+            -- Show projectile damage
+            drawText(left, top - 8, sm.getProjectileDamage(i), colour_projectile)
 
-        -- Show bomb timer
-        if i >= 5 then
-            drawText(left, top - 16, sm.getBombTimer(i), 0xFFFF0080)
+            -- Show bomb timer
+            if i >= 5 then
+                drawText(left, top - 16, sm.getBombTimer(i), colour_projectile)
+            else
+                drawText(left, top - 16, string.format("%04X", sm.getBombTimer(i)), colour_projectile)
+            end
         end
     end
 end
@@ -858,7 +860,7 @@ function displaySamusHitbox(cameraX, cameraY, samusXPosition, samusYPosition)
     end
 
     -- Draw Samus' hitbox
-    drawBox(left, top, right, bottom, 0x00FFFF80, "clear")
+    drawBox(left, top, right, bottom, colour_samus, "clear")
 
     -- Show current cooldown time
     local cooldown = sm.getCooldownTimer()
@@ -876,14 +878,14 @@ function displaySamusHitbox(cameraX, cameraY, samusXPosition, samusYPosition)
     local invincibility = sm.getInvincibilityTimer()
     local recoil = sm.getRecoilTimer()
     if recoil ~= 0 then
-        drawText(right, (top + bottom) / 2, recoil, 0x00FFFF80)
+        drawText(right, (top + bottom) / 2, recoil, colour_samus)
     elseif invincibility ~= 0 then
-        drawText(right, (top + bottom) / 2, invincibility, 0x00FFFF80)
+        drawText(right, (top + bottom) / 2, invincibility, colour_samus)
     end
 
     local shine = sm.getShinesparkTimer()
     if shine ~= 0 then
-        drawText(right, (top + bottom) / 2 + 8, shine, 0x00FFFF80)
+        drawText(right, (top + bottom) / 2 + 8, shine, colour_samus)
     end
 
     if tasFlag ~= 0 then
@@ -922,7 +924,8 @@ function on_paint()
     
     -- [[
     displayScrollBoundaries(cameraX, cameraY, roomWidth)
-    displayDebugInfo(cameraX, cameraY, roomWidth)
+    ----displayCameraMargin()
+    ----displayDebugInfo(cameraX, cameraY, roomWidth)
     displayBlocks(cameraX, cameraY, roomWidth)
     displayFx(cameraX, cameraY)
     

@@ -68,9 +68,115 @@ function saveNotes()
 end
 
 function deleteNotes()
-    for k, notes_filename in pairs(notes_filenames) do
-        os.remove(notes_directory .. notes_filename)
-    end
+    -- Key locations
+    local notes_file = io.open(notes_directory .. notes_filenames[0], "w")
+    local text = string.gsub([[Sick kid: 
+Blacksmith: 
+Potion shop: 
+Bomb shop: 
+Sahasrahla: 
+Magic bat: 
+]], '\n', '\r\n')
+    notes_file:write(text)
+    notes_file:close()
+    
+    -- Overworld
+    local notes_file = io.open(notes_directory .. notes_filenames[1], "w")
+    notes_file:write("")
+    notes_file:close()
+    
+    -- Hyrule Castle
+    local notes_file = io.open(notes_directory .. notes_filenames[2], "w")
+    text = string.gsub([[Main entrance: 
+Left entrance: 
+Right entrance: 
+Boss entrance: 
+]], '\n', '\r\n')
+    notes_file:write(text)
+    notes_file:close()
+    
+    -- Eastern Palace
+    local notes_file = io.open(notes_directory .. notes_filenames[3], "w")
+    text = string.gsub([[Entrance: 
+]], '\n', '\r\n')
+    notes_file:write(text)
+    notes_file:close()
+    
+    -- Desert Palace
+    local notes_file = io.open(notes_directory .. notes_filenames[4], "w")
+    text = string.gsub([[Main entrance: 
+Left entrance: 
+Right entrance: 
+Boss entrance: 
+]], '\n', '\r\n')
+    notes_file:write(text)
+    notes_file:close()
+    
+    -- Hera's Tower
+    local notes_file = io.open(notes_directory .. notes_filenames[5], "w")
+    text = string.gsub([[Entrance: 
+]], '\n', '\r\n')
+    notes_file:write(text)
+    notes_file:close()
+    
+    -- Dark Palace
+    local notes_file = io.open(notes_directory .. notes_filenames[6], "w")
+    text = string.gsub([[Entrance: 
+]], '\n', '\r\n')
+    notes_file:write(text)
+    notes_file:close()
+    
+    -- Swamp Palace
+    local notes_file = io.open(notes_directory .. notes_filenames[7], "w")
+    text = string.gsub([[Entrance: 
+]], '\n', '\r\n')
+    notes_file:write(text)
+    notes_file:close()
+    
+    -- Skull Woods
+    local notes_file = io.open(notes_directory .. notes_filenames[8], "w")
+    text = string.gsub([[Entrance: 
+]], '\n', '\r\n')
+    notes_file:write(text)
+    notes_file:close()
+    
+    -- Thieves' Town
+    local notes_file = io.open(notes_directory .. notes_filenames[9], "w")
+    text = string.gsub([[Entrance: 
+]], '\n', '\r\n')
+    notes_file:write(text)
+    notes_file:close()
+    
+    -- Ice Palace
+    local notes_file = io.open(notes_directory .. notes_filenames[10], "w")
+    text = string.gsub([[Entrance: 
+]], '\n', '\r\n')
+    notes_file:write(text)
+    notes_file:close()
+    
+    -- Misery Mire
+    local notes_file = io.open(notes_directory .. notes_filenames[11], "w")
+    text = string.gsub([[Entrance: 
+]], '\n', '\r\n')
+    notes_file:write(text)
+    notes_file:close()
+    
+    -- Turtle Rock
+    local notes_file = io.open(notes_directory .. notes_filenames[12], "w")
+    text = string.gsub([[Main entrance: 
+Left entrance: 
+Right entrance: 
+Boss entrance: 
+]], '\n', '\r\n')
+    notes_file:write(text)
+    notes_file:close()
+    
+    -- Ganon's Tower
+    local notes_file = io.open(notes_directory .. notes_filenames[13], "w")
+    text = string.gsub([[Entrance: 
+]], '\n', '\r\n')
+    notes_file:write(text)
+    notes_file:close()
 end
 
 
@@ -112,7 +218,7 @@ local scrollbars = "both"
 superform_notes = forms.newform(width, height, "Notes")
 
 local labels = {
-    "00 Super Metroid",
+    "00 Key locations",
     "01 Overworld",
     "02 Light world 0 - Hyrule Castle",
     "03 Light world 1 - Eastern Palace",

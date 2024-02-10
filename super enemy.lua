@@ -13,8 +13,8 @@ function pairsByKeys (t, f)
   local a = {}
   for n in pairs(t) do table.insert(a, n) end
   table.sort(a, f)
-  local i = 0      -- iterator variable
-  local iter = function ()   -- iterator function
+  local i = 0 
+  local iter = function()
     i = i + 1
     if a[i] == nil then return nil
     else return a[i], t[a[i]]
@@ -172,6 +172,8 @@ function updateForm_main(form)
     local aiVariable3Description = ""
     local aiVariable4Description = ""
     local aiVariable5Description = ""
+    local parameter1Description = ""
+    local parameter2Description = ""
     local otherDescriptions = {}
     if enemyDatabase[enemyId] ~= nil then
         -- Custom enemy name
@@ -209,7 +211,17 @@ function updateForm_main(form)
                 if enemyDatabase[enemyId]["0FB2_list"] ~= nil then
                     aiVariable5Description = enemyDatabase[enemyId]["0FB2_list"][sm.getEnemyAiVariable5(i_enemy)] or ""
                 end
-            elseif not string.match(k, "_list$") and string.match(k, "^7E") then
+            elseif k == "0FB4" then
+                text_enemyParameter1 = enemyDatabase[enemyId]["0FB4"] or text_enemyParameter1
+                if enemyDatabase[enemyId]["0FB4_list"] ~= nil then
+                    parameter1Description = enemyDatabase[enemyId]["0FB4_list"][sm.getEnemyParameter1(i_enemy)] or ""
+                end
+            elseif k == "0FB6" then
+                text_enemyParameter2 = enemyDatabase[enemyId]["0FB6"] or text_enemyParameter2
+                if enemyDatabase[enemyId]["0FB6_list"] ~= nil then
+                    parameter2Description = enemyDatabase[enemyId]["0FB6_list"][sm.getEnemyParameter2(i_enemy)] or ""
+                end
+            elseif not string.match(k, "_list$") and tonumber(k, 0x10) ~= nil then
                 otherDescriptions[k] = {['address'] = v, ['value'] = ""}
                 if enemyDatabase[enemyId][k .. "_list"] ~= nil then
                     otherDescriptions[k]['value'] = enemyDatabase[enemyId][k .. "_list"][xemu.read_u16_le(tonumber(k, 0x10) + i_enemy * 0x40)] or ""
@@ -266,6 +278,8 @@ function updateForm_main(form)
         end
         
         text_enemyId = text_enemyId .. string.format(" (%s)", enemyName)
+    elseif customEnemyName ~= "" then
+        text_enemyId = string.format("(%s)", customEnemyName)
     end
     
     if aiVariable0Description ~= "" then text_enemyAiVariable0 = text_enemyAiVariable0 .. ". " .. aiVariable0Description end
@@ -274,6 +288,8 @@ function updateForm_main(form)
     if aiVariable3Description ~= "" then text_enemyAiVariable3 = text_enemyAiVariable3 .. ". " .. aiVariable3Description end
     if aiVariable4Description ~= "" then text_enemyAiVariable4 = text_enemyAiVariable4 .. ". " .. aiVariable4Description end
     if aiVariable5Description ~= "" then text_enemyAiVariable5 = text_enemyAiVariable5 .. ". " .. aiVariable5Description end
+    if parameter1Description  ~= "" then text_enemyParameter1  = text_enemyParameter1  .. ". " .. parameter1Description  end
+    if parameter2Description  ~= "" then text_enemyParameter2  = text_enemyParameter2  .. ". " .. parameter2Description  end
     
     local otherText = ""
     for k, v in pairsByKeys(otherDescriptions) do

@@ -1,93 +1,9 @@
 -- Note that BizHawk requires a restart if any included files are modified
+xemu = require("cross emu")
 sm = require("Super Metroid")
 
--- Patch some functions for cross-emu compatibility
-emuId_bizhawk = 0
-emuId_snes9x  = 1
-
-if memory.usememorydomain then
-    emuId = emuId_bizhawk
-elseif memory.readshort then
-    emuId = emuId_snes9x
-end
-
--- Define memory access functions
-if emuId == emuId_bizhawk then
-    function makeMemoryReader(f)
-        return function(p)
-            if p < 0x800000 then
-                return f(bit.band(p, 0x1FFFF), "WRAM")
-            else
-                return f(snes2pc(p), "CARTROM")
-            end
-        end
-    end
-
-    function makeMemoryWriter(f)
-        return function(p, v)
-            if p < 0x800000 then
-                return f(bit.band(p, 0x1FFFF), v, "WRAM")
-            else
-                print(string.format('Error: trying to write to ROM address %X', p))
-            end
-        end
-    end
-
-    function makeAramReader(f)
-        return function(p)
-            return f(p, "APURAM")
-        end
-    end
-
-    read_u8      = makeMemoryReader(memory.read_u8)
-    read_u16_le  = makeMemoryReader(memory.read_u16_le)
-    read_s8      = makeMemoryReader(memory.read_s8)
-    read_s16_le  = makeMemoryReader(memory.read_s16_le)
-    write_u8     = makeMemoryWriter(memory.write_u8)
-    write_u16_le = makeMemoryWriter(memory.write_u16_le)
-
-    read_aram_u8     = makeAramReader(memory.read_u8)
-    read_aram_u16_le = makeAramReader(memory.read_u16_le)
-    read_aram_s8     = makeAramReader(memory.read_s8)
-    read_aram_s16_le = makeAramReader(memory.read_s16_le)
-elseif emuId == emuId_snes9x then
-    read_u8      = memory.readbyte
-    read_u16_le  = memory.readshort
-    read_s8      = memory.readbytesigned
-    read_s16_le  = memory.readshortsigned
-    write_u8     = memory.writebyte
-    write_u16_le = memory.writeshort
-else -- emuId == lsnes
-    function makeMemoryReader(f)
-        return function(p)
-            if p < 0x800000 then
-                return f(p)
-            else
-                return f("ROM", snes2pc(p))
-            end
-        end
-    end
-
-    function makeMemoryWriter(f)
-        return function(p, v)
-            if p < 0x800000 then
-                return f(p, v)
-            else
-                print(string.format('Error: trying to write to ROM address %X', p))
-            end
-        end
-    end
-
-    read_u8      = makeMemoryReader(memory.readbyte)
-    read_u16_le  = makeMemoryReader(memory.readword)
-    read_s8      = makeMemoryReader(memory.readsbyte)
-    read_s16_le  = makeMemoryReader(memory.readsword)
-    write_u8     = makeMemoryWriter(memory.writebyte)
-    write_u16_le = makeMemoryWriter(memory.writeword)
-end
-
 -- Define a controller 1 input function
-if emuId == emuId_bizhawk then
+if xemu.emuId == xemu.emuId_bizhawk then
     function getInput()
         local inputTable = joypad.get()
         return (
@@ -105,7 +21,7 @@ if emuId == emuId_bizhawk then
             + (inputTable['P1 R']      and sm.button_R or 0)
         )
     end
-elseif emuId == emuId_snes9x then
+elseif xemu.emuId == xemu.emuId_snes9x then
     function getInput()
         local inputTable = joypad.get()
         return (
@@ -200,16 +116,16 @@ function on_paint()
     local chartHeight = 0x18
     local flashLength = 4
 
-    gui.drawBox(chartOriginX, chartOriginY, chartOriginX + chartWidth, chartOriginY + chartHeight, "black", "black")
-    gui.drawLine(chartOriginX, chartOriginY, chartOriginX, chartOriginY + chartHeight, "white")
+    xemu.drawBox(chartOriginX, chartOriginY, chartOriginX + chartWidth, chartOriginY + chartHeight, "black", "black")
+    xemu.drawLine(chartOriginX, chartOriginY, chartOriginX, chartOriginY + chartHeight, "white")
 
     if sm.getSamusMovementType() == 1 and sm.getSpeedBoosterLevel() < 4 then
         local timer = timeUntilTap()
 
-        gui.drawLine(chartOriginX + timer, chartOriginY, chartOriginX + timer, chartOriginY + chartHeight, "white")
+        xemu.drawLine(chartOriginX + timer, chartOriginY, chartOriginX + timer, chartOriginY + chartHeight, "white")
         if timer == 0 then
             colour = "red"
-            if bit.band(getInput(), sm.getRunBinding()) ~= 0 then
+            if xemu.and_(getInput(), sm.getRunBinding()) ~= 0 then
                 colour = "green"
             end
             
@@ -218,16 +134,15 @@ function on_paint()
         
         if flashTimer ~= 0 then
             flashTimer = flashTimer - 1
-            gui.drawLine(chartOriginX - 1, chartOriginY, chartOriginX - 1, chartOriginY + chartHeight, colour)
-            gui.drawLine(chartOriginX + 1, chartOriginY, chartOriginX + 1, chartOriginY + chartHeight, colour)
+            xemu.drawLine(chartOriginX - 1, chartOriginY, chartOriginX - 1, chartOriginY + chartHeight, colour)
+            xemu.drawLine(chartOriginX + 1, chartOriginY, chartOriginX + 1, chartOriginY + chartHeight, colour)
         end
         
-        gui.drawText(8, 8, string.format("%d %04X", timer, getInput()), 0xFFFFFFFF)
+        xemu.drawText(8, 8, string.format("%d %04X", timer, getInput()), 0xFFFFFFFF)
     end
 end
 
-gui.register(on_paint)
-
 while true do
     emu.frameadvance()
+    on_paint()
 end

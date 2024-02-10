@@ -32,12 +32,18 @@ end
 
 -- Define memory access functions
 if xemu.emuId == xemu.emuId_bizhawk then
+    if memory.getmemorydomainsize("CARTRIDGE_ROM") ~= memory.getcurrentmemorydomainsize() then
+        romDomainName = "CARTRIDGE_ROM" -- used by BSNES core
+    elseif memory.getmemorydomainsize("CARTROM") ~= memory.getcurrentmemorydomainsize() then
+        romDomainName = "CARTROM" -- used by snes9x
+    end
+
     function makeMemoryReader(f)
         return function(p)
             if p < 0x800000 then
                 return f(xemu.and_(p, 0x1FFFF), "WRAM")
             else
-                return f(snes2pc(p), "CARTROM")
+                return f(snes2pc(p), romDomainName)
             end
         end
     end
@@ -107,6 +113,14 @@ end
 
 -- GUI functions
 if xemu.emuId == xemu.emuId_bizhawk then
+    xemu.drawPixel = function(x, y, fg)
+        if fg ~= nil and type(fg) ~= "string" then
+            fg = xemu.rshift(fg, 8) + xemu.lshift(xemu.and_(fg, 0xFF), 0x18)
+        end
+        
+        gui.drawPixel(x0, y0, x1, y1, fg, bg)
+    end
+    
     xemu.drawBox = function(x0, y0, x1, y1, fg, bg)
         if fg ~= nil and type(fg) ~= "string" then
             fg = xemu.rshift(fg, 8) + xemu.lshift(xemu.and_(fg, 0xFF), 0x18)
@@ -137,7 +151,8 @@ if xemu.emuId == xemu.emuId_bizhawk then
         gui.pixelText(x0, y0, x1, y1, fg, bg)
     end
 elseif xemu.emuId == xemu.emuId_snes9x then
-    xemu.drawBox  = function(x0, y0, x1, y1, fg, bg) gui.box(x0, y0, x1, y1, bg, fg) end
+    xemu.drawPixel = gui.pixel
+    xemu.drawBox  = function(x0, y0, x1, y1, fg, bg) gui.box(x0, y0, x1, y1, bg or 0, fg) end
     xemu.drawLine = gui.line
     xemu.drawText = gui.text
 else -- emuId == lsnes
@@ -174,6 +189,15 @@ else -- emuId == lsnes
         end
 
         return xemu.and_(colour, 0xFFFFFF)
+    end
+
+    xemu.drawPixel = function(x, y, fg)
+        local n_x, n_y = gui.resolution()
+        local s_x = n_x / 256
+        local s_y = n_y / 224
+        x = math.floor(x * s_x)
+        y = math.floor(y * s_y)
+        gui.pixel(x, y, decodeColour(fg))
     end
 
     xemu.drawBox = function(x0, y0, x1, y1, fg, bg)

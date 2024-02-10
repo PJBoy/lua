@@ -282,7 +282,7 @@ while true do
             if tilemapValue < maxSolidThreshold then
                 if tilemapValue < 4 or clip ~= 0 and AND(clip, 0xF9) == clip then
                     gui.box(tileX, tileY, tileX + 7, tileY + 7, "clear", "orange")
-                    --gui.text(tileX, tileY, string.format("%02X", clip), "orange")
+                    gui.text(tileX, tileY, string.format("%02X", clip), "orange")
                 elseif clip ~= 0 then
                     gui.box(tileX, tileY, tileX + 7, tileY + 7, "clear", "purple")
                     gui.text(tileX, tileY, string.format("%02X", clip), "purple")
@@ -342,7 +342,8 @@ while true do
         -- Using Samus' position on screen
         local yPosition = memory.readbyte(0xD03B) - 16
         local xPosition = memory.readbyte(0xD03C) - 8
-        local top    = yPosition - 16
+        local pose = AND(memory.readbyte(0xD020), 0x7F)
+        local top    = yPosition + memory.gbromreadbytesigned(0x369B + pose)
         local bottom = yPosition + 16
         local left   = xPosition - 8
         local right  = xPosition + 8
@@ -350,15 +351,17 @@ while true do
         gui.box(left, top, right, bottom, 'clear', 'cyan')
         
         -- Using Samus' absolute position
+    --[[
         local cameraX, cameraY = memory.readshort(0xFFCA), memory.readshort(0xFFC8)
         yPosition = memory.readshort(0xFFC0) - cameraY + 0x62 - 16
         xPosition = memory.readshort(0xFFC2) - cameraX + 0x60 - 8
-        top    = yPosition - 15
+        top    = yPosition + memory.gbromreadbytesigned(0x369B + pose)
         bottom = yPosition + 15
         left   = xPosition - 7
         right  = xPosition + 7
         
         gui.box(left, top, right, bottom, 'clear', 'green')
+    --]]
     end
 
     -- Show solid thresholds
