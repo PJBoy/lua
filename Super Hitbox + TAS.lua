@@ -897,7 +897,7 @@ function displaySamusHitbox(cameraX, cameraY, samusXPosition, samusYPosition)
             direction = '<-'
         end
 
-        gui.text(10, 100, string.format("X:%s: %3d.%05d", direction, xemu.rshift(xDistance_actual, 0x10), xemu.and_(xDistance_actual, 0xFFFF)), colour)
+        drawText(10, 100, string.format("X:%s: %3d.%05d", direction, xemu.rshift(xDistance_actual, 0x10), xemu.and_(xDistance_actual, 0xFFFF)), colour)
     end
 
     -- Show Y distance
@@ -907,7 +907,7 @@ function displaySamusHitbox(cameraX, cameraY, samusXPosition, samusYPosition)
             direction = '^'
         end
 
-        gui.text(10, 110, string.format("Y: %s: %3d.%05d", direction, xemu.rshift(yDistance, 0x10), xemu.and_(yDistance, 0xFFFF)), colour)
+        drawText(10, 110, string.format("Y: %s: %3d.%05d", direction, xemu.rshift(yDistance, 0x10), xemu.and_(yDistance, 0xFFFF)), colour)
     end
 
 end
@@ -938,7 +938,7 @@ function displayItemPercentage()
     percent = percent + xemu.and_(xemu.rshift(collectedBeams, 3), 1) -- plasma beam
     percent = percent + xemu.and_(xemu.rshift(collectedBeams, 0xC), 1) -- charge beam
 
-    gui.text(20, 160, string.format("Items:  %3d%%", percent));
+    drawText(20, 160, string.format("Items:  %3d%%", percent));
 end
 
 function displayActiveGlitches(samusXPosition, samusYPosition)
@@ -1080,7 +1080,7 @@ function displayActiveGlitches(samusXPosition, samusYPosition)
     activeGlitches = activeGlitches .. oob()
     
     if activeGlitches ~= '' then
-        gui.text(10, 130, 'Active glitches:' .. activeGlitches);
+        drawText(10, 130, 'Active glitches:' .. activeGlitches);
     end
 end
 
@@ -1111,7 +1111,7 @@ function displayActiveTricks(samusXPosition, samusYPosition)
     activeTricks = activeTricks .. btSkip()
     
     if activeTricks ~= '' then
-        gui.text(10, 120, 'Active tricks:' .. activeTricks);
+        drawText(10, 120, 'Active tricks:' .. activeTricks);
     end
 end
 
