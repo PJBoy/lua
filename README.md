@@ -1,5 +1,5 @@
 # lua
-Lua scripts for lua-supporting emulators
+Lua scripts for lua-supporting emulators. Specifically [snes9x-rr](https://github.com/TASEmulators/snes9x-rr/releases) (v1.43 or 1.51), [BizHawk](https://github.com/TASEmulators/BizHawk/releases/tag/2.8) (v2.8 or less), [lsnes](https://tasvideos.org/EmulatorResources/Lsnes) (I should test this more often)
 
 * `Super Camhack.lua`: Requires `Super Metroid.lua` + `cross emu.lua`. BizHawk only. Non-intrusively fixes graphical errors caused by:
   * Misaligned doors
