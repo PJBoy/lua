@@ -1,5 +1,6 @@
 -- If lsnes complains about "module 'Super Metroid' not found", uncomment the next line and provide the path to the "Super Metroid.lua" file
 -- package.path = "C:\\Games\\Lua\\Super Metroid.lua"
+-- If Mesen complains about `require` not being recognised, you need to enable Lua IO access in the settings
 xemu = require("cross emu")
 sm = require("Super Metroid")
 
@@ -10,8 +11,10 @@ elseif print then
     print("\n\n\n\n\n\n\n\n")
 end
 
-if gui.clearGraphics then
+if gui and gui.clearGraphics then
     gui.clearGraphics()
+elseif emu and emu.clearScreen then
+    emu.clearScreen()
 end
 
 -- Globals
@@ -48,6 +51,7 @@ colour_spriteObject    = 0xFF800000 + colour_opacity
 colour_enemyProjectile = 0x00FF0000 + colour_opacity
 colour_powerBomb       = 0xFFFFFF00 + colour_opacity
 colour_projectile      = 0xFFFF0000 + colour_opacity
+                                                    
 colour_camera          = 0x80808000 + colour_opacity
 
 colour_samus            = 0x80FFFF00 + colour_opacity -- actual X distance = expected X distance
@@ -1170,7 +1174,9 @@ function on_paint()
     previousSamusYSubposition = sm.getSamusYSubposition()
 end
 
-if xemu.emuId ~= xemu.emuId_lsnes then
+if xemu.emuId == xemu.emuId_mesen then
+    emu.addEventCallback(on_paint, emu.eventType.nmi)
+elseif xemu.emuId ~= xemu.emuId_lsnes then
     while true do
         on_paint()
         emu.frameadvance()

@@ -3,27 +3,41 @@ xemu = {}
 xemu.emuId_bizhawk = 0
 xemu.emuId_snes9x  = 1
 xemu.emuId_lsnes   = 2
+xemu.emuId_mesen   = 3
 
-if memory.usememorydomain then
-    xemu.emuId = xemu.emuId_bizhawk
-elseif memory.readshort then
-    xemu.emuId = xemu.emuId_snes9x
+if memory then
+    if memory.usememorydomain then
+        xemu.emuId = xemu.emuId_bizhawk
+    elseif memory.readshort then
+        xemu.emuId = xemu.emuId_snes9x
+    else
+        xemu.emuId = xemu.emuId_lsnes
+    end
 else
-    xemu.emuId = xemu.emuId_lsnes
+    xemu.emuId = xemu.emuId_mesen
 end
 
 -- Bitwise operations
-if xemu.emuId == xemu.emuId_lsnes then
-    xemu.rshift = bit.lrshift -- (logical) right shift
+if xemu.emuId == xemu.emuId_mesen then
+    xemu.rshift = function(x, y) return x >> y end
+    xemu.lshift = function(x, y) return x << y end
+    xemu.not_ = function(x) return ~x end
+    xemu.and_ = function(x, y) return x & y end
+    xemu.or_ = function(x, y) return x | y end
+    xemu.xor = function(x, y) return x ~ y end
 else
-    xemu.rshift = bit.rshift
-end
+    if xemu.emuId == xemu.emuId_lsnes then
+        xemu.rshift = bit.lrshift -- (logical) right shift
+    else
+        xemu.rshift = bit.rshift
+    end
 
-xemu.lshift = bit.lshift
-xemu.not_ = bit.bnot
-xemu.and_ = bit.band
-xemu.or_ = bit.bor
-xemu.xor = bit.bxor
+    xemu.lshift = bit.lshift
+    xemu.not_ = bit.bnot
+    xemu.and_ = bit.band
+    xemu.or_ = bit.bor
+    xemu.xor = bit.bxor
+end
 
 -- Converts from SNES address model to flat address model (for ROM access)
 function snes2pc(p)
@@ -82,7 +96,7 @@ elseif xemu.emuId == xemu.emuId_snes9x then
     xemu.read_s16_le  = memory.readshortsigned
     xemu.write_u8     = memory.writebyte
     xemu.write_u16_le = memory.writeshort
-else -- xemu.emuId == lsnes
+elseif xemu.emuId == lsnes then
     function makeMemoryReader(f)
         return function(p)
             if p < 0x800000 then
@@ -109,6 +123,33 @@ else -- xemu.emuId == lsnes
     xemu.read_s16_le  = makeMemoryReader(memory.readsword)
     xemu.write_u8     = makeMemoryWriter(memory.writebyte)
     xemu.write_u16_le = makeMemoryWriter(memory.writeword)
+else -- xemu.emuId == xemu.emuId_mesen
+    function makeMemoryReader(f, isSigned)
+        return function(p)
+            if p < 0x800000 then
+                return f(p, emu.memType.workRam, isSigned)
+            else
+                return f(p, emu.memType.prgRom, isSigned)
+            end
+        end
+    end
+
+    function makeMemoryWriter(f)
+        return function(p, v)
+            if p < 0x800000 then
+                return f(xemu.and_(p, 0x1FFFF), v, emu.memType.workRam)
+            else
+                print(string.format('Error: trying to write to ROM address %X', p))
+            end
+        end
+    end
+
+    xemu.read_u8      = makeMemoryReader(emu.read, false)
+    xemu.read_u16_le  = makeMemoryReader(emu.readWord, false)
+    xemu.read_s8      = makeMemoryReader(emu.read, true)
+    xemu.read_s16_le  = makeMemoryReader(emu.readWord, true)
+    xemu.write_u8     = makeMemoryWriter(emu.write)
+    xemu.write_u16_le = makeMemoryWriter(emu.writeWord)
 end
 
 -- GUI functions
@@ -118,7 +159,7 @@ if xemu.emuId == xemu.emuId_bizhawk then
             fg = xemu.rshift(fg, 8) + xemu.lshift(xemu.and_(fg, 0xFF), 0x18)
         end
         
-        gui.drawPixel(x0, y0, x1, y1, fg, bg)
+        gui.drawPixel(x, y, fg)
     end
     
     xemu.drawBox = function(x0, y0, x1, y1, fg, bg)
@@ -140,7 +181,7 @@ if xemu.emuId == xemu.emuId_bizhawk then
         gui.drawLine(x0, y0, x1, y1, fg)
     end
     
-    xemu.drawText = function(x0, y0, x1, y1, fg, bg)
+    xemu.drawText = function(x, y, text, fg, bg)
         if fg ~= nil and type(fg) ~= "string" then
             fg = xemu.rshift(fg, 8) + xemu.lshift(xemu.and_(fg, 0xFF), 0x18)
         end
@@ -148,14 +189,14 @@ if xemu.emuId == xemu.emuId_bizhawk then
             bg = xemu.rshift(bg, 8) + xemu.lshift(xemu.and_(bg, 0xFF), 0x18)
         end
         
-        gui.pixelText(x0, y0, x1, y1, fg, bg)
+        gui.pixelText(x, y, text, fg, bg)
     end
 elseif xemu.emuId == xemu.emuId_snes9x then
     xemu.drawPixel = gui.pixel
     xemu.drawBox  = function(x0, y0, x1, y1, fg, bg) gui.box(x0, y0, x1, y1, bg or 0, fg) end
     xemu.drawLine = gui.line
     xemu.drawText = gui.text
-else -- emuId == lsnes
+elseif emuId == xemu.emuId_lsnes then
     function decodeColour(colour)
         if colour == nil then
             return nil
@@ -231,6 +272,79 @@ else -- emuId == lsnes
         x = math.floor(x * s_x)
         y = math.floor(y * s_y)
         gui.text(x, y, text, decodeColour(fg), decodeColour(bg))
+    end
+else -- xemu.emuId == xemu.emuId_mesen
+    function decodeColour(colour)
+        if colour == nil then
+            return nil
+        end
+        
+        if type(colour) == "string" then
+            if colour == "red" then
+                return 0xFF0000
+            elseif colour == "orange" then
+                return 0x808000
+            elseif colour == "yellow" then
+                return 0xFFFF00
+            elseif colour == "white" then
+                return 0xFFFFFF
+            elseif colour == "black" then
+                return 0x000000
+            elseif colour == "green" then
+                return 0x00FF00
+            elseif colour == "purple" then
+                return 0xFF00FF
+            elseif colour == "cyan" then
+                return 0x00FFFF
+            elseif colour == "blue" then
+                return 0x0000FF
+            elseif colour == "clear" then
+                return 0xFF000000
+            else
+                print(string.format("Colour = %s", colour))
+                return
+            end
+        end
+
+        return xemu.and_(colour, 0xFFFFFF)
+    end
+    
+    xemu.drawPixel = function(x, y, fg)
+        if fg ~= nil and type(fg) ~= "string" then
+            fg = xemu.rshift(fg, 8) + xemu.lshift(0xFF - xemu.and_(fg, 0xFF), 0x18)
+        end
+        
+        emu.drawPixel(x, y + 7, decodeColour(fg))
+    end
+    
+    xemu.drawBox = function(x0, y0, x1, y1, fg, bg)
+        if fg ~= nil and type(fg) ~= "string" then
+            fg = xemu.rshift(fg, 8) + xemu.lshift(0xFF - xemu.and_(fg, 0xFF), 0x18)
+        end
+        if bg ~= nil and type(bg) ~= "string" then
+            bg = xemu.rshift(bg, 8) + xemu.lshift(0xFF - xemu.and_(bg, 0xFF), 0x18)
+        end
+        
+        emu.drawRectangle(x0, y0 + 6, x1 - x0 + 1, y1 - y0 + 1, decodeColour(fg), bg == fg)
+    end
+    
+    xemu.drawLine = function(x0, y0, x1, y1, fg)
+        if fg ~= nil and type(fg) ~= "string" then
+            fg = xemu.rshift(fg, 8) + xemu.lshift(0xFF - xemu.and_(fg, 0xFF), 0x18)
+        end
+        
+        emu.drawLine(x0, y0 + 6, x1, y1 + 6, decodeColour(fg))
+    end
+    
+    xemu.drawText = function(x, y, text, fg, bg)
+        if fg ~= nil and type(fg) ~= "string" then
+            fg = xemu.rshift(fg, 8) + xemu.lshift(0xFF - xemu.and_(fg, 0xFF), 0x18)
+        end
+        if bg ~= nil and type(bg) ~= "string" then
+            bg = xemu.rshift(bg, 8) + xemu.lshift(0xFF - xemu.and_(bg, 0xFF), 0x18)
+        end
+        
+        emu.drawString(x, y + 7, text, decodeColour(fg), decodeColour(bg))
     end
 end
 

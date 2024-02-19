@@ -1,5 +1,6 @@
 -- If lsnes complains about "module 'Super Metroid' not found", uncomment the next line and provide the path to the "Super Metroid.lua" file
 -- package.path = "C:\\Games\\Lua\\Super Metroid.lua"
+-- If Mesen complains about `require` not being recognised, you need to enable Lua IO access in the settings
 xemu = require("cross emu")
 sm = require("Super Metroid")
 
@@ -10,8 +11,10 @@ elseif print then
     print("\n\n\n\n\n\n\n\n")
 end
 
-if gui.clearGraphics then
+if gui and gui.clearGraphics then
     gui.clearGraphics()
+elseif emu and emu.clearScreen then
+    emu.clearScreen()
 end
 
 -- Globals
@@ -22,7 +25,7 @@ debugInfoFlag = 0
 doorListFlag = 0
 followSamusFlag = 0--sm.button_B
 tasFlag = 0
-logFlag = 1
+logFlag = 0
 xAdjust = 0
 yAdjust = 0
 doorList = {}
@@ -33,6 +36,8 @@ colour_opacity = 0x80
 colour_slope        = 0x00FF0000 + xemu.rshift(colour_opacity, 1)
 colour_solidBlock   = 0xFF000000 + colour_opacity
 colour_specialBlock = 0x0000FF00 + colour_opacity
+colour_doorcap      = 0xFF800000 + colour_opacity
+colour_errorBlock   = 0x8000FF00 + colour_opacity
 
 colour_scroll_red   = 0xFF000000 + colour_opacity
 colour_scroll_blue  = 0x0000FF00 + colour_opacity
@@ -140,7 +145,6 @@ outline = {
         local flip_x = xemu.and_(bts, 0x40) ~= 0
         local flip_y = xemu.and_(bts, 0x80) ~= 0
         
-    -- [[
         local p_slope = 0x948B2B + i_slope * 0x10
         
         local ys = {}
@@ -194,59 +198,6 @@ outline = {
         
         xemu.drawLine(blockX + x_max, blockY + y_base, blockX + x_max, blockY + ys[x_max], colour_slope)
         xemu.drawLine(blockX + x_min, blockY + y_base, blockX + x_max, blockY + y_base, colour_slope)
-    --]]
-        
-    --[[
-        local p_slope = 0x94892B + i_slope * 0x10
-        
-        local xs = {}
-        for y = 0, 0xF do
-            local i = y
-            if flip_y then
-                i = 0xF - y
-            end
-            
-            local x = xemu.read_u8(p_slope + i)
-            if flip_x and x < 0x10 then
-                x = 0xF - x
-            end
-            
-            xs[y] = x
-        end
-        
-        local y_min
-        for y = 0, 0xF do
-            if xs[y] < 0x10 then
-                y_min = y
-                break
-            end
-        end
-        
-        local y_max
-        for i = 0, 0xF do
-            local y = 0xF - i
-            if xs[y] < 0x10 then
-                y_max = y
-                break
-            end
-        end
-        
-        local x_base = 0xF
-        if flip_x then
-            x_base = 0xF - x_base
-        end
-        
-        xemu.drawLine(blockX + x_base, blockY + y_min, blockX + xs[y_min], blockY + y_min, colour_slope)
-        
-        for y = y_min, y_max - 1 do
-            if xs[y] < 0x10 and xs[y + 1] < 0x10 then
-                xemu.drawLine(blockX + xs[y], blockY + y, blockX + xs[y + 1], blockY + y + 1, colour_slope)
-            end
-        end
-        
-        xemu.drawLine(blockX + x_base, blockY + y_max, blockX + xs[y_max], blockY + y_max, colour_slope)
-        xemu.drawLine(blockX + x_base, blockY + y_min, blockX + x_base, blockY + y_max, colour_slope)
-    --]]
     end,
 
     -- Spike air
@@ -262,7 +213,7 @@ outline = {
     [0x05] = function (blockX, blockY, blockIndex, stackLimit)
         -- Prevents infinite recursion
         if stackLimit == 0 then
-            standardOutline("purple")(blockX, blockY, blockIndex, stackLimit)
+            standardOutline(colour_errorBlock)(blockX, blockY, blockIndex, stackLimit)
             return
         end
 
@@ -271,7 +222,7 @@ outline = {
 
         -- Infinite recursion, game would probably freeze if this block reacts to anything
         if bts == 0 then
-            standardOutline("purple")(blockX, blockY, blockIndex, stackLimit)
+            standardOutline(colour_errorBlock)(blockX, blockY, blockIndex, stackLimit)
             return
         end
 
@@ -299,10 +250,10 @@ outline = {
 
     -- Shootable block
     [0x0C] = function(blockX, blockY, blockIndex, stackLimit)
-        -- Make doors orange
+        -- Colour doors specially
         local bts = sm.getBts(blockIndex)
         if bts >= 0x40 and bts <= 0x43 then
-            standardOutline("orange")(blockX, blockY, blockIndex, stackLimit)
+            standardOutline(colour_doorcap)(blockX, blockY, blockIndex, stackLimit)
         else
             standardOutline(colour_specialBlock)(blockX, blockY, blockIndex, stackLimit)
         end
@@ -312,7 +263,7 @@ outline = {
     [0x0D] = function(blockX, blockY, blockIndex, stackLimit)
         -- Prevents infinite recursion
         if stackLimit == 0 then
-            standardOutline("purple")(blockX, blockY, blockIndex, stackLimit)
+            standardOutline(colour_errorBlock)(blockX, blockY, blockIndex, stackLimit)
             return
         end
 
@@ -321,7 +272,7 @@ outline = {
 
         -- Infinite recursion, game would probably freeze if this block reacts to anything
         if bts == 0 then
-            standardOutline("purple")(blockX, blockY, blockIndex, stackLimit)
+            standardOutline(colour_errorBlock)(blockX, blockY, blockIndex, stackLimit)
             return
         end
 
@@ -451,7 +402,7 @@ function displayBlocks(cameraX, cameraY, roomWidth)
             end
 
             -- Draw the block outline depending on its block type
-            local f = outline[blockType] or standardOutline("purple")
+            local f = outline[blockType] or standardOutline(colour_errorBlock)
             f(blockX, blockY, blockIndex, stackLimit)
         end
     end
@@ -845,8 +796,8 @@ function displayProjectileHitboxes(cameraX, cameraY)
 end
 
 function displaySamusHitbox(cameraX, cameraY, samusXPosition, samusYPosition)
-    samusXRadius = sm.getSamusXRadius(i)
-    samusYRadius = sm.getSamusYRadius(i)
+    local samusXRadius = sm.getSamusXRadius()
+    local samusYRadius = sm.getSamusYRadius()
     if followSamusFlag ~= 0 then
         left   = 128 - samusXRadius
         top    = 112 - samusYRadius
@@ -902,8 +853,8 @@ function on_paint()
         return
     end
     
-    samusXPosition = sm.getSamusXPositionSigned()
-    samusYPosition = sm.getSamusYPositionSigned()
+    local samusXPosition = sm.getSamusXPositionSigned()
+    local samusYPosition = sm.getSamusYPositionSigned()
     
     -- Debug controls
     if debugControlsEnabled ~= 0 then
@@ -924,8 +875,8 @@ function on_paint()
     
     -- [[
     displayScrollBoundaries(cameraX, cameraY, roomWidth)
-    ----displayCameraMargin()
-    ----displayDebugInfo(cameraX, cameraY, roomWidth)
+    --displayCameraMargin()
+    displayDebugInfo(cameraX, cameraY, roomWidth)
     displayBlocks(cameraX, cameraY, roomWidth)
     displayFx(cameraX, cameraY)
     
@@ -947,7 +898,9 @@ function on_paint()
     --]]
 end
 
-if xemu.emuId ~= xemu.emuId_lsnes then
+if xemu.emuId == xemu.emuId_mesen then
+    emu.addEventCallback(on_paint, emu.eventType.nmi)
+elseif xemu.emuId ~= xemu.emuId_lsnes then
     while true do
         on_paint()
         emu.frameadvance()
