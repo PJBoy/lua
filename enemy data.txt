@@ -987,6 +987,15 @@ F313
 F353
 {
     name: Old Tourian grey wall space pirate
+    0FA8: Function
+    {
+        0xF034: Climbing left wall
+        0xF04F: RTS
+        0xF050: Wall-jumping right
+        0xF0C8: Climbing right wall
+        0xF0E3: RTS
+        0xF0E4: Wall-jumping left
+    }
 }
 
 F393
@@ -1047,6 +1056,12 @@ F613
 F653
 {
     name: Grey walking space pirate
+    0FA8: Function
+    {
+        0xFD44: Walking left
+        0xFDCE: Walking right
+        0xFE4A: RTS
+    }
 }
 
 F693

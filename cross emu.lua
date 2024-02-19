@@ -19,12 +19,15 @@ end
 
 -- Bitwise operations
 if xemu.emuId == xemu.emuId_mesen then
-    xemu.rshift = function(x, y) return x >> y end
-    xemu.lshift = function(x, y) return x << y end
-    xemu.not_ = function(x) return ~x end
-    xemu.and_ = function(x, y) return x & y end
-    xemu.or_ = function(x, y) return x | y end
-    xemu.xor = function(x, y) return x ~ y end
+    -- [[
+    xemu_mesen = require("cross emu - mesen")
+    xemu.rshift = xemu_mesen.rshift
+    xemu.lshift = xemu_mesen.lshift
+    xemu.not_ = xemu_mesen.not_
+    xemu.and_ = xemu_mesen.and_
+    xemu.or_ = xemu_mesen.or_
+    xemu.xor = xemu_mesen.xor
+    --]]
 else
     if xemu.emuId == xemu.emuId_lsnes then
         xemu.rshift = bit.lrshift -- (logical) right shift

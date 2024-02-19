@@ -4,7 +4,7 @@ Specifically:
 * SNES
   * [snes9x-rr](https://github.com/TASEmulators/snes9x-rr/releases) (v1.43 or 1.51)
   * [BizHawk](https://github.com/TASEmulators/BizHawk/releases/tag/2.8) (v2.8 or less)
-  * [Mesen](https://mesen.ca/)
+  * [Mesen](https://mesen.ca/). Mesen scripts additionally require `cross emu - mesen.lua`
   * [lsnes](https://tasvideos.org/EmulatorResources/Lsnes) (I should test this more often)
 * GBA
   * [VBA-rr](https://github.com/TASEmulators/vba-rerecording/releases)
