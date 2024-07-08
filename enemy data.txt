@@ -1,7 +1,26 @@
+CEBF
+{
+    name: Bouncing gooball
+}
+
+CEFF
+{
+    name: Mini-Crocomire
+}
+
+CF3F
+{
+    name: Maridia beyblade turtle
+}
+
+CF7F
+{
+    name: Mini-tatori
+}
+
 CFBF
 {
     name: Thin hopping blob
-    0FA8: Unused
     0FAA: Y speed table index
     0FAC: Hop cooldown timer
     0FAE: Function
@@ -42,82 +61,6 @@ CFBF
     7E780E: Initial Y speed table index * 1/2
 }
 
-DF3F
-{
-    name: Spore Spawn
-    0FA8: Function
-    {
-        EB1B: Descent
-        EB52: Moving
-        EB9B: Set up death
-        EBEE: Dying
-    }
-    0FAC: X origin
-    0FAE: Y origin
-    7E7814: Angle
-    7E7816: Speed
-    7E7818: Angle delta
-}
-
-E7BF
-{
-    name: Yapping maw
-    0FA8: Function
-    {
-        A235: Neutral
-        A445: Attacking
-        A68A: Cooldown
-    }
-    7E7800: Body segment 1 X offset
-    7E7802: Body segment 1 Y offset
-    7E7804: Body segment 2 X offset
-    7E7806: Body segment 2 Y offset
-    7E7808: Body segment 3 X offset
-    7E780A: Body segment 3 Y offset
-    7E7818: Body segment base X position
-    7E781A: Body segment base Y position
-    7E8800: Body segment 0 enemy projectile index
-    7E8802: Body segment 1 enemy projectile index
-    7E8804: Body segment 2 enemy projectile index
-    7E8806: Body segment 3 enemy projectile index
-}
-
-E8FF
-{
-    name: Wrecked Ship robot
-    0FA8: Laser X velocity
-    0FAA: Laser cooldown
-    0FAC: X position backup during approaching fall detection
-    0FAE: Y position backup during approaching fall detection
-    0FB0: Y subvelocity
-    0FB2: Y velocity
-}
-
-E93F
-{
-    name: Wrecked Ship robot, deactivated
-}
-
-CEBF
-{
-    name: Bouncing gooball
-}
-
-CEFF
-{
-    name: Mini-Crocomire
-}
-
-CF3F
-{
-    name: Maridia beyblade turtle
-}
-
-CF7F
-{
-    name: Mini-tatori
-}
-
 CFFF
 {
     name: Spike shooting plant
@@ -131,26 +74,91 @@ D03F
 D07F
 {
     name: Gunship top
+    0FA8: Function timer
+    0FAC: Hover index
+    0FAE: Hover timer
+    0FB0: Fixed Y position / brakes timer
+    0FB2: Function
+    {
+        A80C: Landing on Zebes - descending
+        A8D0: Landing on Zebes - apply brakes
+        A942: Landing on Zebes - wait for gunship entrance to open
+        A950: Landing on Zebes - eject Samus
+        A987: Landing on Zebes - wait for gunship entrance to close, then unlock Samus and save
+        A9BD: Handle letting Samus enter
+        AA4F: Wait for entrance pad to open
+        AA5D: Lower Samus
+        AA94: Wait for entrance pad to close
+        AAA2: Go to liftoff or restore Samus health / ammo
+        AB1F: Handle save confirmation
+        AB60: Wait for entrance pad to open
+        AB6E: Eject Samus
+        ABA5: Wait for entrance pad to close
+        ABC7: Liftoff - load dust cloud tiles
+        AC1B: Liftoff - fire up engines and spawn dust clouds
+        ACD7: Liftoff - steady rise
+        AD0E: Liftoff - accelerating / set game state
+        AD2D: Liftoff - accelerating
+    }
 }
 
 D0BF
 {
     name: Gunship bottom / entrance pad
+    0FAE: Hover sound effect timer
+    0FB0: Liftoff timer
+    0FB2: Y velocity
 }
 
 D0FF
 {
     name: Pre-Bomb Torizo fly
+    $0FA8: Retreat timer
+    $0FAA: X velocity
+    $0FAC: Y velocity
+    $0FAE: Target Y position
+    $0FB0: Angle
+    $0FB2: Function
+    {
+        B14E: Idle movement - clockwise circle
+        B17C: Idle movement - anti-clockwise circle
+        B1AA: Attack Samus
+        B1D2: Retreat
+    }
 }
 
 D13F
 {
     name: Under ice beam fly
+    $0FA8: Retreat timer
+    $0FAA: X velocity
+    $0FAC: Y velocity
+    $0FAE: Target Y position
+    $0FB0: Angle
+    $0FB2: Function
+    {
+        B14E: Idle movement - clockwise circle
+        B17C: Idle movement - anti-clockwise circle
+        B1AA: Attack Samus
+        B1D2: Retreat
+    }
 }
 
 D17F
 {
     name: Pre-spring ball fly
+    $0FA8: Retreat timer
+    $0FAA: X velocity
+    $0FAC: Y velocity
+    $0FAE: Target Y position
+    $0FB0: Angle
+    $0FB2: Function
+    {
+        B14E: Idle movement - clockwise circle
+        B17C: Idle movement - anti-clockwise circle
+        B1AA: Attack Samus
+        B1D2: Retreat
+    }
 }
 
 D1BF
@@ -166,6 +174,17 @@ D1FF
 D23F
 {
     name: Rinka
+    0FA8: Function
+    {
+        B7DF: Fire
+        B844: Killed
+        B852: Waiting to fire
+        B85B: Moving
+    }
+    0FAA: X velocity
+    0FAC: Y velocity
+    0FAE: Spawn point availability table index
+    0FB2: Function timer
 }
 
 D27F
@@ -208,7 +227,7 @@ D2FF
         C1A3: Flames - descending
     }
     7E7802: Finished swoop start animation flag
-    7E7804: Flames offset
+    7E7804: Flames Y offset
 }
 
 D33F
@@ -271,6 +290,7 @@ D5FF
     name: Rising and falling platform
 }
 
+
 D63F
 {
     name: Waver
@@ -294,16 +314,43 @@ D6FF
 D73F
 {
     name: Elevator
+    0FA8: Target Y position
 }
 
 D77F
 {
     name: Crab
+    0FA8: X velocity
+    0FAA: Y velocity
+    0FB2: Function
+    {
+        E6C1: RTL
+        E6C8: Crawling vertically
+        E785: Falling
+        E7F2: Crawling horizontally
+    }
+    7E7802: Falling Y subvelocity
+    7E7804: Falling Y velocity
+    7E7806: Non-falling function
+    7E7808: Consecutive turn counter
 }
 
 D7BF
 {
     name: Slug
+    0FA8: X velocity
+    0FAA: Y velocity
+    0FB2: Function
+    {
+        E6C1: RTL
+        E6C8: Crawling vertically
+        E785: Falling
+        E7F2: Crawling horizontally
+    }
+    7E7802: Falling Y subvelocity
+    7E7804: Falling Y velocity
+    7E7806: Non-falling function
+    7E7808: Consecutive turn counter
 }
 
 D7FF
@@ -329,6 +376,19 @@ D8BF
 D8FF
 {
     name: Mochtroid
+    0FA8: X subvelocity
+    0FAA: X velocity
+    0FAC: Y subvelocity
+    0FAE: Y velocity
+    0FB0: Shake timer
+    0FB2: Function index
+    {
+        0: Not touching Samus
+        1: Touching Samus
+        2: Shaking
+    }
+    7E7802: Instruction list
+    7E8000: Damage timer
 }
 
 D93F
@@ -387,6 +447,19 @@ DA7F
 DABF
 {
     name: Norfair slow fireball
+    0FA8: X velocity
+    0FAA: Y velocity
+    0FB2: Function
+    {
+        E6C1: RTL
+        E6C8: Crawling vertically
+        E785: Falling
+        E7F2: Crawling horizontally
+    }
+    7E7802: Falling Y subvelocity
+    7E7804: Falling Y velocity
+    7E7806: Non-falling function
+    7E7808: Consecutive turn counter
 }
 
 DAFF
@@ -417,66 +490,327 @@ DBFF
 DC3F
 {
     name: Wrecked Ship orange zoomer
+    0FA8: X velocity
+    0FAA: Y velocity
+    0FB2: Function
+    {
+        E6C1: RTL
+        E6C8: Crawling vertically
+        E785: Falling
+        E7F2: Crawling horizontally
+    }
+    7E7802: Falling Y subvelocity
+    7E7804: Falling Y velocity
+    7E7806: Non-falling function
+    7E7808: Consecutive turn counter
 }
 
 DC7F
 {
     name: Big eye bugs
+    0FA8: X velocity
+    0FAA: Y velocity
+    0FB2: Function
+    {
+        E6C1: RTL
+        E6C8: Crawling vertically
+        E785: Falling
+        E7F2: Crawling horizontally
+    }
+    7E7802: Falling Y subvelocity
+    7E7804: Falling Y velocity
+    7E7806: Non-falling function
+    7E7808: Consecutive turn counter
 }
 
 DCBF
 {
     name: Fire zoomer
+    0FA8: X velocity
+    0FAA: Y velocity
+    0FB2: Function
+    {
+        E6C1: RTL
+        E6C8: Crawling vertically
+        E785: Falling
+        E7F2: Crawling horizontally
+    }
+    7E7802: Falling Y subvelocity
+    7E7804: Falling Y velocity
+    7E7806: Non-falling function
+    7E7808: Consecutive turn counter
 }
 
 DCFF
 {
     name: Zoomer
+    0FA8: X velocity
+    0FAA: Y velocity
+    0FB2: Function
+    {
+        E6C1: RTL
+        E6C8: Crawling vertically
+        E785: Falling
+        E7F2: Crawling horizontally
+    }
+    7E7802: Falling Y subvelocity
+    7E7804: Falling Y velocity
+    7E7806: Non-falling function
+    7E7808: Consecutive turn counter
 }
 
 DD3F
 {
     name: Stone zoomer
+    0FA8: X velocity
+    0FAA: Y velocity
+    0FB2: Function
+    {
+        E6C1: RTL
+        E6C8: Crawling vertically
+        E785: Falling
+        E7F2: Crawling horizontally
+    }
+    7E7802: Falling Y subvelocity
+    7E7804: Falling Y velocity
+    7E7806: Non-falling function
+    7E7808: Consecutive turn counter
 }
 
 DD7F
 {
     name: Metroid
+    0FA8: X subvelocity
+    0FAA: X velocity
+    0FAC: Y subvelocity
+    0FAE: Y velocity
+    0FB0: Bombed off Samus cooldown timer
+    0FB2: Function index
+    {
+        0: Chase Samus
+        1: Latch onto Samus
+        2: Latched onto Samus
+        3: Bombed off Samus
+    }
+    0FB6: Freeze health threshold
+    
+    7E7800: Metroid electricity sprite object index
+    7E7802: Metroid shell sprite object index
+    7E7804: Samus subhealth
 }
+
 
 DDBF
 {
     name: Crocomire
+    0FA8: Death sequence index
+    {
+        0: Death sequence not started
+        2: Falling
+        4: Hop 1 - resting
+        6: Hop 1 - rising
+        8: Hop 1 - sinking
+        A: Hop 2 - resting
+        C: Hop 2 - rising
+        E: Hop 2 - sinking
+        10: Hop 3 - load melting tilemap
+        12: Hop 3 - load melting tiles
+        14: Hop 3 - uploading to VRAM
+        16: Hop 3 - rising
+        18: Hop 3 - queue cry and create Crocomire melting HDMA object
+        1A: Hop 3 - melting
+        1C: Hop 3 - clear tilemap
+        1E: Hop 3 - sinking
+        20: Hop 4 - resting
+        22: Hop 4 - rising
+        24: Hop 4 - sinking
+        26: Hop 5 - resting
+        28: Hop 5 - rising
+        2A: Hop 5 - sinking
+        2C: Hop 6 - load melting tilemap
+        2E: Hop 6 - load melting tiles
+        30: Hop 6 - uploading to VRAM
+        32: Set index 34h
+        34: Hop 6 - rising
+        36: Hop 6 - queue cry and create Crocomire melting HDMA object
+        38: Hop 6 - melting
+        3A: Hop 6 - clear tilemap
+        3C: Hop 6 - sinking
+        3E: Behind wall - wait for Samus
+        40: Behind wall - rumbling
+        42: Behind wall - no more rumbling
+        44: Breaks down wall
+        46: Skeleton falls
+        48: Skeleton falls apart
+        4A: Unlock camera
+        4C: Set index 4Eh
+        4E: Set index 50h
+        50: Mark event and start post-death music
+        52: Dead (due to death sequence, final state)
+        54: Set index 56h
+        56: Dead (due to room entry, final state)
+        58: Flowing down the river (between 3Ch and 3Eh)
+    }
+    0FAA: Fight flags
+    0FAC: Fight function index
+    {
+        4: Asleep
+        6: Stepping forward
+        8: Projectile attack
+        A: Near spike wall charge
+        C: Stepping back
+        E: Back off from spike wall
+        12: Wait for first damage
+        14: Wait for second damage
+        18: Power bombed charge
+    }
+    0FAE: Timer / step counter / rumble index / Y acceleration
+    0FB0: Y velocity
+    0FB2: Projectile counter
+    0FEE: Rumbling Y offset
+    102E: Timer / melting X position
+    106E: Rumbling Y offset delta
+    7E783E: Melting HDMA object index
+    7E8000: Acid damage sound effect timer
+    7E9000: Pre-bridge block dust cloud spawned flag
+    7E9002: Bridge part 1 crumbled flag
+    7E9006: Bridge part 2 crumbled flag
+    7E9016: Death sequence crumbling bridge index
+    7E9018: Acid damage smoke timer
+    0688: Skeleton loading index / target number of pixels to erase per column
+    068A: Melting tiles loading table (sub)index
+    068C: Number of pixels to erase per column per frame
+    068E: Number of words to load when loading melting tiles
+    0690: Melting X offset table index
+    0692: Melting displacement coefficient
+    0694: Initial adjusted destination Y offset
+    0698: Max adjusted destination Y offset
+    069A: Melting tiles loading table (base) index
 }
 
 DDFF
 {
     name: Crocomire's tongue
+    0FA8: X offset from Crocomire
 }
+
 
 DE3F
 {
-    name: Draygon
+    name: Draygon body
+    0FA8: Function
+    {
+        871B: Fight intro - initial delay
+        878B: Fight intro - dance
+        87F4: Swoop right - setup
+        88B1: Swoop right - descending
+        8922: Swoop right - apex
+        8951: Swoop right - ascending
+        89B3: Swoop left - setup
+        8A00: Swoop left - descending
+        8A50: Swoop left - apex
+        8A90: Swoop left - ascending
+        8B0A: Goop right - setup
+        8B52: Goop right - move until Samus in range
+        8BAE: Goop right - firing goops
+        8C33: Goop right - move until off-screen
+        8C8E: Goop left - setup
+        8CD4: Goop left - move until Samus in range
+        8D30: Goop left - firing goops
+        8DB2: Goop left - move until off-screen
+        8E19: Chase Samus
+        8F10: Repelled by grapple
+        8F1E: Grabbed Samus - moving to target position
+        8FD6: Grabbed Samus - rising spiral movement
+        90D4: Grabbed Samus - tail whip
+        9105: Grabbed Samus - final tail whips - start
+        9124: Grabbed Samus - final tail whips - ongoing
+        9128: Flail tail and fly straight up
+        9154: Fly straight up
+        9185: Death sequence - drift to death spot
+        9294: Death sequence - wait for mini-Draygons
+        92AB: Death sequence - buried by mini-Draygons
+    }
+    0FAA: Function timer / swoop Y position index
+    0FAC: Swoop duration * 4
+    0FAE: X speed
+    0FB0: X subspeed
+    7E7800: Left side reset X position
+    7E7802: Reset Y position
+    7E7804: Right side reset X position
+    7E7806: Goop counter
+    7E780A: Spiral X radius
+    7E780C: Spiral X position
+    7E780E: Spiral Y position
+    7E7810: Spiral angle
+    7E7812: Spiral X subradius
+    7E7814: Spiral Y subposition
+    7E7816: Spiral angle delta
+    7E7818: Tail whip timer
+    7E781A: Goop Y oscillation angle
+    7E781C: Health-based palette table index
+    7E781E: Swoop Y acceleration
+    7E8000: Facing direction
+    {
+        0: Left
+        1: Right
+    }
+    7E880C: Fight intro dance index
+    7E883C: Body graphics X displacement
+    7E883E: Body graphics Y displacement
+
 }
 
 DE7F
 {
-    name: Draygon's eye
+    name: Draygon eye
+    $0FE8: Function
+    {
+        C48D: Facing left
+        C513: Facing right
+    }
+    $0FF2: Angle to Samus
 }
 
 DEBF
 {
-    name: Draygon's tail
+    name: Draygon tail
 }
 
 DEFF
 {
-    name: Draygon's arms
+    name: Draygon arms
 }
 
 DF3F
 {
     name: Spore Spawn
+    0FA8: Function
+    {
+        EB1B: Descent
+        EB52: Moving
+        EB9B: Set up death
+        EBEE: Dying
+    }
+    0FAC: X origin
+    0FAE: Y origin
+    7E7808: Stalk X origin
+    7E780A: Stalk Y origin
+    7E7814: Angle
+    7E7816: Max X radius
+    7E7818: Angle delta
+    7E8000: Stalk segment 2 X position
+    7E8002: Stalk segment 1 X position
+    7E8004: Stalk segment 0 X position
+    7E8006: Stalk segment 2 Y position
+    7E8008: Stalk segment 1 Y position
+    7E800A: Stalk segment 0 Y position
+    7E801E: Damaged flag
+    7E8806: Death drift angle
+    7E8012: Death drift X speed
+    7E8014: Death drift Y speed
+    7E8800: Previous health
+    7E9000: Spore generation flag
 }
 
 DF7F
@@ -484,34 +818,175 @@ DF7F
     name: Spore Spawn
 }
 
+
 DFBF
 {
     name: Boulder
+    0FA8: Function
+    {
+        879A: Wait for Samus to get near
+        87ED: Falling
+        8832: Bounce - rising
+        888B: Bounce - falling
+        8942: Rolling
+        89FC: RTS
+    }
+    0FAA: X speed table index * 100h
+    0FAC: Y speed table index * 100h
+    0FAE: Bounce index
+    0FB0: Direction
+    {
+        0: Right
+        1: Left
+        2: Left - destroy after bounce
+    }
+    7E7800: X proximity
+    7E7802: Minimum distance from ground
+    7E7804: Previous enemy Y subposition
+    7E7806: Previous enemy Y position
+    7E7808: Spawn X position
+    7E780A: Falling target Y position
+    7E780C: Y proximity
+    7E780E: Type
+    {
+        0: Falling
+        1: Rolling
+    }
 }
 
 DFFF
 {
-    name: Spikey platform
+    name: Spikey platform top
+    0FA8: Function
+    {
+        8BB4: Waiting to fall
+        8BDC: Falling
+        8C4A: Waiting to rise
+        8C5D: Rising
+    }
+    0FAA: Fall wait timer
+    0FAC: Rising target Y position
+    0FAE: Falling target Y position
+    0FB0: Initial falling Y subspeed
+    0FB2: Initial falling Y speed
+    7E7800: Fall wait timer reset value
+    7E7802: Previous Y position
+    7E7804: Falling Y speed table index
+    7E7806: Rise wait timer
 }
 
 E03F
 {
-    name: Spikey platform, part 2: redundant
+    name: Spikey platform bottom
 }
 
 E07F
 {
     name: Fire geyser
+    0FA8: Function
+    {
+        902F: Inactive
+        9062: Active
+    }
+    0FAA: Inactive timer
+    0FAC: Finished activity flag
+    0FAE: Spawn Y position
+    0FB4: Inactive timer reset value
+    0FB6: Part
+    {
+        0: Graphics
+        1: Hitbox
+    }
 }
 
 E0BF
 {
     name: Nuclear waffle
+    0FA8: Function
+    {
+        9615: Inactive
+        9682: Active
+    }
+    0FAA: Inactive timer
+    0FAC: Speed table index
+    0FAE: Arc radius
+    0FB0: Direction
+    {
+        0: Clockwise
+        1: Anticlockwise
+    }
+    0FB2: Inactive timer reset value
+    7E7800: Enemy projectile index 0
+    7E7802: Enemy projectile index 1
+    7E7804: Enemy projectile index 2
+    7E7806: Enemy projectile index 3
+    7E7808: Enemy projectile index 4
+    7E7810: Enemy projectile 0 explosion reason
+    7E7812: Enemy projectile 1 explosion reason
+    7E7814: Enemy projectile 2 explosion reason
+    7E7816: Enemy projectile 3 explosion reason
+    7E7818: Enemy projectile 4 explosion reason
+    7E7820: Sprite object index 0
+    7E7822: Sprite object index 1
+    7E7824: Sprite object index 2
+    7E7826: Sprite object index 3
+    7E7830: Sprite object 0 explosion reason
+    7E7832: Sprite object 1 explosion reason
+    7E7834: Sprite object 2 explosion reason
+    7E7836: Sprite object 3 explosion reason
+    7E8000: Subangle
+    7E8002: Angle
+    7E8006: Start angle
+    7E8008: Subangle delta
+    7E800A: Angle delta
+    7E800C: Arc origin X position
+    7E800E: Arc origin Y position
+    7E8010: Body part spawn X position
+    7E8012: Body part spawn Y position
+    7E8014: Body index
+    7E8016: Angle between body parts * 2
+    7E8018: Angle between body parts
+    7E801C: Finish angle
+    7E801E: Falling explosion angle
+    7E8020: Rising explosion angle
+    7E8026: Head explosion reason
+    {
+        0: No explosion
+        1: Rising
+        2: Falling
+    }
+    7E8028: Graphics indices
 }
 
 E0FF
 {
     name: Fake Kraid
+    0FAA: X velocity
+    0FAC: Direction
+    {
+        4: Right
+        FFFC: left
+    }
+    0FAE: Step counter
+    0FB0: Spit timer
+    7E7800: Spit X velocity
+    7E7802: Spit Y velocity
+    7E7804: Spit X offset
+    7E7806: Top spike timer
+    7E7808: Middle spike timer
+    7E780A: Bottom spike timer
+    7E780C: Spike index
+    {
+        0: Top
+        2: Middle
+        4: Bottom
+    }
+    7E780E: Spike timer index
+    {
+        0: Top
+        2: Middle
+        4: Bottom
+    }
 }
 
 E13F
@@ -532,21 +1007,107 @@ E1BF
 E1FF
 {
     name: Ceres steam
+    0FA8: Function
+    {
+        EFF4: RTL
+        F019: Calculate graphical offset in rotating elevator room
+    }
+    0FAE: Activation timer
 }
 
 E23F
 {
     name: Ceres door
+    0FA8: Function
+    {
+        F76B: Handle earthquake during escape
+        F770: Handle earthquake during escape in Ridley's room
+        F7A5: Ridley escape mode 7 wall
+        F7BD: Rotating elevator room - default
+        F7DC: Rotating elevator room - rumbling and explosions
+        F850: Rotating elevator room - handle Ceres elevator animations
+    }
+    0FAA: Drawn by Ridley flag
+    0FAE: Rumbling timer
+    0FB0: Ceres door rumble timer
+    0FB2: Ceres door rumble index
 }
 
 E27F
 {
     name: Zebetites
+    0FA8: Function
+    {
+        FC41: Spawn bottom zebetite if needed
+        FC5B: Wait for door transition to finish
+        FC67: Active
+    }
+    0FAE: Destroyed counter
+    0FB2: Multipart flag
+    0FB6: Other part enemy index
 }
+
 
 E2BF
 {
     name: Kraid
+    0FA8: Function
+    {
+        AC4D: Kraid gets big - break ceiling into platforms
+        AD3A: Kraid gets big - set BG2 tilemap priority bits
+        AD61: Kraid gets big - finish updating BG2 tilemap
+        AD8E: Kraid gets big - draw room background
+        AE23: Kraid gets big - fade in room background
+        AEA4: Kraid main loop - thinking
+        AEC4: Kraid gets big - thinking
+        AEE4: Kraid shot - Kraid's mouth is open
+        B6BF: Kraid shot - initialise Kraid eye glowing
+        B6D7: Kraid shot - glow Kraid's eye
+        B73D: Kraid shot - unglow Kraid's eye
+        B92D: Handle Kraid enemy function timer
+        B965: Process Kraid instruction
+        BBEA: Kraid main loop - attacking with mouth open
+        C0A1: Kraid gets big - release camera
+        C715: Fade in regular background - clear BG2 tilemap top half
+        C751: Fade in regular background - clear BG2 tilemap bottom half
+        C777: Fade in regular background - load standard BG3 tiles 1/4
+        C7A3: Fade in regular background - load standard BG3 tiles 2/4
+        C7C9: Fade in regular background - load standard BG3 tiles 3/4
+        C7EF: Fade in regular background - load standard BG3 tiles 4/4
+        C815: Fade in regular background - fade in BG palette 6
+        C843: Fade in regular background - set enemy properties to dead - Kraid was alive
+        C851: Fade in regular background - set enemy properties to dead - Kraid was dead
+        C865: Restrict Samus X position to first screen
+        C86B: Raise Kraid through floor - load tilemap top half
+        C89A: Raise Kraid through floor - load tilemap bottom half and shake screen
+        C8E0: Raise Kraid through floor - spawn random earthquake projectiles every 10h frames
+        C902: Raise Kraid through floor - spawn random earthquake projectiles every 8 frames
+        C924: Raise Kraid through floor - raise Kraid
+    }
+    0FAA: Instruction list pointer
+    0FAC: Instruction timer
+    0FB2: Function timer
+    0FB6: Ceiling break index
+    7E7800: Next function
+    7E7806: Thinking timer
+    7E7808: Minimum Samus ejection Y position
+    7E780A: Mouth reopen flags
+    7E780B: Mouth reopen counter
+    7E780C: Max health * 1/8
+    7E780E: Max health * 2/8
+    7E7810: Max health * 3/8
+    7E7812: Max health * 4/8
+    7E7814: Max health * 5/8
+    7E7816: Max health * 6/8
+    7E7818: Max health * 7/8
+    7E781A: Max health * 8/8
+    7E781E: Target X position
+    7E7820: Max health * 1/4
+    7E7822: Max health * 2/4
+    7E7824: Max health * 3/4
+    7E7826: Max health * 4/4
+    7E782A: Hurt frame
+    7E782C: Hurt frame timer
 }
 
 E2FF
@@ -557,36 +1118,198 @@ E2FF
 E33F
 {
     name: Kraid top lint
+    0FA8: Function
+    {
+        B832: Produce lint
+        B868: Charge lint
+        B89B: Fire lint
+        B923: Horizontally align enemy to Kraid
+    }
+    0FAA: Spawning X speed
+    0FAC: X additional spawning velocity
+    0FB2: Function timer
+    7E7800: Next function
 }
 
 E37F
 {
     name: Kraid middle lint
+    0FA8: Function
+    {
+        B832: Produce lint
+        B868: Charge lint
+        B89B: Fire lint
+        B923: Horizontally align enemy to Kraid
+    }
+    0FAA: Spawning X speed
+    0FAC: X additional spawning velocity
+    0FB2: Function timer
+    7E7800: Next function
 }
 
 E3BF
 {
     name: Kraid bottom lint
+    0FA8: Function
+    {
+        B832: Produce lint
+        B868: Charge lint
+        B89B: Fire lint
+        B923: Horizontally align enemy to Kraid
+    }
+    0FAA: Spawning X speed
+    0FAC: X additional spawning velocity
+    0FB2: Function timer
+    7E7800: Next function
 }
 
 E3FF
 {
     name: Kraid's foot
+    0FA8: Function
+    {
+        B92D: Handle Kraid enemy function timer
+        B93F: Start retreat
+        B960: First phase - thinking
+        BA2D: RTL
+        BA2E: Second phase - thinking
+        BB45: Second phase - walking backwards
+        BB6E: Second phase setup - walk to starting spot
+        BBA4: Second phase setup - initialise second phase
+        BBAE: Second phase - walking forwards
+        BF2D: First phase - prepare to lunge forward
+        BF5D: First phase - lunge forward
+        BFAB: First phase - retreat from lunge
+    }
+    0FB2: Function timer
+    7E7800: Next function / thinking timer
 }
 
 E43F
 {
     name: Kraid good fingernail
+    0FA8: Function
+    {
+        B907: Wait until top lint X position >= 100h
+        B92D: Handle Kraid enemy function timer
+        BD60: Initialise fingernail
+        BE8E: Fire fingernail
+    }
+    0FAA: X subvelocity
+    0FAC: X velocity
+    0FAE: Y subvelocity
+    0FB0: Y velocity
+    0FB2: Function timer
+    7E7800: Next function
+    7E780E: Orientation
+    {
+        0: Diagonal
+        1: Horizontal
+    }
 }
 
 E47F
 {
     name: Kraid bad fingernail
+    0FA8: Function
+    {
+        B907: Wait until top lint X position >= 100h
+        B92D: Handle Kraid enemy function timer
+        BD60: Initialise fingernail
+        BE8E: Fire fingernail
+    }
+    0FAA: X subvelocity
+    0FAC: X velocity
+    0FAE: Y subvelocity
+    0FB0: Y velocity
+    0FB2: Function timer
+    7E7800: Next function
+    7E780E: Orientation
+    {
+        0: Diagonal
+        1: Horizontal
+    }
 }
 
 E4BF
 {
     name: Phantoon body
+    0FA8: Flame counter / movement index / explosion loop counter
+    0FAA: Starting flames activation flag / subspeed
+    0FAC: Speed
+    0FAE: Movement stage
+    {
+        0: Slowly accelerating
+        1: Quickly accelerating
+        2: Decelerating
+    }
+    0FB0: Function timer
+    0FB2: Function
+    {
+        D4A9: Fight intro - spawn circle of flames
+        D4EE: Fight intro - spin circle of flames
+        D508: Fight intro - start wavy fade in
+        D54A: Fight intro - wavy fade-in
+        D596: Fight intro - pick first pattern
+        D5E7: Figure-8 - moving
+        D60D: Figure-8 - vulnerable window
+        D65C: Figure-8 - swooping triggered
+        D678: Swooping - opaque
+        D6B9: Swooping - fading out
+        D6D4: Hiding before figure-8 - hiding
+        D6E2: Hiding before figure-8 - place Phantoon
+        D72D: Hiding before figure-8 - fading in
+        D73F: Flame rain - show Phantoon
+        D767: Flame rain - make Phantoon vulnerable
+        D788: Flame rain - vulnerable window
+        D7D5: Flame rain - fading out
+        D7F7: Flame rain - subsequent flame rain
+        D82A: Flame rain - initial flame rain
+        D85C: Enraged - fading out before rage
+        D874: Enraged - hiding
+        D891: Enraged - fading in
+        D8AC: Enraged - rage
+        D916: Enraged - fading out after rage
+        D92E: Swooping - fatal damage
+        D948: Death sequence - fading in and out
+        D98B: Death sequence - exploding
+        DA51: Death sequence - set up wavy mosaic Phantoon
+        DA86: Death sequence - wavy mosaic Phantoon
+        DAD7: Death sequence - clear graphics
+        DB3D: Death sequence - activate Wrecked Ship
+    }
+    0FB6: Flame rain triggered flag
+    0FE8: Eye timer
+    0FEC: Reversed movement flag / fade counter / mosaic options
+    0FEE: Palette change denominator
+    0FF0: Palette change numerator
+    0FF2: Fade complete flag / rage round counter
+    0FF4: Wavy Phantoon mode
+    {
+        0: Disabled
+        1: Doubled wavelength
+        2: Normal
+    }
+    1028: Swooping triggered flag
+    102A: Round damage
+    102C: Swooping X velocity
+    102E: Swooping Y velocity
+    1030: Swooping target X position
+    1032: Explosion index
+    1034: Next wavy Phantoon mode
+    1037: Hurt flash palette loaded flag
+    1068: Casual flame pattern
+    106A: Casual flame timer
+    106C: Casual flame pattern index
+    106E: Wavy Phantoon amplitude
+    1070: Wavy Phantoon phase delta direction
+    {
+        0: Growing
+        1: Shrinking
+    }
+    1072: Wavy Phantoon phase delta
+    1074: Semi-transparency HDMA object control
+
 }
 
 E4FF
@@ -634,7 +1357,6 @@ E5BF
         EE3E: Hop until Samus is near
         EE9A: Running for failed morph tunnel jump
         EEB8: Failed tunnel jump
-        
     }
     0FB4: Direction
     {
@@ -673,6 +1395,7 @@ E5FF
     }
 }
 
+
 E63F
 {
     name: Mini-Draygon
@@ -701,6 +1424,34 @@ E73F
 E77F
 {
     name: Wrecked Ship ghost
+}
+
+E7BF
+{
+    name: Yapping maw
+    0FA8: Function
+    {
+        A235: Neutral
+        A445: Attacking
+        A68A: Cooldown
+    }
+    7E7800: Body segment 1 X offset
+    7E7802: Body segment 1 Y offset
+    7E7804: Body segment 2 X offset
+    7E7806: Body segment 2 Y offset
+    7E7808: Body segment 3 X offset
+    7E780A: Body segment 3 Y offset
+    7E7810: Target distance
+    7E7818: Body segment base X position
+    7E781A: Body segment base Y position
+    7E802A: Intangibility timer
+    7E8800: Body segment 0 enemy projectile index
+    7E8802: Body segment 1 enemy projectile index
+    7E8804: Body segment 2 enemy projectile index
+    7E8806: Body segment 3 enemy projectile index
+    7E8808: Body segment index
+    7E880A: Initial palette index
+    7E880C: Base sprite object index
 }
 
 E7FF
@@ -765,6 +1516,10 @@ E87F
     7E780A: Falling flag
     7E7810: Attached to Samus flag
     7E7812: Direction
+    {
+        0: Left
+        1: Right
+    }
 }
 
 E8BF
@@ -775,6 +1530,17 @@ E8BF
 E8FF
 {
     name: Wrecked Ship robot
+    0FA8: Laser X velocity
+    0FAA: Laser cooldown
+    0FAC: X position backup
+    0FAE: Y position backup
+    0FB0: Y subvelocity
+    0FB2: Y velocity
+}
+
+E93F
+{
+    name: Wrecked Ship robot, deactivated
 }
 
 E97F
@@ -832,6 +1598,7 @@ EBFF
     name: Red ki-hunter wings
 }
 
+
 EC3F
 {
     name: Mother Brain's brain
@@ -840,26 +1607,467 @@ EC3F
 EC7F
 {
     name: Mother Brain's body
+    0FA8: Body function
+    {
+        87E1: First phase
+        881D: Fake death - descent - initial pause
+        8829: Fake death - descent - lock Samus and set scroll region
+        884D: Fake death - descent - queue Mother Brain music
+        886C: Fake death - descent - unlock Samus
+        8884: Fake death - descent - begin screen flashing and lower acid
+        88B2: Fake death - descent - transition Mother Brain palette to grey
+        88D3: Fake death - descent - collapse tubes
+        8C87: Fake death - ascent - draw room background on BG1 - rows 2/3
+        8C9E: Fake death - ascent - draw room background on BG1 - rows 4/5
+        8CB5: Fake death - ascent - draw room background on BG1 - rows 6/7
+        8CCC: Fake death - ascent - draw room background on BG1 - rows 8/9
+        8CE3: Fake death - ascent - draw room background on BG1 - rows Ah/Bh
+        8CFA: Fake death - ascent - draw room background on BG1 - rows Ch/Dh
+        8D11: Fake death - ascent - set up Mother Brain phase 2 graphics
+        8D49: Fake death - ascent - set up Mother Brain phase 2 brain
+        8D79: Fake death - ascent - pause for suspense
+        8D8B: Fake death - ascent - prepare Mother Brain for rising
+        8DB4: Fake death - ascent - load Mother Brain's legs tiles
+        8DC3: Fake death - ascent - continue pausing for suspense
+        8DEC: Fake death - ascent - start music and earthquake
+        8E4D: Fake death - ascent - raise Mother Brain
+        8E95: Fake death - ascent - wait until Mother Brain has finished uncrouching
+        8EAA: Fake death - ascent - transition Mother Brain from grey and lower her head
+        8EF5: Second phase - stretching - shake head menacingly
+        8F14: Second phase - stretching - bring head back up
+        8F33: Second phase - stretching - finish stretching
+        AEE1: Third phase - death sequence - move to back of room
+        AF12: Third phase - death sequence - idle whilst exploding
+        AF21: Third phase - death sequence - stumble to middle of room and drool
+        AF54: Third phase - death sequence - disable brain effects
+        AF9D: Third phase - death sequence - set up body fade out
+        AFB6: Third phase - death sequence - fade out body
+        B013: Third phase - death sequence - final few explosions
+        B115: Third phase - death sequence - realise decapitation
+        B12D: Third phase - death sequence - brain falls to ground
+        B15E: Third phase - death sequence - load corpse tiles
+        B173: Third phase - death sequence - set up fade to grey
+        B189: Third phase - death sequence - fade to grey
+        B1B8: Third phase - death sequence - corpse tips over
+        B1D5: Third phase - death sequence - corpse rots away
+        B211: Third phase - death sequence - 20 frame delay
+        B258: Third phase - death sequence - load escape timer tiles
+        B26D: Third phase - death sequence - start escape sequence
+        B2D1: Third phase - death sequence - spawn time bomb set Japanese text
+        B2E3: Third phase - death sequence - type out Zebes escape text
+        B2F9: Third phase - death sequence - escape door is exploding, start escape timer
+        B32A: Third phase - death sequence - blow up escape door
+        B33C: Third phase - death sequence - keep earthquake going
+        B605: Second phase - thinking
+        B64B: Second phase - try attack
+        B781: Firing bomb - decide on walking
+        B7AC: Firing bomb - walking backwards
+        B7C6: Firing bomb - crouch
+        B7E8: Firing bomb - fired bomb
+        B7F8: Firing bomb - stand up
+        B80E: Second phase - firing laser - position head quickly
+        B839: Second phase - firing laser - position head slowly and fire
+        B863: Second phase - firing laser - finish attack
+        B87D: Second phase - firing death beam
+        B8EB: Second phase - firing rainbow beam - extend neck
+        B91A: Second phase - firing rainbow beam - start charging rainbow beam
+        B92B: Second phase - firing rainbow beam - retract neck
+        B93F: Second phase - firing rainbow beam - wait for beam to charge
+        B951: Second phase - firing rainbow beam - extend neck down
+        B975: Second phase - firing rainbow beam - start firing rainbow beam
+        B9E5: Second phase - firing rainbow beam - move Samus towards wall
+        BA00: Second phase - firing rainbow beam - 1 frame delay
+        BA27: Second phase - firing rainbow beam - start draining Samus
+        BA3C: Second phase - firing rainbow beam - draining Samus
+        BA5E: Second phase - firing rainbow beam - finish firing rainbow beam
+        BAC4: Second phase - firing rainbow beam - let Samus fall
+        BAD1: Second phase - firing rainbow beam - wait for Samus to hit ground
+        BADD: Second phase - firing rainbow beam - lower head
+        BB06: Second phase - firing rainbow beam - decide next action
+        BD45: Second phase - finish Samus off - get Samus to low health
+        BD98: Second phase - finish Samus off - stand up
+        BDA9: Second phase - finish Samus off - admire job well done
+        BDC1: Second phase - finish Samus off - charge final rainbow beam
+        BDD2: Second phase - finish Samus off - charge final rainbow beam / load Shitroid
+        BDED: Second phase - finish Samus off - fire final rainbow beam
+        BE38: Drained by Shitroid - taken aback by Shitroid
+        BE5D: Drained by Shitroid - regain balance
+        BE96: Drained by Shitroid - firing rainbow beam
+        BF0E: Drained by Shitroid - rainbow beam has run out
+        BF41: Drained by Shitroid - move to back of room
+        BF56: Drained by Shitroid - go into low power mode
+        BF7D: Drained by Shitroid - prepare transition to grey
+        BF95: Drained by Shitroid - transition to grey
+        C059: Second phase - revive self - inanimate grey
+        C066: Second phase - revive self - show signs of life
+        C082: Second phase - revive self - prepare transition from grey
+        C08F: Second phase - revive self - transition from grey
+        C0BA: Second phase - revive self - wake up
+        C0E4: Second phase - revive self - wake-up stretch
+        C0FB: Second phase - revive self - walk up to Shitroid
+        C11E: Second phase - revive self - prepare neck for Shitroid murder
+        C147: Second phase - revive self - finish preparing for Shitroid murder
+        C15C: Second phase - murder Shitroid - attack Shitroid
+        C182: Second phase - murder Shitroid - Shitroid attack cooldown
+        C18E: Second phase - prepare for final Shitroid attack
+        C19A: Second phase - execute final Shitroid attack
+        C1CF: Third phase - recover from cutscene - make some distance
+        C1F0: Third phase - recover from cutscene - set up for fighting
+        C209: Third phase - fighting - main
+        C24E: Third phase - fighting - attack cooldown
+    }
+    0FAC: Zebetites palette animation index
+    0FAE: Brain palette counter
+    0FAF: Brain palette timer
+    0FB0: Brain palette timer reset value
+    0FB1: Brain palette set
+    {
+        0: Normal
+        2: Charging her laser
+    }
+    0FB2: Body function timer / body target X position
+    0FB4: Attack cooldown / rainbow beam explosion index / custom Samus X velocity
+    0FB6: Rainbow beam explosion timer / custom Samus Y velocity
+    0FE8: Mother Brain's brain function
+    {
+        87A2: Set up brain and neck to be drawn
+        87D0: Set up brain to be drawn
+    }
+    0FF0: Body subfunction / death explosion interval timer
+    {
+        8949: Wait until there are less than 4 enemy projectiles alive and spawn tubes falling enemy 0
+        896E: Clear bottom-left tube
+        8983: Spawn top-right tube falling enemy projectile
+        89A0: Clear ceiling block column 9
+        89B5: Spawn top-left tube falling enemy projectile
+        89D2: Clear ceiling block column 6
+        89E7: Spawn tubes falling enemy 1
+        89FA: Clear bottom-right tube
+        8A0F: Spawn tubes falling enemy 2
+        8A22: Clear bottom-middle-left tube
+        8A37: Spawn top-middle-left tube falling enemy projectile
+        8A54: Clear ceiling tube column 7
+        8A69: Spawn top-middle-right tube falling enemy projectile
+        8A86: Clear ceiling tube column 8
+        8A9B: Spawn tubes falling enemy 3
+        8AAE: Clear bottom-middle-right tube
+        8AC3: Spawn tubes falling enemy 4
+        8AD6: Clear bottom-middle tubes
+    }
+    0FF2: Body subfunction timer / death explosion index / escape door index
+    7E7800: Form
+    {
+        0: First phase
+        1: Fake death
+        2: Second phase
+        3: Drained by Shitroid
+        4: Third phase
+    }
+    7E7804: Pose
+    {
+        0: Standing
+        1: Walking
+        2: Crouching transition
+        3: Crouched
+        4: Death beam mode
+        6: Leaning down
+    }
+    7E7808: Hitboxes enabled
+    7E780C: Disable attacks
+    7E780E: Walk counter
+    7E7812: HDMA object index
+    7E7814: Body X position - 50h
+    7E7816: Body Y position + 2Eh
+    7E7818: Neck palette index
+    7E781A: Brain palette index
+    7E781C: Room palette instruction list pointer
+    7E781E: Room palette instruction timer
+    7E7826: Shitroid attack counter
+    7E7828: Play Shitroid cry flag
+    7E782A: Number of times to queue rainbow beam sound effect
+    7E782C: Rainbow beam sound effect is playing flag
+    7E782E: Death beam attack phase
+    {
+        0: Back up
+        1: Wait for any active bombs
+        2: Death beam mode is active
+        3: Finish
+    }
+    7E7830: Attack phase
+    {
+        0: Try attack
+        1: Cooldown
+        2: End attack
+    }
+    7E7834: Blue rings target angle
+    7E783A: Flag to delete turrets and rinkas
+    7E783C: Rinka counter
+    7E783E: Phase 2 corpse state
+    {
+        0: Initial
+        1: Turned into corpse by Shitroid
+        2: Recovered from being a corpse
+    }
+    7E7840: Brain main shake timer
+    7E7842: Body rainbow beam palette animation index
+    7E7844: Enable unpause hook flag
+    7E784A: Bomb counter
+    7E784C: Painful walking stage
+    7E784E: Painful walking walk animation delay
+    {
+        2: Really fast
+        4: Fast
+        6: Medium
+        8: Slow
+        A: Really slow
+    }
+    7E7850: Painful walking function
+    {
+        BFD0: Walk forwards 
+        BFE8: Walking forwards
+        C004: Walk backwards
+        C01C: Walking backwards
+    }
+    7E7852: Painful walking function timer
+    7E7854: Shitroid enemy index
+    7E7860: Enable brain palette handling flag
+    7E7862: Enable health-based palette handling flag
+    7E7864: Enable drool generation flag
+    7E7866: Drool enemy projectile parameter
+    7E7868: Small purple breath generation is enabled flag
+    7E786A: Small purple breath is active flag
+    7E786C: Samus rainbow palette function
+    {
+        CD30: Activate rainbow when enemy is low enough
+        CD4B: Gradually slow animation down
+    }
+    7E7870: Mother Brain neck function
+    {
+        C330: Normal
+        C354: Set up recoil recovery
+        C37B: Recoil recovery
+        C395: Set up hyper beam recoil
+        C3CD: Hyper beam recoil
+    }
+    7E7872: Mother Brain neck function timer
+    7E7874: Mother Brain walking function
+    {
+        C26A: Try to inch forward
+        C2B3: Retreat quickly
+        C2D2: Retreat slowly
+    }
+    7E7876: Mother Brain target X position
+    7E7878: Mother Brain crouch timer
+    7E787A: Samus rainbow palette animation counter
+    7E8000: Brain instruction timer
+    7E8002: Brain instruction list pointer
+    7E8004: Sprite tiles transfer entry pointer
+    7E8006: Death beam next X subposition
+    7E8008: Death beam next X position
+    7E800A: Death beam next Y subposition
+    7E800C: Death beam next Y position
+    7E800E: Death beam next X velocity
+    7E8010: Death beam next Y velocity
+    7E8012: Death beam next angle
+    7E8022: Rainbow beam angle
+    7E8026: Rainbow beam angular width
+    7E802E: Grey transition counter / room lights transition counter
+    7E8030: Fake death explosion timer
+    7E8032: Fake death explosion index
+    7E8034: Rainbow beam right edge angle
+    7E8036: Rainbow beam left edge angle
+    7E8038: Rainbow beam right edge origin X position
+    7E803A: Rainbow beam origin Y position
+    7E803C: Rainbow beam left edge origin X position
+    7E803E: Rainbow beam origin Y position
+    7E8040: Lower neck angle
+    7E8042: Upper neck angle
+    7E8044: Neck segment 0 X position
+    7E8046: Neck segment 0 Y position
+    7E8048: Neck segment 0 distance
+    7E804A: Neck segment 1 X position
+    7E804C: Neck segment 1 Y position
+    7E804E: Neck segment 1 distance
+    7E8050: Neck segment 2 X position
+    7E8052: Neck segment 2 Y position
+    7E8054: Neck segment 2 distance
+    7E8056: Neck segment 3 X position
+    7E8058: Neck segment 3 Y position
+    7E805A: Neck segment 3 distance
+    7E805C: Neck segment 4 X position
+    7E805E: Neck segment 4 Y position
+    7E8060: Neck segment 4 distance
+    7E8062: Enable neck movement flag
+    7E8064: Lower neck movement index
+    {
+        0: Nothing
+        2: Bob down
+        4: Bob up
+        6: Lower
+        8: Raise
+    }
+    7E8066: Upper neck movement index
+    {
+        0: Nothing
+        2: Bob down
+        4: Bob up
+        6: Lower
+        8: Raise
+    }
+    7E8068: Neck angle delta
+    7E8824: Corpse rotting rot table pointer
+    7E8826: Corpse rotting VRAM transfers pointer
+    7E8828: Corpse rotting rot entry copy function
+    7E882A: Corpse rotting rot entry move function
+    7E882C: Corpse rotting tile data row offsets pointer
+    7E882E: Corpse rotting sprite height
+    7E8830: Corpse rotting sprite height - 1
+    7E8832: Corpse rotting sprite height - 2
+    7E8834: Corpse rotting inter-tile data offset
+    7E8836: Corpse rotting rot entry finished hook
 }
 
 ECBF
 {
     name: Shitroid in cutscene
+    0FA8: Function
+    {
+        C7CC: Dash onto screen
+        C7EC: Curve towards Mother Brain's brain
+        C811: Get right up in Mother Brain's face
+        C851: Latch onto Mother Brain
+        C879: Set Mother Brain to stumble back
+        C889: Activate rainbow beam and Mother Brain's body
+        C8E2: Wait for Mother Brain to turn to corpse
+        C915: Stop draining
+        C94B: Let go and spawn dust clouds
+        C959: Move up to ceiling
+        C9C3: Move to Samus
+        CA66: Latch onto Samus
+        CA7A: Heal Samus up to full health
+        CABD: Idle until run out of health
+        CB13: Release Samus
+        CB2D: Stare down Mother Brain
+        CB56: Fly off-screen
+        CB7B: Move to final charge start position
+        CBB3: Initiate final charge
+        CBD8: Final charge
+        CC3E: Shitroid takes fatal blow
+        CC60: Play Samus theme
+        CC7F: Prepare Samus for hyper beam acquisition
+        CC99: Death sequence
+        CCC0: Unload Shitroid tiles
+        CCDE: Let Samus rainbow some more
+        CCF0: Finish cutscene
+    }
+    0FAA: X velocity
+    0FAC: Y velocity
+    0FAE: Palette frame timer
+    0FAF: Palette handler timer
+    0FB0: Palette handler delay
+    0FB2: Function timer
+    7E7808: Cry sound effect flag
+    7E780A: Cry sound effect timer
+    7E780C: Flash timer
+    7E780E: Death explosion index
+    7E7810: Death explosion timer
+    7E7812: Health based palette flag
+    7E7814: Angle
+    7E7816: Speed
+    7E7818: Fade to black palette timer
+    7E781A: Fade to black palette index
+    7E781C: Movement table pointer
+    7E781E: Palette function
+    {
+        F683: Normal
+        F68F: Low health
+    }
+    7E7820: Shaking origin X position
+    7E7822: Shaking origin Y position
 }
 
 ECFF
 {
     name: Mother Brain's tubes falling
+    0FA8: Function
+    {
+        8B88: Non-main tube
+        8BCB: Main tube - waiting to fall
+        8BD6: Main tube - falling
+    }
+    0FAA: Y position threshold
+    0FAC: Y velocity
+    0FAE: Smoke timer
+    0FB0: Smoke counter
+    0FB4: Tube type
+    {
+        0: Large tube
+        2: Large tube
+        4: Small tube
+        6: Small tube
+        8: Main tube
+    }
+    0FB6: Fall delay timer
 }
 
 ED3F
 {
     name: Dead Torizo
+    0FA8: Function
+    {
+        D3AD: Wait for Samus collision
+        D3C8: Pre-rot delay
+        D3E6: Rotting
+    }
+    0FAA: X velocity
+    0FAC: Y velocity
+    7E7804: Sand heap Y pixel row to copy
+    7E7806: Sand heap formation timer
+    7E7808: Pre-rot delay timer
+    7E8824: Corpse rotting rot table pointer
+    7E8826: Corpse rotting VRAM transfers pointer
+    7E8828: Corpse rotting rot entry copy function
+    7E882A: Corpse rotting rot entry move function
+    7E882C: Corpse rotting tile data row offsets pointer
+    7E882E: Corpse rotting sprite height
+    7E8830: Corpse rotting sprite height - 1
+    7E8832: Corpse rotting sprite height - 2
+    7E8834: Corpse rotting inter-tile data offset
+    7E8836: Corpse rotting rot entry finished hook
 }
 
 ED7F
 {
     name: Dead sidehopper
+    0FA8: Function
+    {
+        D8E2: Alive - waiting for activation
+        D8F1: Hopping
+        D90F: RTS
+        D910: Start idling
+        D91D: Idling
+        DA08: Being drained
+        DA64: Dead - wait for Samus collision
+        DA8F: Pre-rot delay
+        DABA: Rotting
+    }
+    0FAA: Pre-rot delay timer
+    0FB2: Function timer
+    7E780C: Hop index
+    7E780E: Drained palette timer
+    7E7810: Drained palette index
+    7E7814: X velocity
+    7E7816: Y velocity
+    7E8824: Corpse rotting rot table pointer
+    7E8826: Corpse rotting VRAM transfers pointer
+    7E8828: Corpse rotting rot entry copy function
+    7E882A: Corpse rotting rot entry move function
+    7E882C: Corpse rotting tile data row offsets pointer
+    7E882E: Corpse rotting sprite height
+    7E8830: Corpse rotting sprite height - 1
+    7E8832: Corpse rotting sprite height - 2
+    7E8834: Corpse rotting inter-tile data offset
+    7E8836: Corpse rotting rot entry finished hook
 }
 
 EDBF
@@ -870,22 +2078,101 @@ EDBF
 EDFF
 {
     name: Dead zoomer
+    0FA8: Function
+    {
+        DA63: RTS
+        DA69: Wait for Samus collision
+        DA94: Pre-rot delay
+        DAD0: Rotting
+    }
+    0FAA: Pre-rot delay timer
+    7E8824: Corpse rotting rot table pointer
+    7E8826: Corpse rotting VRAM transfers pointer
+    7E8828: Corpse rotting rot entry copy function
+    7E882A: Corpse rotting rot entry move function
+    7E882C: Corpse rotting tile data row offsets pointer
+    7E882E: Corpse rotting sprite height
+    7E8830: Corpse rotting sprite height - 1
+    7E8832: Corpse rotting sprite height - 2
+    7E8834: Corpse rotting inter-tile data offset
+    7E8836: Corpse rotting rot entry finished hook
 }
 
 EE3F
 {
     name: Dead ripper
+    0FA8: Function
+    {
+        DA63: RTS
+        DA73: Wait for Samus collision
+        DA99: Pre-rot delay
+        DAE6: Rotting
+    }
+    0FAA: Pre-rot delay timer
+    7E8824: Corpse rotting rot table pointer
+    7E8826: Corpse rotting VRAM transfers pointer
+    7E8828: Corpse rotting rot entry copy function
+    7E882A: Corpse rotting rot entry move function
+    7E882C: Corpse rotting tile data row offsets pointer
+    7E882E: Corpse rotting sprite height
+    7E8830: Corpse rotting sprite height - 1
+    7E8832: Corpse rotting sprite height - 2
+    7E8834: Corpse rotting inter-tile data offset
+    7E8836: Corpse rotting rot entry finished hook
 }
 
 EE7F
 {
     name: Dead skree
+    0FA8: Function
+    {
+        DA63: RTS
+        DA6E: Wait for Samus collision
+        DA9E: Pre-rot delay
+        DAFC: Rotting
+    }
+    0FAA: Pre-rot delay timer
+    7E8824: Corpse rotting rot table pointer
+    7E8826: Corpse rotting VRAM transfers pointer
+    7E8828: Corpse rotting rot entry copy function
+    7E882A: Corpse rotting rot entry move function
+    7E882C: Corpse rotting tile data row offsets pointer
+    7E882E: Corpse rotting sprite height
+    7E8830: Corpse rotting sprite height - 1
+    7E8832: Corpse rotting sprite height - 2
+    7E8834: Corpse rotting inter-tile data offset
+    7E8836: Corpse rotting rot entry finished hook
 }
 
 EEBF
 {
     name: Shitroid
     0FA8: Function
+    {
+        EFDF: Disappeared
+        EFE6: Wait for camera
+        F02B: Let sidehopper live for a bit
+        F037: Queue battle music
+        F049: Rush to middle of room
+        F06D: Rush to sidehopper
+        F094: Latch onto sidehopper
+        F0E6: Draining sidehopper
+        F125: Make sidehopper rottable
+        F138: Move up and unlock camera
+        F180: Stare down Samus
+        F1FA: Latch onto Samus
+        F20E: Start draining Samus
+        F21B: Draining Samus
+        F2A2: Start heel realisation
+        F2AE: Heel realisation
+        F2C0: Back off guiltily
+        F2FB: Go left guiltily
+        F324: Go right guiltily
+        F360: Flee remorsefully
+        F36D: Fleeing
+        F3A3: Samus recovering
+        F3BE: Remorse
+    }
     0FAA: X velocity
     0FAC: Y velocity
     0FAE: Palette frame timer
@@ -898,6 +2185,7 @@ EEBF
     7E7808: Cry sound effect flag
     7E780A: Cry sound effect timer
 }
+
 
 EEFF
 {
@@ -944,6 +2232,7 @@ F0FF
     name: Chozo statue
 }
 
+
 F153
 {
     name: Unused spinning turtle eye
@@ -952,37 +2241,254 @@ F153
 F193
 {
     name: Brinstar red pipe bug
+    0FA8: Direction
+    {
+        0: Right
+        8000: Left
+    }
+    0FAA: Spawn X position
+    0FAC: Spawn Y position
+    0FAE: Spawn delay timer
+    0FB0: Instruction list table index
+    {
+        0: Facing left - rising
+        1: Facing left - shooting
+        2: Facing right - rising
+        3: Facing right - shooting
+    }
+    0FB2: Function
+    {
+        8880: Wait until on screen
+        8890: Wait for Samus to get near
+        88E3: Rising
+        891C: Shooting
+        897E: Spawn delay
+    }
+    7E7800: Target Y position
+    7E7802: Previous instruction list table index
 }
 
 F1D3
 {
     name: Brinstar green pipe bug
+    0FA8: Direction
+    {
+        0: Right
+        8000: Left
+    }
+    0FAA: Spawn X position
+    0FAC: Spawn Y position
+    0FAE: Spawn delay timer
+    0FB0: Instruction list table index
+    {
+        0: Facing left - rising
+        1: Facing left - shooting
+        2: Facing right - rising
+        3: Facing right - shooting
+    }
+    0FB2: Function
+    {
+        8880: Wait until on screen
+        8890: Wait for Samus to get near
+        88E3: Rising
+        891C: Shooting
+        897E: Spawn delay
+    }
+    7E7800: Target Y position
+    7E7802: Previous instruction list table index
 }
 
 F213
 {
     name: Norfair pipe bug
+    0FA8: Function
+    {
+        8BCD: Wait until everyone's ready
+        8BFF: Wait for Samus to get near
+        8CA6: Rising
+        8CFF: Move to formation - centre
+        8D0C: Move to formation - upper middle
+        8D4E: Move to formation - top
+        8D90: Move to formation - lower middle
+        8DD2: Move to formation - bottom
+        8E14: Shooting left
+        8E35: Shooting right
+        8E5A: Shoot delay
+    }
+    0FAA: X speed table index
+    0FAC: Shoot delay timer
+    0FAE: Spawn X position
+    0FB0: Spawn Y position
+    0FB2: Formation function
+    {
+        8CFF: Centre
+        8D0C: Upper middle
+        8D4E: Top
+        8D90: Lower middle
+        8DD2: Bottom
+    }
+    7E7802: Formation centre Y position
+    7E7804: Shoot delay
 }
 
 F253
 {
     name: Brinstar yellow pipe bug
+    0FA8: Function
+    {
+        8FB5: Wait for Samus to get near
+        8FF5: Shoot delay
+        9028: Shooting left
+        90BD: Shooting right
+        915A: Dipping left
+        91D8: Dipping right
+    }
+    0FAC: X subposition
+    0FAE: Y subposition
+    0FB0: Y speed table index
+    0FB2: Dip direction
+    {
+        0: Up
+        1: Down
+    }
+    7E7800: Right subvelocity
+    7E7802: Right velocity
+    7E7804: Left subvelocity
+    7E7806: Left velocity
+    7E780C: Dip disable flag
+    7E780E: Spawn X position
+    7E7810: Spawn Y position
+    7E8000: Shoot delay timer
 }
 
 F293
 {
     name: Botwoon
+    0FA8: Body projectile index
+    0FAA: Position history index
+    0FAC: Body travel time
+    0FAE: Function
+    {
+        9878: Initial
+        989D: Go through hole
+        99A4: Moving around
+        99E4: Spitting
+        9A46: Death sequence - pre-death delay
+        9A5E: Death sequence - falling to ground
+        9ACA: Death sequence - wait for body to fall to ground
+        9AF9: Death sequence - crumbling wall
+    }
+    0FB0: Movement function
+    {
+        9BB7: Move directly toward target hole
+        E250: Start moving Botwoon according to movement data
+        E28C: Move Botwoon according to movement data
+    }
+    0FB2: Head function
+    {
+        9DC0: Moving around
+        9E7D: Spitting - set angle and show
+        9EE0: Spitting - spawn 5 spit projectiles
+        9F34: Spitting - spawn 3 spit projectiles
+        9F7A: Spitting - cooldown
+    }
+    7E8000: Initialisation timer
+    7E8002: Spit timer
+    7E8004: Pre-death counter
+    7E8006: Death counter
+    7E8008: Large wall explosion timer
+    7E800A: Wall smoke timer
+    7E8010: Falling Y speed table index
+    7E801E: Death flag
+    7E8020: Body death flag
+    7E8026: Head hidden flag
+    7E8028: Previous head hidden flag
+    7E802A: Hole collision disabled flag
+    7E802C: Target position history index
+    7E802E: Target hole index
+    {
+        0: Left
+        8: Bottom
+        10: Top
+        18: Right
+    }
+    7E8030: Speed
+    7E8034: Target hole angle
+    7E8036: Instruction list
+    {
+        9341: Mouth closed - aiming up-left
+        9349: Mouth closed - aiming left
+        9351: Mouth closed - aiming down-left
+        9361: Mouth closed - aiming down (facing right)
+        9369: Mouth closed - aiming down-right
+        9371: Mouth closed - aiming right
+        9379: Mouth closed - aiming up-right
+        9381: Mouth closed - aiming up (facing right)
+        9389: Hide
+        939F: Spit - aiming up-left
+        93AF: Spit - aiming left
+        93BF: Spit - aiming down-left
+        93DF: Spit - aiming down (facing right)
+        93EF: Spit - aiming down-right
+        93FF: Spit - aiming right
+        940F: Spit - aiming up-right
+        941F: Spit - aiming up (facing right)
+        9435: Hidden - aiming up-left
+        943B: Hidden - aiming left
+        9441: Hidden - aiming down-left
+        944D: Hidden - aiming down (facing right)
+        9453: Hidden - aiming down-right
+        9459: Hidden - aiming right
+        945F: Hidden - aiming up-right
+        9465: Hidden - aiming up (facing right)
+    }
+    7E8038: Going through hole flag
+    7E803A: Spit angle
+    7E803C: Tail showing flag
+    7E803E: Speed table index
+    7E8800: Movement table index
+    7E8804: Movement data pointer
+    7E8808: Movement direction
+    {
+        0: Forwards
+        FFFF: Backwards
+    }
+    7E8818: Previous health
+    7E881C: Palette data offset
+    7E881E: Health-based palette index
+    7E8820: X position 1 frame ago
+    7E8822: Y position 1 frame ago
+    7E8824: X position 2 frames ago
+    7E8826: Y position 2 frames ago
+    7E8828: X position 3 frames ago
+    7E882A: Y position 3 frames ago
+    7E882C: X position 4 frames ago
+    7E882E: Y position 4 frames ago
+    7E8832: Initial leave hole action flag
+    7E8834: Spitting flag
+    7E8836: Max health
+    7E8838: Max health * 1/2
+    7E883A: Max health * 1/4
+    7E883E: Body death flag
 }
 
 F2D3
 {
     name: Escape etecoon
+    0FA8: X velocity
+    0FB2: Function
+    {
+        E65C: Running for escape
+        E670: Stationary (waiting to express gratitude)
+        E680: Running around aimlessly
+    }
 }
 
 F313
 {
     name: Escape dachora
 }
+
 
 F353
 {
@@ -996,61 +2502,280 @@ F353
         0xF0E3: RTS
         0xF0E4: Wall-jumping left
     }
+    0FAC: Direction. 0 = down, 1 = up
+    0FAE: Wall-jump arc centre X position
+    0FB0: Wall-jump arc centre Y position
+    0FB2: Wall-jump arc angle
+    
+    7E8000: Wall-jump arc right target angle
+    7E8002: Wall-jump arc left target angle
+    7E8004: Wall-jump arc angle delta
 }
 
 F393
 {
     name: Kraid green wall space pirate
+    0FA8: Function
+    {
+        0xF034: Climbing left wall
+        0xF04F: RTS
+        0xF050: Wall-jumping right
+        0xF0C8: Climbing right wall
+        0xF0E3: RTS
+        0xF0E4: Wall-jumping left
+    }
+    0FAC: Direction. 0 = down, 1 = up
+    0FAE: Wall-jump arc centre X position
+    0FB0: Wall-jump arc centre Y position
+    0FB2: Wall-jump arc angle
+    
+    7E8000: Wall-jump arc right target angle
+    7E8002: Wall-jump arc left target angle
+    7E8004: Wall-jump arc angle delta
 }
 
 F3D3
 {
     name: Norfair red wall space pirate
+    0FA8: Function
+    {
+        0xF034: Climbing left wall
+        0xF04F: RTS
+        0xF050: Wall-jumping right
+        0xF0C8: Climbing right wall
+        0xF0E3: RTS
+        0xF0E4: Wall-jumping left
+    }
+    0FAC: Direction. 0 = down, 1 = up
+    0FAE: Wall-jump arc centre X position
+    0FB0: Wall-jump arc centre Y position
+    0FB2: Wall-jump arc angle
+    
+    7E8000: Wall-jump arc right target angle
+    7E8002: Wall-jump arc left target angle
+    7E8004: Wall-jump arc angle delta
 }
 
 F413
 {
     name: Lower Norfair gold wall space pirate
+    0FA8: Function
+    {
+        0xF034: Climbing left wall
+        0xF04F: RTS
+        0xF050: Wall-jumping right
+        0xF0C8: Climbing right wall
+        0xF0E3: RTS
+        0xF0E4: Wall-jumping left
+    }
+    0FAC: Direction. 0 = down, 1 = up
+    0FAE: Wall-jump arc centre X position
+    0FB0: Wall-jump arc centre Y position
+    0FB2: Wall-jump arc angle
+    
+    7E8000: Wall-jump arc right target angle
+    7E8002: Wall-jump arc left target angle
+    7E8004: Wall-jump arc angle delta
 }
 
 F453
 {
     name: Maridia wall space pirate
+    0FA8: Function
+    {
+        0xF034: Climbing left wall
+        0xF04F: RTS
+        0xF050: Wall-jumping right
+        0xF0C8: Climbing right wall
+        0xF0E3: RTS
+        0xF0E4: Wall-jumping left
+    }
+    0FAC: Direction. 0 = down, 1 = up
+    0FAE: Wall-jump arc centre X position
+    0FB0: Wall-jump arc centre Y position
+    0FB2: Wall-jump arc angle
+    
+    7E8000: Wall-jump arc right target angle
+    7E8002: Wall-jump arc left target angle
+    7E8004: Wall-jump arc angle delta
 }
 
 F493
 {
     name: Escape silver wall space pirate
+    0FA8: Function
+    {
+        0xF034: Climbing left wall
+        0xF04F: RTS
+        0xF050: Wall-jumping right
+        0xF0C8: Climbing right wall
+        0xF0E3: RTS
+        0xF0E4: Wall-jumping left
+    }
+    0FAC: Direction. 0 = down, 1 = up
+    0FAE: Wall-jump arc centre X position
+    0FB0: Wall-jump arc centre Y position
+    0FB2: Wall-jump arc angle
+    
+    7E8000: Wall-jump arc right target angle
+    7E8002: Wall-jump arc left target angle
+    7E8004: Wall-jump arc angle delta
 }
 
 F4D3
 {
     name: Grey ninja space pirate
+    0FA8: Function
+    {
+        F6A9: Initial
+        F6E4: Active
+        F817: Spin jump left - rising
+        F84C: Spin jump left - falling
+        F890: Spin jump right - rising
+        F8C5: Spin jump right - falling
+        F909: Ready to divekick
+        F985: Divekick left - jump
+        F9C1: Divekick left - divekick
+        FA15: Divekick left - walk to left post
+        FA59: Divekick right - jump
+        FA95: Divekick right - divekick
+        FAE9: Divekick right - walk to right post
+    }
+    0FAE: Posts midpoint X position
+    0FB0: Left post X position
+    0FB2: Right post X position
+    7E7800: Speed
+    7E7810: Spawn Y position
 }
 
 F513
 {
     name: Green ninja space pirate
+    0FA8: Function
+    {
+        F6A9: Initial
+        F6E4: Active
+        F817: Spin jump left - rising
+        F84C: Spin jump left - falling
+        F890: Spin jump right - rising
+        F8C5: Spin jump right - falling
+        F909: Ready to divekick
+        F985: Divekick left - jump
+        F9C1: Divekick left - divekick
+        FA15: Divekick left - walk to left post
+        FA59: Divekick right - jump
+        FA95: Divekick right - divekick
+        FAE9: Divekick right - walk to right post
+    }
+    0FAE: Posts midpoint X position
+    0FB0: Left post X position
+    0FB2: Right post X position
+    7E7800: Speed
+    7E7810: Spawn Y position
 }
 
 F553
 {
     name: Red ninja space pirate
+    0FA8: Function
+    {
+        F6A9: Initial
+        F6E4: Active
+        F817: Spin jump left - rising
+        F84C: Spin jump left - falling
+        F890: Spin jump right - rising
+        F8C5: Spin jump right - falling
+        F909: Ready to divekick
+        F985: Divekick left - jump
+        F9C1: Divekick left - divekick
+        FA15: Divekick left - walk to left post
+        FA59: Divekick right - jump
+        FA95: Divekick right - divekick
+        FAE9: Divekick right - walk to right post
+    }
+    0FAE: Posts midpoint X position
+    0FB0: Left post X position
+    0FB2: Right post X position
+    7E7800: Speed
+    7E7810: Spawn Y position
 }
 
 F593
 {
     name: Gold ninja space pirate
+    0FA8: Function
+    {
+        F6A9: Initial
+        F6E4: Active
+        F817: Spin jump left - rising
+        F84C: Spin jump left - falling
+        F890: Spin jump right - rising
+        F8C5: Spin jump right - falling
+        F909: Ready to divekick
+        F985: Divekick left - jump
+        F9C1: Divekick left - divekick
+        FA15: Divekick left - walk to left post
+        FA59: Divekick right - jump
+        FA95: Divekick right - divekick
+        FAE9: Divekick right - walk to right post
+    }
+    0FAE: Posts midpoint X position
+    0FB0: Left post X position
+    0FB2: Right post X position
+    7E7800: Speed
+    7E7810: Spawn Y position
 }
 
 F5D3
 {
     name: Magenta ninja space pirate
+    0FA8: Function
+    {
+        F6A9: Initial
+        F6E4: Active
+        F817: Spin jump left - rising
+        F84C: Spin jump left - falling
+        F890: Spin jump right - rising
+        F8C5: Spin jump right - falling
+        F909: Ready to divekick
+        F985: Divekick left - jump
+        F9C1: Divekick left - divekick
+        FA15: Divekick left - walk to left post
+        FA59: Divekick right - jump
+        FA95: Divekick right - divekick
+        FAE9: Divekick right - walk to right post
+    }
+    0FAE: Posts midpoint X position
+    0FB0: Left post X position
+    0FB2: Right post X position
+    7E7800: Speed
+    7E7810: Spawn Y position
 }
 
 F613
 {
     name: Escape silver ninja space pirate
+    0FA8: Function
+    {
+        F6A9: Initial
+        F6E4: Active
+        F817: Spin jump left - rising
+        F84C: Spin jump left - falling
+        F890: Spin jump right - rising
+        F8C5: Spin jump right - falling
+        F909: Ready to divekick
+        F985: Divekick left - jump
+        F9C1: Divekick left - divekick
+        FA15: Divekick left - walk to left post
+        FA59: Divekick right - jump
+        FA95: Divekick right - divekick
+        FAE9: Divekick right - walk to right post
+    }
+    0FAE: Posts midpoint X position
+    0FB0: Left post X position
+    0FB2: Right post X position
+    7E7800: Speed
+    7E7810: Spawn Y position
 }
 
 F653
@@ -1062,30 +2787,77 @@ F653
         0xFDCE: Walking right
         0xFE4A: RTS
     }
+    0FB0: Left post X position
+    0FB2: Right post X position
+    7E7800: X position backup
 }
 
 F693
 {
     name: Green walking space pirate
+    0FA8: Function
+    {
+        0xFD44: Walking left
+        0xFDCE: Walking right
+        0xFE4A: RTS
+    }
+    0FB0: Left post X position
+    0FB2: Right post X position
+    7E7800: X position backup
 }
 
 F6D3
 {
     name: Red walking space pirate
+    0FA8: Function
+    {
+        0xFD44: Walking left
+        0xFDCE: Walking right
+        0xFE4A: RTS
+    }
+    0FB0: Left post X position
+    0FB2: Right post X position
+    7E7800: X position backup
 }
 
 F713
 {
     name: Gold walking space pirate
+    0FA8: Function
+    {
+        0xFD44: Walking left
+        0xFDCE: Walking right
+        0xFE4A: RTS
+    }
+    0FB0: Left post X position
+    0FB2: Right post X position
+    7E7800: X position backup
 }
 
 F753
 {
     name: Magenta walking space pirate
+    0FA8: Function
+    {
+        0xFD44: Walking left
+        0xFDCE: Walking right
+        0xFE4A: RTS
+    }
+    0FB0: Left post X position
+    0FB2: Right post X position
+    7E7800: X position backup
 }
 
 F793
 {
     name: Escape silver walking space pirate
+    0FA8: Function
+    {
+        0xFD44: Walking left
+        0xFDCE: Walking right
+        0xFE4A: RTS
+    }
+    0FB0: Left post X position
+    0FB2: Right post X position
+    7E7800: X position backup
 }
-

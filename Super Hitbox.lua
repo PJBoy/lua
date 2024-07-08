@@ -25,7 +25,7 @@ debugInfoFlag = 0
 doorListFlag = 0
 followSamusFlag = 0--sm.button_B
 tasFlag = 0
-logFlag = 0
+logFlag = 1
 xAdjust = 0
 yAdjust = 0
 doorList = {}
@@ -332,6 +332,8 @@ function handleDebugControls()
 
     if xemu.and_(input, sm.button_A) ~= 0 then
         -- These move the Samus around
+        local samusXPosition = sm.getSamusXPosition()
+        local samusYPosition = sm.getSamusYPosition()
         samusXPosition = xemu.and_(samusXPosition +             xemu.and_(changedInput, sm.button_right),    0xFFFF)
         samusXPosition = xemu.and_(samusXPosition - xemu.rshift(xemu.and_(changedInput, sm.button_left), 1), 0xFFFF)
         samusYPosition = xemu.and_(samusYPosition + xemu.rshift(xemu.and_(changedInput, sm.button_down), 2), 0xFFFF)
@@ -734,16 +736,15 @@ function displayEnemyProjectileHitboxes(cameraX, cameraY)
             drawBox(left, top, right, bottom, colour_enemyProjectile, "clear")
             --drawBox(math.min(left, right - 2), math.min(top, bottom - 2), math.max(right, left + 2), math.max(bottom, top + 2), colour_enemyProjectile, "clear")
 
-            if enemyProjectileId == 0xDE88 then
             -- Show enemy projectile index and ID
-            drawText(left, top, string.format("%u: %04X", i, xemu.read_u16_le(0x7E1B23 + i * 2)), colour_enemyProjectile)
-            --drawText(left, top, string.format("%04X", xemu.read_u16_le(0x7E1B6B + i * 2)), 0x00FFFFFF, 0x000000FF)
+            drawText(left, top, string.format("%u: %04X", i, enemyProjectileId), colour_enemyProjectile)
+            --xemu.write_u16_le(0x7E1BD7 + i * 2, xemu.and_(xemu.read_u16_le(0x7E1BD7 + i * 2), 0xEFFF))
+            --drawText(left, top, string.format("%04X", xemu.read_u16_le(0x7E1BD7 + i * 2)), 0x00FFFFFF, 0x000000FF)
 
             -- Log enemy projectile index and ID to list in top-right (after sprite objects)
             if logFlag ~= 0 then
-                drawText(0, y, string.format("%u: %04X", i, xemu.read_u16_le(0x7E1B23 + i * 2)), colour_enemyProjectile)
+                drawText(0, y, string.format("%u: %04X", i, enemyProjectileId), colour_enemyProjectile)
                 y = y + 8
-            end
             end
         end
     end
@@ -781,11 +782,10 @@ function displayProjectileHitboxes(cameraX, cameraY)
         -- Draw projectile hitbox
         drawBox(left, top, right, bottom, colour_projectile, "clear")
 
+        -- Show projectile damage
+        drawText(left, top - 8, sm.getProjectileDamage(i), colour_projectile)
+        -- Show bomb timer
         if sm.getBombTimer(i) ~= 0 then
-            -- Show projectile damage
-            drawText(left, top - 8, sm.getProjectileDamage(i), colour_projectile)
-
-            -- Show bomb timer
             if i >= 5 then
                 drawText(left, top - 16, sm.getBombTimer(i), colour_projectile)
             else

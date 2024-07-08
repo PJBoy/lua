@@ -95,7 +95,7 @@ function initGui()
     forms.destroyall()
 
     local super_width = 500
-    local super_height = 700
+    local super_height = 1050
     
     local labels = {}
     for i = 0, 31 do
@@ -359,6 +359,7 @@ function displayEnemyHitbox()
         if xemu.and_(sm.getEnemyExtraProperties(i_enemy), 4) == 0 or sm.getEnemyAiHandler(i_enemy) == 4 then
             xemu.drawBox(left, top, right, bottom, 0xFF0000FF, "clear")
         else
+            xemu.drawBox(left, top, right, bottom, 0xFFFFFFFF, "clear")
             -- Process extended spritemap format
             local p_spritemap = sm.getEnemySpritemap(i_enemy)
             if p_spritemap ~= 0 then
@@ -370,6 +371,7 @@ function displayEnemyHitbox()
                         local entryPointer = p_spritemap + 2 + ii*8
                         local entryXOffset = xemu.read_s16_le(entryPointer)
                         local entryYOffset = xemu.read_s16_le(entryPointer + 2)
+                        local p_entrySpritemap = xemu.read_u16_le(entryPointer + 4)
                         local entryHitboxPointer = xemu.read_u16_le(entryPointer + 6)
                         if entryHitboxPointer ~= 0 then
                             entryHitboxPointer = bank + entryHitboxPointer
@@ -380,6 +382,9 @@ function displayEnemyHitbox()
                                     local entryTop    = xemu.read_s16_le(entryHitboxPointer + 2 + iii*12 + 2)
                                     local entryRight  = xemu.read_s16_le(entryHitboxPointer + 2 + iii*12 + 4)
                                     local entryBottom = xemu.read_s16_le(entryHitboxPointer + 2 + iii*12 + 6)
+                                    local p_entryTouch = xemu.read_u16_le(entryHitboxPointer + 2 + iii*12 + 8)
+                                    local p_entryShot = xemu.read_u16_le(entryHitboxPointer + 2 + iii*12 + 0xA)
+                                    
                                     xemu.drawBox(
                                         enemyXPosition - cameraX + entryXOffset + entryLeft,
                                         enemyYPosition - cameraY + entryYOffset + entryTop,
@@ -387,6 +392,13 @@ function displayEnemyHitbox()
                                         enemyYPosition - cameraY + entryYOffset + entryBottom,
                                         0xFF0000FF, "clear"
                                     )
+                                    
+                                    --xemu.drawText(
+                                    --    enemyXPosition - cameraX + entryXOffset + entryLeft + 1,
+                                    --    enemyYPosition - cameraY + entryYOffset + entryTop + 1,
+                                    --    string.format("%d: %X", ii, p_entrySpritemap),
+                                    --    colour, 0x000000FF
+                                    --)
                                 end
                             end
                         end
