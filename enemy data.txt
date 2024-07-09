@@ -1,16 +1,19 @@
 CEBF
 {
     name: Bouncing gooball
+    debug: BOYON
 }
 
 CEFF
 {
     name: Mini-Crocomire
+    debug: STOKE
 }
 
 CF3F
 {
     name: Maridia beyblade turtle
+    debug: KAME
 }
 
 CF7F
@@ -21,6 +24,7 @@ CF7F
 CFBF
 {
     name: Thin hopping blob
+    debug: PUYO
     0FAA: Y speed table index
     0FAC: Hop cooldown timer
     0FAE: Function
@@ -64,11 +68,13 @@ CFBF
 CFFF
 {
     name: Spike shooting plant
+    debug: SABOTEN
 }
 
 D03F
 {
     name: Maridia spikey shells
+    debug: TOGE
 }
 
 D07F
@@ -113,6 +119,7 @@ D0BF
 D0FF
 {
     name: Pre-Bomb Torizo fly
+    debug: MERO
     $0FA8: Retreat timer
     $0FAA: X velocity
     $0FAC: Y velocity
@@ -130,6 +137,7 @@ D0FF
 D13F
 {
     name: Under ice beam fly
+    debug: MELLA
     $0FA8: Retreat timer
     $0FAA: X velocity
     $0FAC: Y velocity
@@ -147,6 +155,7 @@ D13F
 D17F
 {
     name: Pre-spring ball fly
+    debug: MEMU
     $0FA8: Retreat timer
     $0FAA: X velocity
     $0FAC: Y velocity
@@ -164,16 +173,19 @@ D17F
 D1BF
 {
     name: Norfair erratic fireball
+    debug: MULTI
 }
 
 D1FF
 {
     name: Lavaquake rocks
+    debug: POLYP
 }
 
 D23F
 {
     name: Rinka
+    debug: RINKA
     0FA8: Function
     {
         B7DF: Fire
@@ -190,16 +202,19 @@ D23F
 D27F
 {
     name: Rio
+    debug: RIO
 }
 
 D2BF
 {
     name: Norfair lava-jumping enemy
+    debug: SQUEEWPT
 }
 
 D2FF
 {
     name: Norfair rio
+    debug: GERUDA
     0FA8: Y velocity
     0FAA: X velocity
     0FB2: Function
@@ -233,82 +248,98 @@ D2FF
 D33F
 {
     name: Lower Norfair rio
+    debug: HOLTZ
 }
 
 D37F
 {
     name: Maridia large indestructible snails
+    debug: OUM
 }
 
 D3BF
 {
     name: High-rising slow-falling enemy
+    debug: HIRU
 }
 
 D3FF
 {
     name: Grapplable jet powered ripper
+    debug: RIPPER2
 }
 
 D43F
 {
     name: Jet powered ripper
+    debug: RIPPER2
 }
 
 D47F
 {
     name: Ripper
+    debug: RIPPER
 }
 
 D4BF
 {
     name: Lava seahorse
+    debug: DRAGON
 }
 
 D4FF
 {
     name: Timed shutter
+    debug: SHUTTER
 }
 
 D53F
 {
     name: Shootable shutter
+    debug: SHUTTER2
 }
 
 D57F
 {
     name: Horizontal shootable shutter
+    debug: SHUTTER2
 }
 
 D5BF
 {
     name: Destroyable timed shutter
+    debug: SHUTTER2
 }
 
 D5FF
 {
     name: Rising and falling platform
+    debug: SHUTTER2
 }
 
 
 D63F
 {
     name: Waver
+    debug: WAVER
 }
 
 D67F
 {
     name: Metal skree
+    debug: METALEE
 }
 
 D6BF
 {
     name: Fireflea
+    debug: HOTARY
 }
 
 D6FF
 {
     name: Maridia fish
+    debug: FISH
 }
 
 D73F
@@ -320,6 +351,7 @@ D73F
 D77F
 {
     name: Crab
+    debug: KANI
     0FA8: X velocity
     0FAA: Y velocity
     0FB2: Function
@@ -338,6 +370,7 @@ D77F
 D7BF
 {
     name: Slug
+    debug: OUMU
     0FA8: X velocity
     0FAA: Y velocity
     0FB2: Function
@@ -356,26 +389,31 @@ D7BF
 D7FF
 {
     name: Fast-moving slowly-sinking platform
+    debug: KAMER
 }
 
 D83F
 {
     name: Platform that falls with Samus' weight
+    debug: KAMER
 }
 
 D87F
 {
     name: Roach, flies away from Samus
+    debug: SBUG
 }
 
 D8BF
 {
     name: Roach, unused/broken
+    debug: SBUG
 }
 
 D8FF
 {
     name: Mochtroid
+    debug: METMOD
     0FA8: X subvelocity
     0FAA: X velocity
     0FAC: Y subvelocity
@@ -394,31 +432,37 @@ D8FF
 D93F
 {
     name: Sidehopper
+    debug: SSIDE
 }
 
 D97F
 {
     name: Desgeega
+    debug: SDEATH
 }
 
 D9BF
 {
     name: Super-sidehopper
+    debug: SIDE
 }
 
 D9FF
 {
     name: Tourian super-sidehopper
+    debug: SIDE
 }
 
 DA3F
 {
     name: Super-desgeega
+    debug: DESSGEEGA
 }
 
 DA7F
 {
     name: Maridia refill candy
+    debug: ZOA
     0FAA: Spawn X position
     0FAC: Spawn Y position
     0FAE: Instruction list table index
@@ -447,6 +491,7 @@ DA7F
 DABF
 {
     name: Norfair slow fireball
+    debug: VIOLA
     0FA8: X velocity
     0FAA: Y velocity
     0FB2: Function
@@ -470,26 +515,31 @@ DAFF
 DB3F
 {
     name: Bang
+    debug: BANG
 }
 
 DB7F
 {
     name: Skree
+    debug: SKREE
 }
 
 DBBF
 {
     name: Maridia snail
+    debug: YARD
 }
 
 DBFF
 {
     name: Reflec
+    debug: REFLEC
 }
 
 DC3F
 {
     name: Wrecked Ship orange zoomer
+    debug: HZOOMER
     0FA8: X velocity
     0FAA: Y velocity
     0FB2: Function
@@ -508,6 +558,7 @@ DC3F
 DC7F
 {
     name: Big eye bugs
+    debug: ZEELA
     0FA8: X velocity
     0FAA: Y velocity
     0FB2: Function
@@ -526,6 +577,7 @@ DC7F
 DCBF
 {
     name: Fire zoomer
+    debug: NOVA
     0FA8: X velocity
     0FAA: Y velocity
     0FB2: Function
@@ -544,6 +596,7 @@ DCBF
 DCFF
 {
     name: Zoomer
+    debug: ZOOMER
     0FA8: X velocity
     0FAA: Y velocity
     0FB2: Function
@@ -562,6 +615,7 @@ DCFF
 DD3F
 {
     name: Stone zoomer
+    debug: MZOOMER
     0FA8: X velocity
     0FAA: Y velocity
     0FB2: Function
@@ -580,6 +634,7 @@ DD3F
 DD7F
 {
     name: Metroid
+    debug: METROID
     0FA8: X subvelocity
     0FAA: X velocity
     0FAC: Y subvelocity
@@ -822,6 +877,7 @@ DF7F
 DFBF
 {
     name: Boulder
+    debug: RSTONE
     0FA8: Function
     {
         879A: Wait for Samus to get near
@@ -857,6 +913,7 @@ DFBF
 DFFF
 {
     name: Spikey platform top
+    debug: KZAN
     0FA8: Function
     {
         8BB4: Waiting to fall
@@ -883,6 +940,7 @@ E03F
 E07F
 {
     name: Fire geyser
+    debug: HIBASHI
     0FA8: Function
     {
         902F: Inactive
@@ -902,6 +960,7 @@ E07F
 E0BF
 {
     name: Nuclear waffle
+    debug: PUROMI
     0FA8: Function
     {
         9615: Inactive
@@ -961,6 +1020,7 @@ E0BF
 E0FF
 {
     name: Fake Kraid
+    debug: SCLAYD
     0FAA: X velocity
     0FAC: Direction
     {
@@ -1399,6 +1459,7 @@ E5FF
 E63F
 {
     name: Mini-Draygon
+    debug: EBI
 }
 
 E67F
@@ -1409,26 +1470,31 @@ E67F
 E6BF
 {
     name: Morph ball eye
+    debug: EYE
 }
 
 E6FF
 {
     name: Fune
+    debug: FUNE
 }
 
 E73F
 {
     name: Fune with eyes
+    debug: NAMI
 }
 
 E77F
 {
     name: Wrecked Ship ghost
+    debug: GAI
 }
 
 E7BF
 {
     name: Yapping maw
+    debug: HAND
     0FA8: Function
     {
         A235: Neutral
@@ -1457,16 +1523,19 @@ E7BF
 E7FF
 {
     name: Kago
+    debug: KAGO
 }
 
 E83F
 {
     name: Norfair lava creature
+    debug: LAVAMAN
 }
 
 E87F
 {
     name: Beetom
+    debug: NOMI
     0FAA: Y speed table index
     0FAC: Function
     {
@@ -1525,11 +1594,13 @@ E87F
 E8BF
 {
     name: Maridia floater
+    debug: PUU
 }
 
 E8FF
 {
     name: Wrecked Ship robot
+    debug: ROBO
     0FA8: Laser X velocity
     0FAA: Laser cooldown
     0FAC: X position backup
@@ -1541,36 +1612,43 @@ E8FF
 E93F
 {
     name: Wrecked Ship robot, deactivated
+    debug: ROBO2
 }
 
 E97F
 {
     name: Mardia puffer
+    debug: PIPE
 }
 
 E9BF
 {
     name: Walking lava seahorse
+    debug: NDRA
 }
 
 E9FF
 {
     name: Wrecked Ship orb
+    debug: ATOMIC
 }
 
 EA3F
 {
     name: Wrecked Ship spark
+    debug: SPA
 }
 
 EA7F
 {
     name: Blue Brinstar face block
+    debug: KOMA
 }
 
 EABF
 {
     name: Green ki-hunter
+    debug: HACHI1
 }
 
 EAFF
@@ -1581,6 +1659,7 @@ EAFF
 EB3F
 {
     name: Yellow ki-hunter
+    debug: HACHI2
 }
 
 EB7F
@@ -1591,6 +1670,7 @@ EB7F
 EBBF
 {
     name: Red ki-hunter
+    debug: HACHI3
 }
 
 EBFF
@@ -2220,6 +2300,7 @@ F03F
 F07F
 {
     name: Shaktool
+    debug: DORI
 }
 
 F0BF
@@ -2241,6 +2322,7 @@ F153
 F193
 {
     name: Brinstar red pipe bug
+    debug: ZEB
     0FA8: Direction
     {
         0: Right
@@ -2271,6 +2353,7 @@ F193
 F1D3
 {
     name: Brinstar green pipe bug
+    debug: ZEBBO
     0FA8: Direction
     {
         0: Right
@@ -2301,6 +2384,7 @@ F1D3
 F213
 {
     name: Norfair pipe bug
+    debug: GAMET
     0FA8: Function
     {
         8BCD: Wait until everyone's ready
@@ -2334,6 +2418,7 @@ F213
 F253
 {
     name: Brinstar yellow pipe bug
+    debug: GEEGA
     0FA8: Function
     {
         8FB5: Wait for Samus to get near
@@ -2364,6 +2449,7 @@ F253
 F293
 {
     name: Botwoon
+    debug: BOTOON
     0FA8: Body projectile index
     0FAA: Position history index
     0FAC: Body travel time
@@ -2515,6 +2601,7 @@ F353
 F393
 {
     name: Kraid green wall space pirate
+    debug: BATTA1Br
     0FA8: Function
     {
         0xF034: Climbing left wall
@@ -2537,6 +2624,7 @@ F393
 F3D3
 {
     name: Norfair red wall space pirate
+    debug: BATTA1No
     0FA8: Function
     {
         0xF034: Climbing left wall
@@ -2559,6 +2647,7 @@ F3D3
 F413
 {
     name: Lower Norfair gold wall space pirate
+    debug: BATTA1Na
     0FA8: Function
     {
         0xF034: Climbing left wall
@@ -2581,6 +2670,7 @@ F413
 F453
 {
     name: Maridia wall space pirate
+    debug: BATTA1Ma
     0FA8: Function
     {
         0xF034: Climbing left wall
@@ -2603,6 +2693,7 @@ F453
 F493
 {
     name: Escape silver wall space pirate
+    debug: BATTA1Tu
     0FA8: Function
     {
         0xF034: Climbing left wall
@@ -2625,6 +2716,7 @@ F493
 F4D3
 {
     name: Grey ninja space pirate
+    debug: BATTA2
     0FA8: Function
     {
         F6A9: Initial
@@ -2651,6 +2743,7 @@ F4D3
 F513
 {
     name: Green ninja space pirate
+    debug: BATTA2Br
     0FA8: Function
     {
         F6A9: Initial
@@ -2677,6 +2770,7 @@ F513
 F553
 {
     name: Red ninja space pirate
+    debug: BATTA2No
     0FA8: Function
     {
         F6A9: Initial
@@ -2703,6 +2797,7 @@ F553
 F593
 {
     name: Gold ninja space pirate
+    debug: BATTA2Na
     0FA8: Function
     {
         F6A9: Initial
@@ -2729,6 +2824,7 @@ F593
 F5D3
 {
     name: Magenta ninja space pirate
+    debug: BATTA2Ma
     0FA8: Function
     {
         F6A9: Initial
@@ -2755,6 +2851,7 @@ F5D3
 F613
 {
     name: Escape silver ninja space pirate
+    debug: BATTA2Tu
     0FA8: Function
     {
         F6A9: Initial
@@ -2781,6 +2878,7 @@ F613
 F653
 {
     name: Grey walking space pirate
+    debug: BATTA3
     0FA8: Function
     {
         0xFD44: Walking left
@@ -2795,6 +2893,7 @@ F653
 F693
 {
     name: Green walking space pirate
+    debug: BATTA3Br
     0FA8: Function
     {
         0xFD44: Walking left
@@ -2809,6 +2908,7 @@ F693
 F6D3
 {
     name: Red walking space pirate
+    debug: BATTA3No
     0FA8: Function
     {
         0xFD44: Walking left
@@ -2823,6 +2923,7 @@ F6D3
 F713
 {
     name: Gold walking space pirate
+    debug: BATTA3Na
     0FA8: Function
     {
         0xFD44: Walking left
@@ -2837,6 +2938,7 @@ F713
 F753
 {
     name: Magenta walking space pirate
+    debug: BATTA3Ma
     0FA8: Function
     {
         0xFD44: Walking left
@@ -2851,6 +2953,7 @@ F753
 F793
 {
     name: Escape silver walking space pirate
+    debug: BATTA3Tu
     0FA8: Function
     {
         0xFD44: Walking left
