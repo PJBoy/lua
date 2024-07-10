@@ -120,12 +120,12 @@ D0FF
 {
     name: Pre-Bomb Torizo fly
     debug: MERO
-    $0FA8: Retreat timer
-    $0FAA: X velocity
-    $0FAC: Y velocity
-    $0FAE: Target Y position
-    $0FB0: Angle
-    $0FB2: Function
+    0FA8: Retreat timer
+    0FAA: X velocity
+    0FAC: Y velocity
+    0FAE: Target Y position
+    0FB0: Angle
+    0FB2: Function
     {
         B14E: Idle movement - clockwise circle
         B17C: Idle movement - anti-clockwise circle
@@ -138,12 +138,12 @@ D13F
 {
     name: Under ice beam fly
     debug: MELLA
-    $0FA8: Retreat timer
-    $0FAA: X velocity
-    $0FAC: Y velocity
-    $0FAE: Target Y position
-    $0FB0: Angle
-    $0FB2: Function
+    0FA8: Retreat timer
+    0FAA: X velocity
+    0FAC: Y velocity
+    0FAE: Target Y position
+    0FB0: Angle
+    0FB2: Function
     {
         B14E: Idle movement - clockwise circle
         B17C: Idle movement - anti-clockwise circle
@@ -156,12 +156,12 @@ D17F
 {
     name: Pre-spring ball fly
     debug: MEMU
-    $0FA8: Retreat timer
-    $0FAA: X velocity
-    $0FAC: Y velocity
-    $0FAE: Target Y position
-    $0FB0: Angle
-    $0FB2: Function
+    0FA8: Retreat timer
+    0FAA: X velocity
+    0FAC: Y velocity
+    0FAE: Target Y position
+    0FB0: Angle
+    0FB2: Function
     {
         B14E: Idle movement - clockwise circle
         B17C: Idle movement - anti-clockwise circle
@@ -819,12 +819,12 @@ DE3F
 DE7F
 {
     name: Draygon eye
-    $0FE8: Function
+    0FE8: Function
     {
         C48D: Facing left
         C513: Facing right
     }
-    $0FF2: Angle to Samus
+    0FF2: Angle to Samus
 }
 
 DEBF
@@ -2581,12 +2581,12 @@ F353
     name: Old Tourian grey wall space pirate
     0FA8: Function
     {
-        0xF034: Climbing left wall
-        0xF04F: RTS
-        0xF050: Wall-jumping right
-        0xF0C8: Climbing right wall
-        0xF0E3: RTS
-        0xF0E4: Wall-jumping left
+        F034: Climbing left wall
+        F04F: RTS
+        F050: Wall-jumping right
+        F0C8: Climbing right wall
+        F0E3: RTS
+        F0E4: Wall-jumping left
     }
     0FAC: Direction. 0 = down, 1 = up
     0FAE: Wall-jump arc centre X position
@@ -2604,12 +2604,12 @@ F393
     debug: BATTA1Br
     0FA8: Function
     {
-        0xF034: Climbing left wall
-        0xF04F: RTS
-        0xF050: Wall-jumping right
-        0xF0C8: Climbing right wall
-        0xF0E3: RTS
-        0xF0E4: Wall-jumping left
+        F034: Climbing left wall
+        F04F: RTS
+        F050: Wall-jumping right
+        F0C8: Climbing right wall
+        F0E3: RTS
+        F0E4: Wall-jumping left
     }
     0FAC: Direction. 0 = down, 1 = up
     0FAE: Wall-jump arc centre X position
@@ -2627,12 +2627,12 @@ F3D3
     debug: BATTA1No
     0FA8: Function
     {
-        0xF034: Climbing left wall
-        0xF04F: RTS
-        0xF050: Wall-jumping right
-        0xF0C8: Climbing right wall
-        0xF0E3: RTS
-        0xF0E4: Wall-jumping left
+        F034: Climbing left wall
+        F04F: RTS
+        F050: Wall-jumping right
+        F0C8: Climbing right wall
+        F0E3: RTS
+        F0E4: Wall-jumping left
     }
     0FAC: Direction. 0 = down, 1 = up
     0FAE: Wall-jump arc centre X position
@@ -2650,12 +2650,12 @@ F413
     debug: BATTA1Na
     0FA8: Function
     {
-        0xF034: Climbing left wall
-        0xF04F: RTS
-        0xF050: Wall-jumping right
-        0xF0C8: Climbing right wall
-        0xF0E3: RTS
-        0xF0E4: Wall-jumping left
+        F034: Climbing left wall
+        F04F: RTS
+        F050: Wall-jumping right
+        F0C8: Climbing right wall
+        F0E3: RTS
+        F0E4: Wall-jumping left
     }
     0FAC: Direction. 0 = down, 1 = up
     0FAE: Wall-jump arc centre X position
@@ -2673,12 +2673,12 @@ F453
     debug: BATTA1Ma
     0FA8: Function
     {
-        0xF034: Climbing left wall
-        0xF04F: RTS
-        0xF050: Wall-jumping right
-        0xF0C8: Climbing right wall
-        0xF0E3: RTS
-        0xF0E4: Wall-jumping left
+        F034: Climbing left wall
+        F04F: RTS
+        F050: Wall-jumping right
+        F0C8: Climbing right wall
+        F0E3: RTS
+        F0E4: Wall-jumping left
     }
     0FAC: Direction. 0 = down, 1 = up
     0FAE: Wall-jump arc centre X position
@@ -2696,12 +2696,12 @@ F493
     debug: BATTA1Tu
     0FA8: Function
     {
-        0xF034: Climbing left wall
-        0xF04F: RTS
-        0xF050: Wall-jumping right
-        0xF0C8: Climbing right wall
-        0xF0E3: RTS
-        0xF0E4: Wall-jumping left
+        F034: Climbing left wall
+        F04F: RTS
+        F050: Wall-jumping right
+        F0C8: Climbing right wall
+        F0E3: RTS
+        F0E4: Wall-jumping left
     }
     0FAC: Direction. 0 = down, 1 = up
     0FAE: Wall-jump arc centre X position
@@ -2881,9 +2881,9 @@ F653
     debug: BATTA3
     0FA8: Function
     {
-        0xFD44: Walking left
-        0xFDCE: Walking right
-        0xFE4A: RTS
+        FD44: Walking left
+        FDCE: Walking right
+        FE4A: RTS
     }
     0FB0: Left post X position
     0FB2: Right post X position
@@ -2896,9 +2896,9 @@ F693
     debug: BATTA3Br
     0FA8: Function
     {
-        0xFD44: Walking left
-        0xFDCE: Walking right
-        0xFE4A: RTS
+        FD44: Walking left
+        FDCE: Walking right
+        FE4A: RTS
     }
     0FB0: Left post X position
     0FB2: Right post X position
@@ -2911,9 +2911,9 @@ F6D3
     debug: BATTA3No
     0FA8: Function
     {
-        0xFD44: Walking left
-        0xFDCE: Walking right
-        0xFE4A: RTS
+        FD44: Walking left
+        FDCE: Walking right
+        FE4A: RTS
     }
     0FB0: Left post X position
     0FB2: Right post X position
@@ -2926,9 +2926,9 @@ F713
     debug: BATTA3Na
     0FA8: Function
     {
-        0xFD44: Walking left
-        0xFDCE: Walking right
-        0xFE4A: RTS
+        FD44: Walking left
+        FDCE: Walking right
+        FE4A: RTS
     }
     0FB0: Left post X position
     0FB2: Right post X position
@@ -2941,9 +2941,9 @@ F753
     debug: BATTA3Ma
     0FA8: Function
     {
-        0xFD44: Walking left
-        0xFDCE: Walking right
-        0xFE4A: RTS
+        FD44: Walking left
+        FDCE: Walking right
+        FE4A: RTS
     }
     0FB0: Left post X position
     0FB2: Right post X position
@@ -2956,9 +2956,9 @@ F793
     debug: BATTA3Tu
     0FA8: Function
     {
-        0xFD44: Walking left
-        0xFDCE: Walking right
-        0xFE4A: RTS
+        FD44: Walking left
+        FDCE: Walking right
+        FE4A: RTS
     }
     0FB0: Left post X position
     0FB2: Right post X position
