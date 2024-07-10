@@ -2588,7 +2588,11 @@ F353
         F0E3: RTS
         F0E4: Wall-jumping left
     }
-    0FAC: Direction. 0 = down, 1 = up
+    0FAC: Direction
+    {
+        0: Down
+        1: Up
+    }
     0FAE: Wall-jump arc centre X position
     0FB0: Wall-jump arc centre Y position
     0FB2: Wall-jump arc angle
@@ -2611,7 +2615,11 @@ F393
         F0E3: RTS
         F0E4: Wall-jumping left
     }
-    0FAC: Direction. 0 = down, 1 = up
+    0FAC: Direction
+    {
+        0: Down
+        1: Up
+    }
     0FAE: Wall-jump arc centre X position
     0FB0: Wall-jump arc centre Y position
     0FB2: Wall-jump arc angle
@@ -2634,7 +2642,11 @@ F3D3
         F0E3: RTS
         F0E4: Wall-jumping left
     }
-    0FAC: Direction. 0 = down, 1 = up
+    0FAC: Direction
+    {
+        0: Down
+        1: Up
+    }
     0FAE: Wall-jump arc centre X position
     0FB0: Wall-jump arc centre Y position
     0FB2: Wall-jump arc angle
@@ -2657,7 +2669,11 @@ F413
         F0E3: RTS
         F0E4: Wall-jumping left
     }
-    0FAC: Direction. 0 = down, 1 = up
+    0FAC: Direction
+    {
+        0: Down
+        1: Up
+    }
     0FAE: Wall-jump arc centre X position
     0FB0: Wall-jump arc centre Y position
     0FB2: Wall-jump arc angle
@@ -2680,7 +2696,11 @@ F453
         F0E3: RTS
         F0E4: Wall-jumping left
     }
-    0FAC: Direction. 0 = down, 1 = up
+    0FAC: Direction
+    {
+        0: Down
+        1: Up
+    }
     0FAE: Wall-jump arc centre X position
     0FB0: Wall-jump arc centre Y position
     0FB2: Wall-jump arc angle
@@ -2703,7 +2723,11 @@ F493
         F0E3: RTS
         F0E4: Wall-jumping left
     }
-    0FAC: Direction. 0 = down, 1 = up
+    0FAC: Direction
+    {
+        0: Down
+        1: Up
+    }
     0FAE: Wall-jump arc centre X position
     0FB0: Wall-jump arc centre Y position
     0FB2: Wall-jump arc angle
