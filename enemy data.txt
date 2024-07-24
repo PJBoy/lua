@@ -1649,33 +1649,201 @@ EABF
 {
     name: Green ki-hunter
     debug: HACHI1
+    0FA8: Function
+    {
+        F268: Winged - idle flying
+        F3B8: Winged - swoop
+        F4ED: Winged - back off
+        F55A: Wingless - initial falling
+        F5E3: RTL
+        F58B: Wingless - prepare to hop
+        F5F0: Wingless - hop
+        F68B: Wingless - thinking
+        F6B3: Wingless - fire acid spit
+    }
+    0FAA: Arc centre X position
+    0FAC: Arc centre Y position
+    0FB2: Arc angle
+    7E7800: Arc angular velocity cap
+    7E7804: Arc angular velocity
+    7E7806: Arc angular subvelocity
+    7E7808: Arc angular acceleration
+    7E780A: Arc angular subacceleration
+    7E780C: X subvelocity
+    7E780E: X velocity
+    7E7810: Y subvelocity
+    7E7812: Y velocity
+    7E7814: Idle zone top position
+    7E7816: Idle zone bottom position
+    7E7818: Spawn X position
+    7E781A: Spawn Y position
+    7E781C: Swipe trigger angle
+    7E781E: Thinking timer
+    7E7820: Swoop swipe flag
+    7E7822: Arc X radius
+    7E7824: Arc Y radius
+    7E7828: Wingless flag
 }
 
 EAFF
 {
     name: Green ki-hunter wings
+    0FA8: Function
+    {
+        F6F3: Attached
+        F7CF: Falling
+    }
+    0FAA: Speed table index * 100h
+    0FAE: Angle accumulator
+    0FB2: Arc angle
+    7E7800: Falling function
+    {
+        F7DB: Drifting left
+        F8AD: Drifting right
+    }
+    7E7802: Right arc centre X offset
+    7E7804: Right arc centre Y offset
+    7E7806: Left arc centre X offset
+    7E7808: Left arc centre Y offset
+    7E780A: Arc start X position
+    7E780C: Arc start Y position
+    7E780E: Fall start Y position
+    7E7810: Fall start X position
+    7E7814: Speed table index reset value
 }
 
 EB3F
 {
     name: Yellow ki-hunter
     debug: HACHI2
+    0FA8: Function
+    {
+        F268: Winged - idle flying
+        F3B8: Winged - swoop
+        F4ED: Winged - back off
+        F55A: Wingless - initial falling
+        F5E3: RTL
+        F58B: Wingless - prepare to hop
+        F5F0: Wingless - hop
+        F68B: Wingless - thinking
+        F6B3: Wingless - fire acid spit
+    }
+    0FAA: Arc centre X position
+    0FAC: Arc centre Y position
+    0FB2: Arc angle
+    7E7800: Arc angular velocity cap
+    7E7804: Arc angular velocity
+    7E7806: Arc angular subvelocity
+    7E7808: Arc angular acceleration
+    7E780A: Arc angular subacceleration
+    7E780C: X subvelocity
+    7E780E: X velocity
+    7E7810: Y subvelocity
+    7E7812: Y velocity
+    7E7814: Idle zone top position
+    7E7816: Idle zone bottom position
+    7E7818: Spawn X position
+    7E781A: Spawn Y position
+    7E781C: Swipe trigger angle
+    7E781E: Thinking timer
+    7E7820: Swoop swipe flag
+    7E7822: Arc X radius
+    7E7824: Arc Y radius
+    7E7828: Wingless flag
 }
 
 EB7F
 {
     name: Yellow ki-hunter wings
+    0FA8: Function
+    {
+        F6F3: Attached
+        F7CF: Falling
+    }
+    0FAA: Speed table index * 100h
+    0FAE: Angle accumulator
+    0FB2: Arc angle
+    7E7800: Falling function
+    {
+        F7DB: Drifting left
+        F8AD: Drifting right
+    }
+    7E7802: Right arc centre X offset
+    7E7804: Right arc centre Y offset
+    7E7806: Left arc centre X offset
+    7E7808: Left arc centre Y offset
+    7E780A: Arc start X position
+    7E780C: Arc start Y position
+    7E780E: Fall start Y position
+    7E7810: Fall start X position
+    7E7814: Speed table index reset value
 }
 
 EBBF
 {
     name: Red ki-hunter
     debug: HACHI3
+    0FA8: Function
+    {
+        F268: Winged - idle flying
+        F3B8: Winged - swoop
+        F4ED: Winged - back off
+        F55A: Wingless - initial falling
+        F5E3: RTL
+        F58B: Wingless - prepare to hop
+        F5F0: Wingless - hop
+        F68B: Wingless - thinking
+        F6B3: Wingless - fire acid spit
+    }
+    0FAA: Arc centre X position
+    0FAC: Arc centre Y position
+    0FB2: Arc angle
+    7E7800: Arc angular velocity cap
+    7E7804: Arc angular velocity
+    7E7806: Arc angular subvelocity
+    7E7808: Arc angular acceleration
+    7E780A: Arc angular subacceleration
+    7E780C: X subvelocity
+    7E780E: X velocity
+    7E7810: Y subvelocity
+    7E7812: Y velocity
+    7E7814: Idle zone top position
+    7E7816: Idle zone bottom position
+    7E7818: Spawn X position
+    7E781A: Spawn Y position
+    7E781C: Swipe trigger angle
+    7E781E: Thinking timer
+    7E7820: Swoop swipe flag
+    7E7822: Arc X radius
+    7E7824: Arc Y radius
+    7E7828: Wingless flag
 }
 
 EBFF
 {
     name: Red ki-hunter wings
+    0FA8: Function
+    {
+        F6F3: Attached
+        F7CF: Falling
+    }
+    0FAA: Speed table index * 100h
+    0FAE: Angle accumulator
+    0FB2: Arc angle
+    7E7800: Falling function
+    {
+        F7DB: Drifting left
+        F8AD: Drifting right
+    }
+    7E7802: Right arc centre X offset
+    7E7804: Right arc centre Y offset
+    7E7806: Left arc centre X offset
+    7E7808: Left arc centre Y offset
+    7E780A: Arc start X position
+    7E780C: Arc start Y position
+    7E780E: Fall start Y position
+    7E7810: Fall start X position
+    7E7814: Speed table index reset value
 }
 
 

@@ -414,8 +414,6 @@ end
 
 function init()
     console.clear()
-console.log(xemu.emuId)
-print(xemu.emuId)
     gui.clearGraphics()
     initGui()
     loadEnemyDatabase()
