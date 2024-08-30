@@ -2438,6 +2438,39 @@ EEBF
 EEFF
 {
     name: Bomb Torizo
+    0FA8: X velocity
+    0FAA: Y velocity
+    0FAC: Y acceleration
+    0FB0: Function
+    {
+        C6AB: RTS
+        C6BF: Simple movement
+        C6C6: Wake enemy when chozo finishes crumbling
+        C6FF: Normal movement
+    }
+    0FB2: Movement function
+    {
+        C752: Walking
+        C828: Attacking
+        C82C: Jumping/falling
+        C95E: RTS
+    }
+    0FB4: Graphical properties
+    {
+        2000: Background leg forward
+        4000: Turning around
+        8000: Facing right
+    }
+    0FB6: Behavioural properties
+    {
+        4000: Face blown up
+        8000: Gut blown up
+    }
+    7E7800: Link instruction
+    7E7802: Gut explosion link instruction
+    7E7806: Turn around timer
+    7E7808: Animation lock flag
+    7E7812: Step counter
 }
 
 EF3F
@@ -2447,7 +2480,39 @@ EF3F
 
 EF7F
 {
-    name: Gold Torizo
+    name: Golden Torizo
+    0FA8: X velocity
+    0FAA: Y velocity
+    0FAC: Y acceleration
+    0FB0: Function
+    {
+        C6AB: RTS
+        D5C2: Wake enemy if Samus is below and right of target position
+        D5DF: Simple movement
+        D5E6: Normal movement
+    }
+    0FB2: Movement function
+    {
+        C95E: RTS
+        D5ED: Attacking
+        D5F1: Walking
+    }
+    0FB4: Graphical properties
+    {
+        2000: Background leg forward
+        4000: Turning around
+        8000: Facing right
+    }
+    0FB6: Behavioural properties
+    {
+        1000: Caught super missile
+        2000: Stunned
+    }
+    7E7800: Link instruction
+    7E7806: Turn around timer
+    7E7808: Animation lock flag
+    7E780E: Space jump counter
+    7E7812: Step counter
 }
 
 EFBF
