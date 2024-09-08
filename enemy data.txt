@@ -2534,6 +2534,26 @@ F07F
 {
     name: Shaktool
     debug: DORI
+    0FA8: Facing angle
+    0FAA: Neighbour angle
+    0FAC: Neighbour angle delta
+    0FAE: Head direction / final piece angle curled
+    0FAF: Flip flag
+    0FB0: Primary piece enemy index
+    0FB2: Function
+    {
+        DCAA: RTS
+        DCAB: RTS. Primary piece
+        DCAC: Arm piece
+        DCD7: Head
+        DD25: Final piece
+    }
+    0FB4: Movement options
+    {
+        2000: Uncurling
+        4000: Maximally curled
+        8000: Moving anti-clockwise
+    }
 }
 
 F0BF
