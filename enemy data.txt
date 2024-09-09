@@ -2564,6 +2564,12 @@ F0BF
 F0FF
 {
     name: Chozo statue
+    0FAC: Movement index
+    0FB2: Function
+    {
+        E7A6: RTS
+    }
+    0FB4: Activation flag
 }
 
 
