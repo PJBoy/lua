@@ -1,6 +1,6 @@
 CEBF
 {
-    name: Bouncing gooball
+    name: Boyon
     debug: BOYON
 }
 
@@ -12,7 +12,7 @@ CEFF
 
 CF3F
 {
-    name: Maridia beyblade turtle
+    name: Tatori
     debug: KAME
 }
 
@@ -23,7 +23,7 @@ CF7F
 
 CFBF
 {
-    name: Thin hopping blob
+    name: Puyo
     debug: PUYO
     0FAA: Y speed table index
     0FAC: Hop cooldown timer
@@ -67,13 +67,13 @@ CFBF
 
 CFFF
 {
-    name: Spike shooting plant
+    name: Cacatac
     debug: SABOTEN
 }
 
 D03F
 {
-    name: Maridia spikey shells
+    name: Owtch
     debug: TOGE
 }
 
@@ -118,7 +118,7 @@ D0BF
 
 D0FF
 {
-    name: Pre-Bomb Torizo fly
+    name: Mellow
     debug: MERO
     0FA8: Retreat timer
     0FAA: X velocity
@@ -136,7 +136,7 @@ D0FF
 
 D13F
 {
-    name: Under ice beam fly
+    name: Mella
     debug: MELLA
     0FA8: Retreat timer
     0FAA: X velocity
@@ -154,7 +154,7 @@ D13F
 
 D17F
 {
-    name: Pre-spring ball fly
+    name: Memu
     debug: MEMU
     0FA8: Retreat timer
     0FAA: X velocity
@@ -172,13 +172,13 @@ D17F
 
 D1BF
 {
-    name: Norfair erratic fireball
+    name: Multiviola
     debug: MULTI
 }
 
 D1FF
 {
-    name: Lavaquake rocks
+    name: Polyp
     debug: POLYP
 }
 
@@ -207,13 +207,13 @@ D27F
 
 D2BF
 {
-    name: Norfair lava-jumping enemy
+    name: Squeept
     debug: SQUEEWPT
 }
 
 D2FF
 {
-    name: Norfair rio
+    name: Geruta
     debug: GERUDA
     0FA8: Y velocity
     0FAA: X velocity
@@ -247,31 +247,31 @@ D2FF
 
 D33F
 {
-    name: Lower Norfair rio
+    name: Holtz
     debug: HOLTZ
 }
 
 D37F
 {
-    name: Maridia large indestructible snails
+    name: Oum
     debug: OUM
 }
 
 D3BF
 {
-    name: High-rising slow-falling enemy
+    name: Choot
     debug: HIRU
 }
 
 D3FF
 {
-    name: Grapplable jet powered ripper
+    name: Gripper
     debug: RIPPER2
 }
 
 D43F
 {
-    name: Jet powered ripper
+    name: Ripper ii
     debug: RIPPER2
 }
 
@@ -283,7 +283,7 @@ D47F
 
 D4BF
 {
-    name: Lava seahorse
+    name: Draygon
     debug: DRAGON
 }
 
@@ -326,7 +326,7 @@ D63F
 
 D67F
 {
-    name: Metal skree
+    name: Metaree
     debug: METALEE
 }
 
@@ -338,7 +338,7 @@ D6BF
 
 D6FF
 {
-    name: Maridia fish
+    name: Skultera
     debug: FISH
 }
 
@@ -350,7 +350,7 @@ D73F
 
 D77F
 {
-    name: Crab
+    name: Sciser
     debug: KANI
     0FA8: X velocity
     0FAA: Y velocity
@@ -369,7 +369,7 @@ D77F
 
 D7BF
 {
-    name: Slug
+    name: Zero
     debug: OUMU
     0FA8: X velocity
     0FAA: Y velocity
@@ -388,19 +388,19 @@ D7BF
 
 D7FF
 {
-    name: Fast-moving slowly-sinking platform
+    name: Tripper
     debug: KAMER
 }
 
 D83F
 {
-    name: Platform that falls with Samus' weight
+    name: Suspensor platform
     debug: KAMER
 }
 
 D87F
 {
-    name: Roach, flies away from Samus
+    name: Roach
     debug: SBUG
 }
 
@@ -461,7 +461,7 @@ DA3F
 
 DA7F
 {
-    name: Maridia refill candy
+    name: Zoa
     debug: ZOA
     0FAA: Spawn X position
     0FAC: Spawn Y position
@@ -490,7 +490,7 @@ DA7F
 
 DABF
 {
-    name: Norfair slow fireball
+    name: Viola
     debug: VIOLA
     0FA8: X velocity
     0FAA: Y velocity
@@ -526,7 +526,7 @@ DB7F
 
 DBBF
 {
-    name: Maridia snail
+    name: Yard
     debug: YARD
 }
 
@@ -557,7 +557,7 @@ DC3F
 
 DC7F
 {
-    name: Big eye bugs
+    name: Zeela
     debug: ZEELA
     0FA8: X velocity
     0FAA: Y velocity
@@ -576,7 +576,7 @@ DC7F
 
 DCBF
 {
-    name: Fire zoomer
+    name: Sova
     debug: NOVA
     0FA8: X velocity
     0FAA: Y velocity
@@ -745,7 +745,7 @@ DDBF
 
 DDFF
 {
-    name: Crocomire's tongue
+    name: Crocomire tongue
     0FA8: X offset from Crocomire
 }
 
@@ -912,7 +912,7 @@ DFBF
 
 DFFF
 {
-    name: Spikey platform top
+    name: Spike platform top
     debug: KZAN
     0FA8: Function
     {
@@ -934,12 +934,12 @@ DFFF
 
 E03F
 {
-    name: Spikey platform bottom
+    name: Spike platform bottom
 }
 
 E07F
 {
-    name: Fire geyser
+    name: Fire pillar
     debug: HIBASHI
     0FA8: Function
     {
@@ -959,7 +959,7 @@ E07F
 
 E0BF
 {
-    name: Nuclear waffle
+    name: Fire arc
     debug: PUROMI
     0FA8: Function
     {
@@ -1061,7 +1061,7 @@ E17F
 
 E1BF
 {
-    name: Ridley's explosion
+    name: Ridley explosion
 }
 
 E1FF
@@ -1172,7 +1172,7 @@ E2BF
 
 E2FF
 {
-    name: Kraid's arm
+    name: Kraid arm
 }
 
 E33F
@@ -1225,7 +1225,7 @@ E3BF
 
 E3FF
 {
-    name: Kraid's foot
+    name: Kraid foot
     0FA8: Function
     {
         B92D: Handle Kraid enemy function timer
@@ -1458,7 +1458,7 @@ E5FF
 
 E63F
 {
-    name: Mini-Draygon
+    name: Evir
     debug: EBI
 }
 
@@ -1481,13 +1481,13 @@ E6FF
 
 E73F
 {
-    name: Fune with eyes
+    name: Namihe
     debug: NAMI
 }
 
 E77F
 {
-    name: Wrecked Ship ghost
+    name: Coven
     debug: GAI
 }
 
@@ -1528,7 +1528,7 @@ E7FF
 
 E83F
 {
-    name: Norfair lava creature
+    name: Magdollite
     debug: LAVAMAN
 }
 
@@ -1593,13 +1593,13 @@ E87F
 
 E8BF
 {
-    name: Maridia floater
+    name: Powamp
     debug: PUU
 }
 
 E8FF
 {
-    name: Wrecked Ship robot
+    name: Work robot
     debug: ROBO
     0FA8: Laser X velocity
     0FAA: Laser cooldown
@@ -1611,25 +1611,25 @@ E8FF
 
 E93F
 {
-    name: Wrecked Ship robot, deactivated
+    name: Work robot deactivated
     debug: ROBO2
 }
 
 E97F
 {
-    name: Mardia puffer
+    name: Bull
     debug: PIPE
 }
 
 E9BF
 {
-    name: Walking lava seahorse
+    name: Alcoon
     debug: NDRA
 }
 
 E9FF
 {
-    name: Wrecked Ship orb
+    name: Atomic
     debug: ATOMIC
 }
 
@@ -1849,12 +1849,12 @@ EBFF
 
 EC3F
 {
-    name: Mother Brain's brain
+    name: Mother Brain brain
 }
 
 EC7F
 {
-    name: Mother Brain's body
+    name: Mother Brain body
     0FA8: Body function
     {
         87E1: First phase
@@ -2236,7 +2236,7 @@ ECBF
 
 ECFF
 {
-    name: Mother Brain's tubes falling
+    name: Mother Brain tubes falling
     0FA8: Function
     {
         8B88: Non-main tube
@@ -2260,7 +2260,7 @@ ECFF
 
 ED3F
 {
-    name: Dead Torizo
+    name: Torizo corpse
     0FA8: Function
     {
         D3AD: Wait for Samus collision
@@ -2286,7 +2286,7 @@ ED3F
 
 ED7F
 {
-    name: Dead sidehopper
+    name: Sidehopper corpse
     0FA8: Function
     {
         D8E2: Alive - waiting for activation
@@ -2320,12 +2320,12 @@ ED7F
 
 EDBF
 {
-    name: Dead sidehopper, part 2
+    name: Sidehopper corpse, part 2
 }
 
 EDFF
 {
-    name: Dead zoomer
+    name: Zoomer corpse
     0FA8: Function
     {
         DA63: RTS
@@ -2348,7 +2348,7 @@ EDFF
 
 EE3F
 {
-    name: Dead ripper
+    name: Ripper corpse
     0FA8: Function
     {
         DA63: RTS
@@ -2371,7 +2371,7 @@ EE3F
 
 EE7F
 {
-    name: Dead skree
+    name: Skree corpse
     0FA8: Function
     {
         DA63: RTS
@@ -2580,7 +2580,7 @@ F153
 
 F193
 {
-    name: Brinstar red pipe bug
+    name: Zeb
     debug: ZEB
     0FA8: Direction
     {
@@ -2611,7 +2611,7 @@ F193
 
 F1D3
 {
-    name: Brinstar green pipe bug
+    name: Zebbo
     debug: ZEBBO
     0FA8: Direction
     {
@@ -2642,7 +2642,7 @@ F1D3
 
 F213
 {
-    name: Norfair pipe bug
+    name: Gamet
     debug: GAMET
     0FA8: Function
     {
@@ -2676,7 +2676,7 @@ F213
 
 F253
 {
-    name: Brinstar yellow pipe bug
+    name: Geega
     debug: GEEGA
     0FA8: Function
     {
@@ -2837,7 +2837,7 @@ F313
 
 F353
 {
-    name: Old Tourian grey wall space pirate
+    name: Grey wall space pirate
     0FA8: Function
     {
         F034: Climbing left wall
@@ -2863,7 +2863,7 @@ F353
 
 F393
 {
-    name: Kraid green wall space pirate
+    name: Green wall space pirate
     debug: BATTA1Br
     0FA8: Function
     {
@@ -2890,7 +2890,7 @@ F393
 
 F3D3
 {
-    name: Norfair red wall space pirate
+    name: Red wall space pirate
     debug: BATTA1No
     0FA8: Function
     {
@@ -2917,7 +2917,7 @@ F3D3
 
 F413
 {
-    name: Lower Norfair gold wall space pirate
+    name: Gold wall space pirate
     debug: BATTA1Na
     0FA8: Function
     {
@@ -2944,7 +2944,7 @@ F413
 
 F453
 {
-    name: Maridia wall space pirate
+    name: Magenta wall space pirate
     debug: BATTA1Ma
     0FA8: Function
     {
@@ -2971,7 +2971,7 @@ F453
 
 F493
 {
-    name: Escape silver wall space pirate
+    name: Silver wall space pirate
     debug: BATTA1Tu
     0FA8: Function
     {
@@ -3133,7 +3133,7 @@ F5D3
 
 F613
 {
-    name: Escape silver ninja space pirate
+    name: Silver ninja space pirate
     debug: BATTA2Tu
     0FA8: Function
     {
@@ -3235,7 +3235,7 @@ F753
 
 F793
 {
-    name: Escape silver walking space pirate
+    name: Silver walking space pirate
     debug: BATTA3Tu
     0FA8: Function
     {
