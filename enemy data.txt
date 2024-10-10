@@ -328,6 +328,18 @@ D67F
 {
     name: Metaree
     debug: METALEE
+    0FA8: Burrow timer
+    0FAA: Function
+    {
+        8987: Idling
+        89D4: Prepare to launch attack
+        89F3: Launched attack
+        8A5C: Burrowing
+    }
+    0FAC: Next instruction list index
+    0FAE: Instruction list index
+    0FB0: Attack ready flag
+    0FB2: Y velocity
 }
 
 D6BF
@@ -522,6 +534,18 @@ DB7F
 {
     name: Skree
     debug: SKREE
+    0FA8: Burrow timer
+    0FAA: Function
+    {
+        C6D5: Idling
+        C6F7: Prepare to launch attack
+        C716: Launched attack
+        C77F: Burrowing
+    }
+    0FAC: Next instruction list index
+    0FAE: Instruction list index
+    0FB0: Attack ready flag
+    0FB2: Y velocity
 }
 
 DBBF
