@@ -322,6 +322,24 @@ D63F
 {
     name: Waver
     debug: WAVER
+    0FA8: X subvelocity
+    0FAA: X velocity
+    0FAC: Instruction list index
+    {
+        0: Steady - facing left
+        1: Steady - facing right
+        2: Spinning - facing left
+        3: Spinning - facing right
+    }
+    0FAE: Angle
+    0FB0: Spin finished flag
+    0FB2: New instruction list index
+    {
+        0: Steady - facing left
+        1: Steady - facing right
+        2: Spinning - facing left
+        3: Spinning - facing right
+    }
 }
 
 D67F
@@ -346,6 +364,15 @@ D6BF
 {
     name: Fireflea
     debug: HOTARY
+    0FA8: Subangle delta
+    0FAA: Angle delta
+    0FAC: Radius
+    0FAE: Angle
+    0FB0: X centre
+    0FB2: Y centre
+    7E7800: Minimum Y position
+    7E7802: Maximum Y position
+    7E7804: Speed table index
 }
 
 D6FF
@@ -1086,6 +1113,9 @@ E17F
 E1BF
 {
     name: Ridley explosion
+    0FAA: X velocity
+    0FAC: Y velocity
+    0FB2: Life timer
 }
 
 E1FF
