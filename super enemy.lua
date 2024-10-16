@@ -92,6 +92,7 @@ function loadEnemyDatabase()
 end
 
 function initGui()
+    gui.clearGraphics()
     forms.destroyall()
 
     local super_width = 500
@@ -372,18 +373,18 @@ function displayEnemyHitbox()
                         local entryXOffset = xemu.read_s16_le(entryPointer)
                         local entryYOffset = xemu.read_s16_le(entryPointer + 2)
                         local p_entrySpritemap = xemu.read_u16_le(entryPointer + 4)
-                        local entryHitboxPointer = xemu.read_u16_le(entryPointer + 6)
-                        if entryHitboxPointer ~= 0 then
-                            entryHitboxPointer = bank + entryHitboxPointer
-                            local n_hitbox = xemu.read_u16_le(entryHitboxPointer)
+                        local p_entryHitbox = xemu.read_u16_le(entryPointer + 6)
+                        if p_entryHitbox ~= 0 then
+                            p_entryHitbox = bank + p_entryHitbox
+                            local n_hitbox = xemu.read_u16_le(p_entryHitbox)
                             if n_hitbox ~= 0 then
                                 for iii=0,n_hitbox-1 do
-                                    local entryLeft   = xemu.read_s16_le(entryHitboxPointer + 2 + iii*12)
-                                    local entryTop    = xemu.read_s16_le(entryHitboxPointer + 2 + iii*12 + 2)
-                                    local entryRight  = xemu.read_s16_le(entryHitboxPointer + 2 + iii*12 + 4)
-                                    local entryBottom = xemu.read_s16_le(entryHitboxPointer + 2 + iii*12 + 6)
-                                    local p_entryTouch = xemu.read_u16_le(entryHitboxPointer + 2 + iii*12 + 8)
-                                    local p_entryShot = xemu.read_u16_le(entryHitboxPointer + 2 + iii*12 + 0xA)
+                                    local entryLeft   = xemu.read_s16_le(p_entryHitbox + 2 + iii*12)
+                                    local entryTop    = xemu.read_s16_le(p_entryHitbox + 2 + iii*12 + 2)
+                                    local entryRight  = xemu.read_s16_le(p_entryHitbox + 2 + iii*12 + 4)
+                                    local entryBottom = xemu.read_s16_le(p_entryHitbox + 2 + iii*12 + 6)
+                                    local p_entryTouch = xemu.read_u16_le(p_entryHitbox + 2 + iii*12 + 8)
+                                    local p_entryShot = xemu.read_u16_le(p_entryHitbox + 2 + iii*12 + 0xA)
                                     
                                     xemu.drawBox(
                                         enemyXPosition - cameraX + entryXOffset + entryLeft,
@@ -393,12 +394,16 @@ function displayEnemyHitbox()
                                         0xFF0000FF, "clear"
                                     )
                                     
-                                    --xemu.drawText(
-                                    --    enemyXPosition - cameraX + entryXOffset + entryLeft + 1,
-                                    --    enemyYPosition - cameraY + entryYOffset + entryTop + 1,
-                                    --    string.format("%d: %X", ii, p_entrySpritemap),
-                                    --    colour, 0x000000FF
-                                    --)
+                                    local colour = 0xFF0000FF
+                                    if p_entryShot == 0xC9C2 then
+                                        colour = 0xFFFF00FF
+                                    end
+                                    xemu.drawText(
+                                        enemyXPosition - cameraX + entryXOffset + entryLeft + 1,
+                                        enemyYPosition - cameraY + entryYOffset + entryTop + 1,
+                                        string.format("%d: %X", ii, p_entryShot),
+                                        colour, 0x000000FF
+                                    )
                                 end
                             end
                         end
@@ -414,7 +419,6 @@ end
 
 function init()
     console.clear()
-    gui.clearGraphics()
     initGui()
     loadEnemyDatabase()
 end
