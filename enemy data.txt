@@ -354,8 +354,18 @@ D67F
         89F3: Launched attack
         8A5C: Burrowing
     }
-    0FAC: Next instruction list index
+    0FAC: New instruction list index
+    {
+        0: Idling
+        1: Prepare to launch attack
+        2: Launched attacked
+    }
     0FAE: Instruction list index
+    {
+        0: Idling
+        1: Prepare to launch attack
+        2: Launched attacked
+    }
     0FB0: Attack ready flag
     0FB2: Y velocity
 }
@@ -379,6 +389,23 @@ D6FF
 {
     name: Skultera
     debug: FISH
+    0FA8: Function
+    {
+        9132: Swimming left
+        91AB: Swimming right
+        9224: Turning right
+        9256: Turning left
+    }
+    0FAA: Right subvelocity
+    0FAC: Right velocity
+    0FAE: Left subvelocity
+    0FB0: Left velocity
+    0FB2: Angle
+    7E7800: Radius
+    7E7802: Turn finished flag
+    7E7804: Angle delta
+    7E7806: Previous Y offset
+    7E7808: Y offset
 }
 
 D73F
@@ -429,12 +456,64 @@ D7FF
 {
     name: Tripper
     debug: KAMER
+    0FA8: Target Y position
+    0FAA: Right subvelocity
+    0FAC: Right velocity
+    0FAE: Left subvelocity
+    0FB0: Left velocity
+    0FB2: Y speed table index
+    7E7800: Y movement function index
+    {
+        0: Rising
+        1: Sinking
+    }
+    7E7802: Previous position
+    7E7804: X movement function index
+    {
+        0: Moving left
+        1: Moving right
+    }
+    7E7806: Vertically moving flag
+    7E7808: Vertically still flag
+    7E780A: Maximum Y speed table index
+    7E780C: Previous Y movement function index
+    {
+        0: Rising
+        1: Sinking
+    }
+    7E783E: Suspensor platform flag
 }
 
 D83F
 {
     name: Suspensor platform
     debug: KAMER
+    0FA8: Target Y position
+    0FAA: Right subvelocity
+    0FAC: Right velocity
+    0FAE: Left subvelocity
+    0FB0: Left velocity
+    0FB2: Y speed table index
+    7E7800: Y movement function index
+    {
+        0: Rising
+        1: Sinking
+    }
+    7E7802: Previous position
+    7E7804: X movement function index
+    {
+        0: Moving left
+        1: Moving right
+    }
+    7E7806: Vertically moving flag
+    7E7808: Vertically still flag
+    7E780A: Maximum Y speed table index
+    7E780C: Previous Y movement function index
+    {
+        0: Rising
+        1: Sinking
+    }
+    7E783E: Suspensor platform flag
 }
 
 D87F
@@ -569,8 +648,18 @@ DB7F
         C716: Launched attack
         C77F: Burrowing
     }
-    0FAC: Next instruction list index
+    0FAC: New instruction list index
+    {
+        0: Idling
+        1: Prepare to launch attack
+        2: Launched attacked
+    }
     0FAE: Instruction list index
+    {
+        0: Idling
+        1: Prepare to launch attack
+        2: Launched attacked
+    }
     0FB0: Attack ready flag
     0FB2: Y velocity
 }
