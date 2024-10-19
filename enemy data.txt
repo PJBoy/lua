@@ -520,6 +520,91 @@ D87F
 {
     name: Roach
     debug: SBUG
+    0FA8: Straight movement timer
+    0FAA: Function
+    {
+        A2D7: Roach function - wait for Samus to get near
+        A301: Activate - index 0 (move forwards)
+        A30B: Activate - index 1 (move forwards in a zigzag)
+        A315: Activate - index 3 (move randomly and wait for Samus if hit block)
+        A325: Activate - index 4 (move in a random direction then reverse until 6 blocks away from Samus)
+        A33B: Activate - index 5 (move forwards then wait for Samus)
+        A34B: Activate - index 2 (move along 45° angle towards Samus)
+        A380: Activate - index 6 (move along 45° angle away from Samus)
+        A407: Activated - index 0 (move forwards)
+        A40E: Activated - index 1 (move forwards in a zigzag)
+        A440: Activated - index 2 (move along 45° angle towards Samus)
+        A447: Activated - index 6 (move along 45° angle away from Samus)
+        A44E: Activated - index 5 (move forwards then wait for Samus)
+        A462: Move along custom angle and wait for Samus if hit block
+        A476: Move straight along custom angle then reverse until 6 blocks away from Samus
+        A4B6: Activated - index 4 (move in a random direction then reverse until 6 blocks away from Samus)
+        A4F0: Activated - index 3 (move randomly and wait for Samus if hit block)
+    }
+    0FAC: Custom angle
+    0FB2: Movement timer
+    7E7800: Moving forward X subspeed
+    7E7802: Moving forward X speed
+    7E7804: Moving forward Y subspeed
+    7E7806: Moving forward Y speed
+    7E7808: Moving left X subvelocity
+    7E780A: Moving left X velocity
+    7E780C: Moving left Y subvelocity
+    7E780E: Moving left Y velocity
+    7E7810: Moving right X subvelocity
+    7E7812: Moving right X velocity
+    7E7814: Moving right Y subvelocity
+    7E7816: Moving right Y velocity
+    7E7818: Custom X subvelocity
+    7E781A: Custom X velocity
+    7E781C: Custom Y subvelocity
+    7E781E: Custom Y velocity
+    7E8000: Moving forward instruction list index
+    {
+        0: Facing up
+        1: Facing up-left
+        2: Facing left
+        3: Facing down-left
+        4: Facing down
+        5: Facing down-right
+        6: Facing right
+        7: Facing up-right
+    }
+    7E8002: Moving left instruction list index
+    {
+        0: Facing up
+        1: Facing up-left
+        2: Facing left
+        3: Facing down-left
+        4: Facing down
+        5: Facing down-right
+        6: Facing right
+        7: Facing up-right
+    }
+    7E8004: Moving right instruction list index
+    {
+        0: Facing up
+        1: Facing up-left
+        2: Facing left
+        3: Facing down-left
+        4: Facing down
+        5: Facing down-right
+        6: Facing right
+        7: Facing up-right
+    }
+    7E8006: Custom instruction list index
+    {
+        0: Facing up
+        1: Facing up-left
+        2: Facing left
+        3: Facing down-left
+        4: Facing down
+        5: Facing down-right
+        6: Facing right
+        7: Facing up-right
+    }
+    7E8008: New instruction list
+    7E800A: Instruction list
 }
 
 D8BF
