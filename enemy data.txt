@@ -636,30 +636,115 @@ D93F
 {
     name: Sidehopper
     debug: SSIDE
+    0FAA: Function
+    0FAC: Y speed table index
+    0FAE: X velocity
+    0FB0: Y speed table index delta
+    7E7800: Instruction list
+    7E7802: Small hop initial Y speed table index
+    7E7804: Big hop initial Y speed table index
+    7E7806: Falling flag
+    7E7808: Ready to hop flag
+    7E780A: Hop table index
+    7E780C: Sidehopper variant index
+    {
+        0: Sidehopper
+        1: Super-sidehopper
+        2: Super-desgeega
+        3: Desgeega
+    }
 }
 
 D97F
 {
     name: Desgeega
     debug: SDEATH
+    0FAA: Function
+    0FAC: Y speed table index
+    0FAE: X velocity
+    0FB0: Y speed table index delta
+    7E7800: Instruction list
+    7E7802: Small hop initial Y speed table index
+    7E7804: Big hop initial Y speed table index
+    7E7806: Falling flag
+    7E7808: Ready to hop flag
+    7E780A: Hop table index
+    7E780C: Sidehopper variant index
+    {
+        0: Sidehopper
+        1: Super-sidehopper
+        2: Super-desgeega
+        3: Desgeega
+    }
 }
 
 D9BF
 {
     name: Super-sidehopper
     debug: SIDE
+    0FAA: Function
+    0FAC: Y speed table index
+    0FAE: X velocity
+    0FB0: Y speed table index delta
+    7E7800: Instruction list
+    7E7802: Small hop initial Y speed table index
+    7E7804: Big hop initial Y speed table index
+    7E7806: Falling flag
+    7E7808: Ready to hop flag
+    7E780A: Hop table index
+    7E780C: Sidehopper variant index
+    {
+        0: Sidehopper
+        1: Super-sidehopper
+        2: Super-desgeega
+        3: Desgeega
+    }
 }
 
 D9FF
 {
     name: Tourian super-sidehopper
     debug: SIDE
+    0FAA: Function
+    0FAC: Y speed table index
+    0FAE: X velocity
+    0FB0: Y speed table index delta
+    7E7800: Instruction list
+    7E7802: Small hop initial Y speed table index
+    7E7804: Big hop initial Y speed table index
+    7E7806: Falling flag
+    7E7808: Ready to hop flag
+    7E780A: Hop table index
+    7E780C: Sidehopper variant index
+    {
+        0: Sidehopper
+        1: Super-sidehopper
+        2: Super-desgeega
+        3: Desgeega
+    }
 }
 
 DA3F
 {
     name: Super-desgeega
     debug: DESSGEEGA
+    0FAA: Function
+    0FAC: Y speed table index
+    0FAE: X velocity
+    0FB0: Y speed table index delta
+    7E7800: Instruction list
+    7E7802: Small hop initial Y speed table index
+    7E7804: Big hop initial Y speed table index
+    7E7806: Falling flag
+    7E7808: Ready to hop flag
+    7E780A: Hop table index
+    7E780C: Sidehopper variant index
+    {
+        0: Sidehopper
+        1: Super-sidehopper
+        2: Super-desgeega
+        3: Desgeega
+    }
 }
 
 DA7F
