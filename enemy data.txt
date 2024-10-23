@@ -804,6 +804,54 @@ DB3F
 {
     name: Bang
     debug: BANG
+    0FAA: Idle palette index
+    0FB0: Damage
+    0FB2: Movement function
+    {
+        BCA5: Movement delay
+        BCC1: RTS. No movement
+        BCC5: Target Samus
+        BD1C: Accelerating
+        BD2C: Decelerating
+    }
+    7E7800: Movement delay timer
+    7E7802: Angle
+    7E7804: Angle to Samus
+    7E780E: Moving left flag
+    7E7810: Moving up flag
+    7E7812: Acceleration
+    7E7814: Speed
+    7E7816: Max speed
+    7E7818: Acceleration interval timer
+    7E781A: Acceleration interval timer reset value
+    7E781C: Deceleration interval timer reset value
+    7E8000: New instruction list index
+    {
+        0: Growth level 0 - idling
+        1: Growth level 0 - growing
+        2: Growth level 1 - idling
+        3: Growth level 1 - growing
+        4: Growth level 2 - idling
+        5: Growth level 2 - growing
+        6: Growth level 3 - idling
+        7: Growth level 3 - growing
+        8: Growth level 4 - idling
+        9: Growth level 4 - growing
+    }
+    7E8002: Instruction list index
+    {
+        0: Growth level 0 - idling
+        1: Growth level 0 - growing
+        2: Growth level 1 - idling
+        3: Growth level 1 - growing
+        4: Growth level 2 - idling
+        5: Growth level 2 - growing
+        6: Growth level 3 - idling
+        7: Growth level 3 - growing
+        8: Growth level 4 - idling
+        9: Growth level 4 - growing
+    }
+    7E8004: Finished growing flag
 }
 
 DB7F
