@@ -529,12 +529,12 @@ D87F
         A315: Activate - index 3 (move randomly and wait for Samus if hit block)
         A325: Activate - index 4 (move in a random direction then reverse until 6 blocks away from Samus)
         A33B: Activate - index 5 (move forwards then wait for Samus)
-        A34B: Activate - index 2 (move along 45° angle towards Samus)
-        A380: Activate - index 6 (move along 45° angle away from Samus)
+        A34B: Activate - index 2 (move towards Samus)
+        A380: Activate - index 6 (move away from Samus)
         A407: Activated - index 0 (move forwards)
         A40E: Activated - index 1 (move forwards in a zigzag)
-        A440: Activated - index 2 (move along 45° angle towards Samus)
-        A447: Activated - index 6 (move along 45° angle away from Samus)
+        A440: Activated - index 2 (move towards Samus)
+        A447: Activated - index 6 (move away from Samus)
         A44E: Activated - index 5 (move forwards then wait for Samus)
         A462: Move along custom angle and wait for Samus if hit block
         A476: Move straight along custom angle then reverse until 6 blocks away from Samus
@@ -943,6 +943,13 @@ DBFF
 {
     name: Reflec
     debug: REFLEC
+    0FB6: Reflection axis
+    {
+        0: Vertical
+        1: Up-right diagonal
+        2: Horizontal
+        3: Down-right diagonal
+    }
 }
 
 DC3F
