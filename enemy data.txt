@@ -2,6 +2,22 @@ CEBF
 {
     name: Boyon
     debug: BOYON
+    0FA8: Speed multiplier
+    0FAA: Speed
+    0FAC: Jump height
+    0FAE: Distance accumulator
+    0FB0: Speed table index
+    0FB2: Bouncing flag
+    7E7800: Initial bounce speed table index
+    7E7802: Bounce movement index
+    {
+        0: Falling
+        1: Rising
+    }
+    7E7804: Bounce disable flag
+    7E7806: Speed multiplier mirror
+    7E7808: Idle disable flag
+    7E780A: Bounce speed calculated flag
 }
 
 CEFF
@@ -562,49 +578,69 @@ D87F
     7E8000: Moving forward instruction list index
     {
         0: Facing up
-        1: Facing up-left
-        2: Facing left
-        3: Facing down-left
-        4: Facing down
-        5: Facing down-right
-        6: Facing right
-        7: Facing up-right
+        2: Facing up-left
+        4: Facing left
+        6: Facing down-left
+        8: Facing down
+        A: Facing down-right
+        C: Facing right
+        E: Facing up-right
     }
     7E8002: Moving left instruction list index
     {
         0: Facing up
-        1: Facing up-left
-        2: Facing left
-        3: Facing down-left
-        4: Facing down
-        5: Facing down-right
-        6: Facing right
-        7: Facing up-right
+        2: Facing up-left
+        4: Facing left
+        6: Facing down-left
+        8: Facing down
+        A: Facing down-right
+        C: Facing right
+        E: Facing up-right
     }
     7E8004: Moving right instruction list index
     {
         0: Facing up
-        1: Facing up-left
-        2: Facing left
-        3: Facing down-left
-        4: Facing down
-        5: Facing down-right
-        6: Facing right
-        7: Facing up-right
+        2: Facing up-left
+        4: Facing left
+        6: Facing down-left
+        8: Facing down
+        A: Facing down-right
+        C: Facing right
+        E: Facing up-right
     }
     7E8006: Custom instruction list index
     {
         0: Facing up
-        1: Facing up-left
-        2: Facing left
-        3: Facing down-left
-        4: Facing down
-        5: Facing down-right
-        6: Facing right
-        7: Facing up-right
+        2: Facing up-left
+        4: Facing left
+        6: Facing down-left
+        8: Facing down
+        A: Facing down-right
+        C: Facing right
+        E: Facing up-right
     }
     7E8008: New instruction list
+    {
+        A071: Facing up
+        A085: Facing up-left
+        A099: Facing left
+        A0AD: Facing down-left
+        A0C1: Facing down
+        A0D5: Facing down-right
+        A0E9: Facing right
+        A0FD: Facing up-right
+    }
     7E800A: Instruction list
+    {
+        A071: Facing up
+        A085: Facing up-left
+        A099: Facing left
+        A0AD: Facing down-left
+        A0C1: Facing down
+        A0D5: Facing down-right
+        A0E9: Facing right
+        A0FD: Facing up-right
+    }
 }
 
 D8BF
