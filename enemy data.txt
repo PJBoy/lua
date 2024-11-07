@@ -45,11 +45,47 @@ CF3F
 {
     name: Tatori
     debug: KAME
+    0FA8: Function
+    {
+        8DD8: Initial
+        8E09: RTL
+        8E0A: Asleep
+        8EE0: Leave shell
+        8F3F: Enter shell
+        8F8D: Rise to hover
+        8FEB: Hovering
+        9083: Rising to peak
+        90CC: Hovering at peak
+        90E1: Falling
+    }
+    0FB0: X velocity
+    0FB2: Asleep flag
+    7E7800: Function timer
+    7E7802: X subacceleration
+    7E7804: X acceleration
+    7E7806: X subvelocity
+    7E7808: Y velocity
+    7E780E: Y subvelocity
 }
 
 CF7F
 {
     name: Mini-tatori
+    0FA8: Function
+    {
+        9142: Crawling - not carrying Samus
+        916E: Hiding - carrying Samus
+        9198: Hiding - not carrying Samus
+        91F8: Spinning - unstoppable
+        9239: Spinning - stoppable
+        925E: Crawling - carrying Samus
+    }
+    0FAA: Tatori index
+    0FAC: Spawn X position
+    0FAE: Spawn top boundary
+    0FB0: X velocity
+    7E7808: Y velocity
+    7E780A: Not carrying Samus reaction timer
 }
 
 CFBF
