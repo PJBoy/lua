@@ -136,6 +136,23 @@ CFFF
 {
     name: Cacatac
     debug: SABOTEN
+    0FA8: Right subvelocity
+    0FAA: Right velocity
+    0FAC: Left subvelocity
+    0FAE: Left velocity
+    0FB0: Direction
+    {
+        0: Left
+        1: Right
+    }
+    0FB2: Function
+    {
+        9FBA: Moving left
+        9FEC: Moving right
+        A01B: RTS
+    }
+    7E7800: Minimum X position
+    7E7802: Maximum X position
 }
 
 D03F
