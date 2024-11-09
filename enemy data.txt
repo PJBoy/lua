@@ -285,6 +285,14 @@ D1FF
 {
     name: Polyp
     debug: POLYP
+    0FA8: Function
+    {
+        B596: Wait for Samus to get near
+        B5B2: Shoot rock
+        B5EA: Cooldown
+        
+    }
+    0FAA: Cooldown timer
 }
 
 D23F
@@ -308,6 +316,26 @@ D27F
 {
     name: Rio
     debug: RIO
+    0FA8: Swoop X velocity backup
+    0FAA: Function
+    {
+        BBED: Wait for Samus to get near
+        BC32: Swoop cooldown
+        BC48: Swoop - descending
+        BCB7: Swoop - ascending
+        BCFF: Homing
+    }
+    0FAC: Y velocity
+    0FAE: X velocity
+    0FB0: Animation finished flag
+    0FB2: Instruction list
+    {
+        BB4B: Initial
+        BB53: Post-swoop idle
+        BB7F: Swooping - part 1
+        BB97: Swooping - part 2
+        BBA3: Swoop cooldown
+    }
 }
 
 D2BF
@@ -1631,8 +1659,8 @@ E23F
         F7DC: Rotating elevator room - rumbling and explosions
         F850: Rotating elevator room - handle Ceres elevator animations
     }
-    0FAA: Drawn by Ridley flag
-    0FAE: Rumbling timer
+    0FAA: Drawn by Ridley flag
+    0FAE: Rumbling timer
     0FB0: Ceres door rumble timer
     0FB2: Ceres door rumble index
 }
