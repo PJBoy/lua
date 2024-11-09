@@ -342,6 +342,24 @@ D2BF
 {
     name: Squeept
     debug: SQUEEWPT
+    0FAC: Y velocity
+    0FAE: Spawn X position
+    0FB0: Spawn Y position
+    0FB2: Function
+    {
+        BEDC: Flame
+        BF1A: Jump
+        BF3E: Rising
+        BF7C: Flipping
+        BFBC: Falling
+    }
+    7E7800: Animation finished flag
+    7E7802: Instruction list
+    {
+        BE3C: Rising
+        BE42: Flipping / falling
+        BE62: Flame
+    }
 }
 
 D2FF
