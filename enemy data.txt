@@ -400,6 +400,29 @@ D33F
 {
     name: Holtz
     debug: HOLTZ
+    0FAC: Y velocity
+    0FAE: X velocity
+    0FB2: Function
+    {
+        C72E: Flames
+        C771: Idle
+        C7BB: Prepare to swoop
+        C7D6: Swoop - descending
+        C82D: Swoop - ascending
+        C888: Swoop cooldown
+    }
+    7E7800: Instruction list
+    {
+        C61A: Idle
+        C630: Prepare to swoop
+        C65A: Swoop - descending
+        C662: Swoop - ascending - part 1
+        C674: Swoop - ascending - part 2
+        C686: Swoop cooldown
+        C6B0: Flames
+    }
+    7E7802: Animation finished flag
+    7E7804: Flames visible flag
 }
 
 D37F
