@@ -429,6 +429,58 @@ D37F
 {
     name: Oum
     debug: OUM
+    0FA8: Function
+    {
+        CDE6: Idle
+        CE2B: Rolling
+        CF40: Attacking
+    }
+    0FAA: Y speed table index
+    0FAC: Time until attack is allowed
+    0FAE: Movement direction
+    {
+        0: Right
+        1: Left
+    }
+    0FB0: Bounce counter
+    0FB2: Bounce function
+    {
+        CF66: Falling
+        CFA9: Rising
+    }
+    7E7800: New instruction list index
+    {
+        0: Idle - facing right
+        1: Idle - facing left
+        2: Rolling forwards - facing right
+        3: Rolling forwards - facing left
+        4: Attacking - facing right
+        5: Attacking - facing left
+        6: Rolling backwards - facing right
+        7: Rolling backwards - facing left
+    }
+    7E7802: Instruction list index
+    {
+        0: Idle - facing right
+        1: Idle - facing left
+        2: Rolling forwards - facing right
+        3: Rolling forwards - facing left
+        4: Attacking - facing right
+        5: Attacking - facing left
+        6: Rolling backwards - facing right
+        7: Rolling backwards - facing left
+    }
+    7E7804: Animation finished flag
+    7E7806: Attack allowing rotation flag
+    7E7808: Touching Samus flag
+    7E780A: Direction to Samus
+    {
+        0: Samus is to the right
+        1: Samus is to the left
+    }
+    7E780C: Previous X position
+    7E7810: Previous Y position
+    7E7816: Stop flag
 }
 
 D3BF
