@@ -533,6 +533,9 @@ D47F
 {
     name: Ripper
     debug: RIPPER
+    0FAC: X subvelocity
+    0FAE: X velocity
+    0FB0: X speed table index
 }
 
 D4BF
