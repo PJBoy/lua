@@ -487,6 +487,26 @@ D3BF
 {
     name: Choot
     debug: HIRU
+    0FA8: Function
+    {
+        E035: Wait for Samus to get near
+        E04F: Prepare to jump
+        E06A: Jumping
+        E0CD: Falling
+    }
+    0FAA: Y speed table index
+    0FAC: Falling pattern index
+    0FAE: Falling pattern loop counter
+    0FB0: Falling pattern pointer
+    0FB2: Falling pattern Y distance
+    7E7800: Spawn X position
+    7E7802: Spawn Y position
+    7E7804: Initial falling X position
+    7E7806: Initial falling Y position
+    7E7808: Falling X origin
+    7E780A: Falling Y origin
+    7E780C: Initial Y speed table index
+    7E780E: Jump delay timer
 }
 
 D3FF
