@@ -524,6 +524,9 @@ D43F
 {
     name: Ripper ii
     debug: RIPPER2
+    0FAC: X subvelocity
+    0FAE: X velocity
+    0FB0: X speed table index
 }
 
 D47F
