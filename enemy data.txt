@@ -542,6 +542,35 @@ D4BF
 {
     name: Draygon
     debug: DRAGON
+    0FAE: Function timer / attack counter
+    0FB2: Function
+    {
+        E654: Wait to rise
+        E6AD: Rising
+        E6F1: Attacking
+        E734: Wait to sink
+        E749: Sinking
+        E781: RTL
+    }
+    7E7800: New instruction list index
+    {
+        0: Idle - facing left
+        1: Idle - facing right
+        2: Wings - facing left
+        3: Wings - facing right
+        4: Attacking - facing left
+        5: Attacking - facing right
+    }
+    7E7802: Instruction list index
+    {
+        0: Idle - facing left
+        1: Idle - facing right
+        2: Wings - facing left
+        3: Wings - facing right
+        4: Attacking - facing left
+        5: Attacking - facing right
+    }
+    7E7804: Animation finished flag
 }
 
 D4FF
