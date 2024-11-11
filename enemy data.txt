@@ -513,6 +513,11 @@ D3FF
 {
     name: Gripper
     debug: RIPPER2
+    0FA8: Minimum X position
+    0FAA: Maximum X position
+    0FAC: X subvelocity
+    0FAE: X velocity
+    0FB0: X speed table index
 }
 
 D43F
