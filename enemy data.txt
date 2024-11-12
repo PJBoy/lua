@@ -577,30 +577,51 @@ D4FF
 {
     name: Timed shutter
     debug: SHUTTER
+    0FA8: Function
+    {
+        EABD: Initial - upwards - wait for timer
+        EAD1: Initial - upwards - wait for Samus to get near
+        EAE7: Initial - downwards - wait for Samus to get near
+        EAFD: Initial - downwards - wait for timer
+        EB11: Closing - downwards
+        EC13: Closing - upwards
+    }
+    0FAA: Growth level 0 Y position
+    0FAC: Growth level 1 Y position
+    0FAE: Growth level 2 Y position
+    0FB0: Growth level 3 Y position
+    0FB2: Growth level
+    7E7800: Y speed
+    7E7802: Y subspeed
+    7E8800: Previous Y position
 }
 
 D53F
 {
     name: Shootable shutter
     debug: SHUTTER2
+    0FA8: Function
 }
 
 D57F
 {
     name: Horizontal shootable shutter
     debug: SHUTTER2
+    0FA8: Function
 }
 
 D5BF
 {
     name: Destroyable timed shutter
     debug: SHUTTER2
+    0FA8: Function
 }
 
 D5FF
 {
     name: Rising and falling platform
     debug: SHUTTER2
+    0FA8: Function
 }
 
 
