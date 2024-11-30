@@ -575,7 +575,7 @@ D4BF
 
 D4FF
 {
-    name: Timed shutter
+    name: Growing shutter
     debug: SHUTTER
     0FA8: Function
     {
@@ -601,6 +601,57 @@ D53F
     name: Shootable shutter
     debug: SHUTTER2
     0FA8: Function
+    {
+        EF28: Wait for Samus to get near
+        EF68: Moving up
+        EFD4: Moving down
+        F040: Stopped moving up
+        F072: Stopped moving down
+        F099: Nothing
+    }
+    0FAA: Function timer
+    0FAC: Down subvelocity
+    0FAE: Down velocity
+    0FB0: Up subvelocity
+    0FB2: Up velocity
+    7E7800: Y speed table index
+    7E7802: Primary direction
+    {
+        0: Upwards
+        1: Downwards
+    }
+    7E7804: Moved up rest time parameter
+    7E7806: Moved down rest time parameter
+    7E7808: Trigger mode
+    {
+        0: Timer
+        1: Proximity
+        2: Immediate
+        3: Once shootable
+        4: Always shootable
+    }
+    7E780A: Y distance
+    7E780C: X proximity / wait time
+    7E780E: Initial function index
+    {
+        0: Timer
+        2: Proximity
+        4: Immediate
+        6: Once shootable
+        8: Always shootable
+    }
+    7E7810: Moved up rest time
+    7E7812: Moved down rest time
+    7E7814: Moving Samus flag
+    7E7818: Shot activated flag
+    7E781C: Previous Y position
+    7E781E: Minimum Y position
+    7E7820: Maximum Y position
+    7E8000: Reaction direction
+    {
+        0: Upwards
+        1: Downwards
+    }
 }
 
 D57F
@@ -608,20 +659,173 @@ D57F
     name: Horizontal shootable shutter
     debug: SHUTTER2
     0FA8: Function
+    {
+        EF28: Wait for Samus to get near
+        EF68: Moving left
+        EFD4: Moving right
+        F040: Stopped moving left
+        F072: Stopped moving right
+        F099: Nothing
+    }
+    0FAA: Function timer
+    0FAC: Right subvelocity
+    0FAE: Right velocity
+    0FB0: Left subvelocity
+    0FB2: Left velocity
+    7E7800: Y speed table index
+    7E7802: Primary direction
+    {
+        0: Leftwards
+        1: Rightwards
+    }
+    7E7804: Moved left rest time parameter
+    7E7806: Moved right rest time parameter
+    7E7808: Trigger mode
+    {
+        0: Timer
+        1: Proximity
+        2: Immediate
+        3: Once shootable
+        4: Always shootable
+    }
+    7E780A: X distance
+    7E780C: X proximity / wait time
+    7E780E: Initial function index
+    {
+        0: Timer
+        2: Proximity
+        4: Immediate
+        6: Once shootable
+        8: Always shootable
+    }
+    7E7810: Moved left rest time
+    7E7812: Moved right rest time
+    7E7818: Shot activated flag
+    7E781A: Previous X position
+    7E7822: Minimum X position
+    7E7824: Maximum X position
+    7E7826: Moving Samus flag
+    7E8000: Reaction direction
+    {
+        0: Leftwards
+        1: Rightwards
+    }
 }
 
 D5BF
 {
-    name: Destroyable timed shutter
+    name: Destroyable shutter
     debug: SHUTTER2
     0FA8: Function
+    {
+        EF28: Wait for Samus to get near
+        EF68: Moving up
+        EFD4: Moving down
+        F040: Stopped moving up
+        F072: Stopped moving down
+        F099: Nothing
+    }
+    0FAA: Function timer
+    0FAC: Down subvelocity
+    0FAE: Down velocity
+    0FB0: Up subvelocity
+    0FB2: Up velocity
+    7E7800: Y speed table index
+    7E7802: Primary direction
+    {
+        0: Upwards
+        1: Downwards
+    }
+    7E7804: Moved up rest time parameter
+    7E7806: Moved down rest time parameter
+    7E7808: Trigger mode
+    {
+        0: Timer
+        1: Proximity
+        2: Immediate
+        3: Once shootable
+        4: Always shootable
+    }
+    7E780A: Y distance
+    7E780C: X proximity / wait time
+    7E780E: Initial function index
+    {
+        0: Timer
+        2: Proximity
+        4: Immediate
+        6: Once shootable
+        8: Always shootable
+    }
+    7E7810: Moved up rest time
+    7E7812: Moved down rest time
+    7E7814: Moving Samus flag
+    7E7818: Shot activated flag
+    7E781C: Previous Y position
+    7E781E: Minimum Y position
+    7E7820: Maximum Y position
+    7E8000: Reaction direction
+    {
+        0: Upwards
+        1: Downwards
+    }
 }
 
 D5FF
 {
-    name: Rising and falling platform
+    name: Up/down mover platform
     debug: SHUTTER2
     0FA8: Function
+    {
+        EF28: Wait for Samus to get near
+        EF68: Moving up
+        EFD4: Moving down
+        F040: Stopped moving up
+        F072: Stopped moving down
+        F099: Nothing
+    }
+    0FAA: Function timer
+    0FAC: Down subvelocity
+    0FAE: Down velocity
+    0FB0: Up subvelocity
+    0FB2: Up velocity
+    7E7800: Y speed table index
+    7E7802: Primary direction
+    {
+        0: Upwards
+        1: Downwards
+    }
+    7E7804: Moved up rest time parameter
+    7E7806: Moved down rest time parameter
+    7E7808: Trigger mode
+    {
+        0: Timer
+        1: Proximity
+        2: Immediate
+        3: Once shootable
+        4: Always shootable
+    }
+    7E780A: Y distance
+    7E780C: X proximity / wait time
+    7E780E: Initial function index
+    {
+        0: Timer
+        2: Proximity
+        4: Immediate
+        6: Once shootable
+        8: Always shootable
+    }
+    7E7810: Moved up rest time
+    7E7812: Moved down rest time
+    7E7814: Moving Samus flag
+    7E7818: Shot activated flag
+    7E781C: Previous Y position
+    7E781E: Minimum Y position
+    7E7820: Maximum Y position
+    7E8000: Reaction direction
+    {
+        0: Upwards
+        1: Downwards
+    }
 }
 
 
