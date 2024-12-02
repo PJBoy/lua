@@ -2462,6 +2462,16 @@ E6BF
 {
     name: Morph ball eye
     debug: EYE
+    0FAC: Activated flag
+    0FAE: Angle
+    0FB0: Function timer
+    0FB2: Function
+    {
+        90F1: Wait for Samus to get near
+        912E: Activating
+        9160: Active
+        91CE: Deactivating
+    }
 }
 
 E6FF
