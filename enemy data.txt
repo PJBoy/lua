@@ -2410,11 +2410,52 @@ E63F
 {
     name: Evir
     debug: EBI
+    0FAA: Facing direction
+    {
+        0: Left
+        1: Right
+    }
+    0FAC: Function
+    {
+        8922: Handle body/arms
+    }
+    0FB0: Movement timer
+    7E7800: Movement direction
+    {
+        0: Up
+        1: Down
+    }
+    7E7802: Instruction list
+    7E7804: New instruction list
+    7E7806: Down subvelocity
+    7E7808: Down velocity
+    7E780A: Up subvelocity
+    7E780C: Up velocity
 }
 
 E67F
 {
     name: Evir projectile
+    0FAA: Facing direction
+    {
+        0: Left
+        1: Right
+    }
+    0FAC: Function
+    {
+        8A34: Idle
+        8A3B: Moving
+        8A78: Cooldown
+    }
+    0FB2: Regeneration X offset
+    7E7802: Instruction list
+    7E7804: New instruction list
+    7E780E: X velocity
+    7E7810: X subvelocity
+    7E7812: Y velocity
+    7E7814: Y subvelocity
+    7E7816: Moving flag
+    7E7818: Regenerating flag
 }
 
 E6BF
