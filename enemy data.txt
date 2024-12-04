@@ -2478,12 +2478,64 @@ E6FF
 {
     name: Fune
     debug: FUNE
+    0FA8: Instruction list pointers pointer
+    {
+        9399: Fune - facing left - idle
+        939F: Fune - facing left - active
+        93C9: Fune - facing right - idle
+        93CF: Fune - facing right - active
+        95BD: Namihe - facing left - idle
+        95C3: Namihe - facing left - active
+        95F1: Namihe - facing right - idle
+        95F7: Namihe - facing right - active
+    }
+    0FAA: Function
+    {
+        9737: Wait for timer
+        975C: Wait for Samus to get near
+        978E: RTS
+        978F: RTS
+    }
+    0FAC: Y proximity
+    0FAE: Variant index
+    {
+        0: Fune
+        1: Namihe
+    }
+    0FB0: Cooldown timer
+    0FB2: Cooldown time
 }
 
 E73F
 {
     name: Namihe
     debug: NAMI
+    0FA8: Instruction list pointers pointer
+    {
+        9399: Fune - facing left - idle
+        939F: Fune - facing left - active
+        93C9: Fune - facing right - idle
+        93CF: Fune - facing right - active
+        95BD: Namihe - facing left - idle
+        95C3: Namihe - facing left - active
+        95F1: Namihe - facing right - idle
+        95F7: Namihe - facing right - active
+    }
+    0FAA: Function
+    {
+        9737: Wait for timer
+        975C: Wait for Samus to get near
+        978E: RTS
+        978F: RTS
+    }
+    0FAC: Y proximity
+    0FAE: Variant index
+    {
+        0: Fune
+        1: Namihe
+    }
+    0FB0: Cooldown timer
+    0FB2: Cooldown time
 }
 
 E77F
