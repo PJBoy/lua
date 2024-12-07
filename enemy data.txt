@@ -2542,6 +2542,40 @@ E77F
 {
     name: Coven
     debug: GAI
+    0FA8: Function
+    {
+        9B42: Materialising - fade to white
+        9BAD: Materialising - fade from white
+        9C69: Dematerialising
+        9C8A: Materialised
+        9D13: Dematerialised - asleep
+        9D36: Dematerialised - awake
+    }
+    0FAA: Function timer
+    0FAC: Palette transition delay index
+    7E7800: Hover centre Y position
+    7E7802: Y subvelocity
+    7E7804: Y velocity
+    7E780A: Previous Samus X movement direction
+    {
+        0: Left
+        4: None
+        8: Right
+    }
+    7E780C: Previous Samus X position
+    7E780E: Zone left position
+    7E7810: Zone right position
+    7E7812: Previous Samus Y movement direction
+    {
+        0: Up
+        C: None
+        18: Down
+    }
+    7E7814: Previous Samus Y position
+    7E7816: Zone top position
+    7E7818: Zone bottom position
+    7E781A: Lock-on timer
+    7E781C: Directed movement timer
 }
 
 E7BF
