@@ -2650,6 +2650,13 @@ E7FF
 {
     name: Kago
     debug: KAGO
+    0FA8: Function
+    {
+        AB7B: Nothing
+        AB81: RTL
+    }
+    0FAA: Fast animation flag
+    7E7808: Hit counter
 }
 
 E83F
