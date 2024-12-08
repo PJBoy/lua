@@ -2585,18 +2585,57 @@ E7BF
     0FA8: Function
     {
         A235: Neutral
+        A28C: Attack
         A445: Attacking
         A68A: Cooldown
     }
+    0FAA: Angle
+    0FAC: Subangle
+    0FAE: Angular speed table index
+    0FB2: Proximity
     7E7800: Body segment 1 X offset
     7E7802: Body segment 1 Y offset
     7E7804: Body segment 2 X offset
     7E7806: Body segment 2 Y offset
     7E7808: Body segment 3 X offset
     7E780A: Body segment 3 Y offset
-    7E7810: Target distance
+    7E780C: Head segment X offset
+    7E780E: Head segment Y offset
+    7E7810: Target length
+    7E7812: Length
+    7E7814: Target angle (SM convention)
+    7E7816: Target angle (maths convention)
     7E7818: Body segment base X position
     7E781A: Body segment base Y position
+    7E781C: Origin X position
+    7E781E: Origin Y position
+    7E8002: Body segment 1 angle
+    7E8004: Body segment 2 angle
+    7E8006: Body segment 3 angle
+    7E8008: Head segment angle
+    7E800E: Body segment 1 X velocity
+    7E8010: Body segment 1 Y velocity
+    7E8012: Body segment 2 X velocity
+    7E8014: Body segment 2 Y velocity
+    7E8016: Body segment 3 X velocity
+    7E8018: Body segment 3 Y velocity
+    7E801A: Head segment X velocity
+    7E801C: Head segment Y velocity
+    7E801E: Aiming down flag
+    7E8020: Grabbing Samus flag
+    7E8024: Samus X offset
+    7E8026: Samus Y offset
+    7E8028: Instruction list table index
+    {
+        0: Up
+        2: Up-right
+        4: Right
+        6: Down-right
+        8: Down
+        A: Down-left
+        C: Left
+        E: Up-left
+    }
     7E802A: Intangibility timer
     7E8800: Body segment 0 enemy projectile index
     7E8802: Body segment 1 enemy projectile index
