@@ -2663,6 +2663,65 @@ E83F
 {
     name: Magdollite
     debug: LAVAMAN
+    0FAA: Arm growth table index / hand direction
+    {
+        0: Left
+        1: Right
+    }
+    0FAC: Instruction list
+    {
+        AC9C: Head - facing left - idle
+        ACB0: Hand - facing left - throwing lava
+        ACDE: Head - facing left - submerge into lava
+        AD0C: Head - facing left - emerge from lava
+        AD3C: Head - facing right - idle
+        AD50: Hand - facing right - throwing lava
+        AD7E: Head - facing right - submerge into lava
+        ADAC: Head - facing right - emerge from lava
+        ADDC: Arm - growth level 0
+        ADE2: Arm - growth level 1
+        ADE8: Arm - growth level 2
+        ADEE: Arm - growth level 3
+        ADF4: Arm - growth level 4
+        ADFA: Arm - growth level 5
+        AE00: Arm - growth level 6
+        AE06: Arm - growth level 7
+        AE0C: Hand - stub
+    }
+    0FAE: New instruction list
+    0FB0: Arm height (negative)
+    0FB2: Function
+    {
+        B11A: Head - idle
+        B175: Head - wait until submerged
+        B193: Head - emerge when ready
+        B1B8: Head - wait until emerged
+        B1DD: Arm - wait until head submerged
+        B204: Arm - growing arm
+        B291: RTS
+        B295: Arm - shrinking arm
+        B30D: Hand - idle
+        B31F: Hand - wait until finished throwing lava and shrink arm
+        B356: Hand - wait until finished growing and throw lava
+        B3A7: Hand - move with shrinking arm
+    }
+    7E7800: Head direction
+    {
+        0: Left
+        1: Right
+    }
+    7E7802: Animation active flag
+    7E7804: Emerge not ready flag
+    7E7806: Y spawn position
+    7E7808: Cooldown timer
+    7E780E: Down subvelocity
+    7E7810: Down velocity
+    7E7812: Up subvelocity
+    7E7814: Up velocity
+    7E7818: Finished growing flag
+    7E781A: Not submerged flag
+    7E7824: Throw X position
+    7E7826: Throw Y position
 }
 
 E87F
