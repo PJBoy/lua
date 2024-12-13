@@ -2787,6 +2787,26 @@ E8BF
 {
     name: Powamp
     debug: PUU
+    0FA8: Y velocity / balloon spawn X position
+    0FAA: Y subvelocity / balloon spawn Y position
+    0FAC: Wiggle index
+    0FAE: Wiggle timer / balloon grapple travel distance
+    0FB0: Function timer
+    0FB2: Function
+    {
+        C283: Body - deflated - resting
+        C2A6: Body - inflating
+        C2CF: Body - inflated - rise to target height
+        C36B: Body - inflated - finish wiggle
+        C3E1: Body - grappled - rise to target height
+        C469: Body - grappled - finish wiggle
+        C4DC: Body - grappled - resting
+        C500: Body - deflating
+        C51D: Body - deflated - sinking
+        C568: RTL
+        C569: Body - fatal damage
+        C59F: Body - death sequence
+    }
 }
 
 E8FF
