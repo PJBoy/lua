@@ -2831,6 +2831,26 @@ E97F
 {
     name: Bull
     debug: PIPE
+    0FA8: Function
+    {
+        D92B: Movement delay
+        D940: Target Samus
+        D963: Accelerating
+        D97C: Decelerating
+    }
+    0FAA: Acceleration
+    0FAC: Acceleration delta
+    0FAE: Speed
+    0FB0: Activation timer
+    0FB2: Acceleration interval timer
+    7E7800: Max speed
+    7E7802: Angle to Samus
+    7E7804: Angle
+    7E7806: Shot reaction disable flag
+    7E780A: Acceleration interval timer reset value
+    7E780C: Deceleration interval timer reset value
+    7E780E: Shot reaction disable timer
+    7E8800: Previous health
 }
 
 E9BF
