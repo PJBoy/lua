@@ -2902,6 +2902,15 @@ EA3F
 {
     name: Wrecked Ship spark
     debug: SPA
+    0FAA: Function
+    {
+        E694: RTL
+        E695: Intermittent - inactive
+        E6B7: Intermittent - active
+        E6DC: Emit falling sparks
+    }
+    0FB0: Base function time
+    0FB2: Function timer
 }
 
 EA7F
