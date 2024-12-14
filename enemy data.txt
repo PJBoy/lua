@@ -2882,6 +2882,20 @@ E9FF
 {
     name: Atomic
     debug: ATOMIC
+    0FA8: Y movement function
+    {
+        E405: Move up
+        E424: Move down
+    }
+    0FAA: X movement function
+    {
+        E443: Move left
+        E462: Move right
+    }
+    7E7800: Subspeed
+    7E7802: Speed
+    7E7804: Negated subspeed
+    7E7806: Negated speed
 }
 
 EA3F
