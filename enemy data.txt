@@ -2857,6 +2857,25 @@ E9BF
 {
     name: Alcoon
     debug: NDRA
+    0FA8: Function
+    {
+        DD71: Wait for Samus to get near
+        DDC6: Emerging - rising
+        DE05: Emerging - falling
+        DE4B: Emerged
+        DECC: RTL
+        DECD: Hiding - rising
+        DEEC: Hiding - falling
+    }
+    0FAA: Y velocity
+    0FAC: Y subvelocity
+    0FAE: X velocity
+    0FB2: Spawn Y position
+    7E7800: Y acceleration
+    7E7802: Y subacceleration
+    7E7804: Spawn X position
+    7E7806: Landing Y position
+    7E7808: Step counter
 }
 
 E9FF
