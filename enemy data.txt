@@ -2917,6 +2917,13 @@ EA7F
 {
     name: Blue Brinstar face block
     debug: KOMA
+    0FA8: Activated flag
+    0FAA: Direction to Samus
+    0FB6: Direction to not turn
+    {
+        0: Right
+        1: Left
+    }
 }
 
 EABF
