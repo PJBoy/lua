@@ -25,7 +25,7 @@ debugInfoFlag = 0
 doorListFlag = 0
 followSamusFlag = 0--sm.button_B
 tasFlag = 0
-logFlag = 1
+logFlag = 0
 xAdjust = 0
 yAdjust = 0
 doorList = {}
@@ -39,9 +39,9 @@ colour_specialBlock = 0x0000FF00 + colour_opacity
 colour_doorcap      = 0xFF800000 + colour_opacity
 colour_errorBlock   = 0x8000FF00 + colour_opacity
 
-colour_scroll_red   = 0xFF000000 + colour_opacity
-colour_scroll_blue  = 0x0000FF00 + colour_opacity
-colour_scroll_green = 0x00FF0000 + colour_opacity
+colour_scroll_red   = 0xFF000000 + xemu.rshift(colour_opacity, 1)
+colour_scroll_blue  = 0x0000FF00 + xemu.rshift(colour_opacity, 1)
+colour_scroll_green = 0x00FF0000 + xemu.rshift(colour_opacity, 1)
 
 colour_enemy           = 0xFFFFFF00 + colour_opacity
 colour_spriteObject    = 0xFF800000 + colour_opacity

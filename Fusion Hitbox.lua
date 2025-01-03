@@ -1,7 +1,24 @@
--- TODO: Make different colours for different slots
+xemu = require("cross emu gba")
 
-DisplayTileData = 0
-DisplayEnemyData = 1
+if console and console.clear then
+    console.clear()
+elseif print then
+    print("\n\n\n\n\n\n\n\n")
+    print("\n\n\n\n\n\n\n\n")
+end
+
+if gui and gui.clearGraphics then
+    gui.clearGraphics()
+elseif emu and emu.clearScreen then
+    emu.clearScreen()
+end
+
+-- Globals
+debugControlsEnabled = true
+blockInfoFlag = 0
+logFlag = 1
+
+DisplayEnemyData = 0
 DisplayRoomBoxes = 1
 DisplaySamusBox = 1
 DisplayProjectileBoxes = 1
@@ -11,224 +28,316 @@ EnemyVAdjust = 0
 AVISkipDoorTransitions = 0
 AVIFullMapView = 0
 
-while true do
-	local CurrentInput = memory.readshort(0x30011E8)
-	local ChangedInput = memory.readshort(0x30011EC)
-	if AND(CurrentInput, 0x4) ~= 0 then	-- while holding Select
-		DisplayTileData        = XOR(DisplayTileData,        AND(ChangedInput, 0x0001))	-- A pressed
-		DisplayEnemyData       = XOR(DisplayEnemyData,       AND(ChangedInput, 0x0001))	-- A pressed
-		DisplayRoomBoxes       = XOR(DisplayRoomBoxes,       SHIFT(AND(ChangedInput, 0x0002), 1))	-- B pressed
-		DisplaySamusBox        = XOR(DisplaySamusBox,        SHIFT(AND(ChangedInput, 0x0200), 9))	-- L pressed
-		DisplayProjectileBoxes = XOR(DisplayProjectileBoxes, SHIFT(AND(ChangedInput, 0x0200), 9))	-- L pressed
-		DisplayEnemyBoxes      = XOR(DisplayEnemyBoxes,      SHIFT(AND(ChangedInput, 0x0100), 8))	-- R pressed
-		EnemyHAdjust = EnemyHAdjust +       AND(ChangedInput, 0x0010)		-- Right pressed
-		EnemyHAdjust = EnemyHAdjust - SHIFT(AND(ChangedInput, 0x0020), 1)	-- Left pressed
-		EnemyVAdjust = EnemyVAdjust - SHIFT(AND(ChangedInput, 0x0040), 2)	-- Up pressed
-		EnemyVAdjust = EnemyVAdjust + SHIFT(AND(ChangedInput, 0x0080), 3)	-- Down pressed
-	end
-	
-	-- This function draws boxes around blocks of different colours, corrosponding to a property of the block:
-	--	Red: Standard solid block
-	--	Purple: Unused block (just incase)
-	--	Orange: Blocks of interest (items and doors)
-	-- And display the data about the tile (its clipdata); Red for normal blocks, Orange for >= 0x8000 blocks
-	if DisplayRoomBoxes ~= 0 then
-		local cameraX, cameraY = SHIFT(memory.readshort(0x3000124), 2), SHIFT(memory.readshort(0x3000128), 2)
-		-- these are the co-ordinates of the top-left of the screen measured in quarter pixels (thus divided by 4)
-		local width = memory.readshort(0x30000A0)
-		-- this is how wide the room is in blocks
-		local tile = 0x2026000 + SHIFT(SHIFT(cameraX, 4) + SHIFT(cameraY, 4)*width, -1)
-		-- 0x02026000 is the start of clipdata
-		-- each block is a 16x16 (thus the camera is divided by 16)
-		-- each block's clipdata is a half-word (thus camera is shifted left)
-		outline = {
-			[0x00] = function ()
-				 end, -- Air
-			[0x01] = function ()
-					gui.box(TileX, TileY, TileX+15, TileY+15, "clear", "red")
-				 end, -- Normal block
-			[0x02] = function ()
-					gui.line(TileX, TileY, TileX+15, TileY+15, "red")
-					gui.line(TileX, TileY+15, TileX+15, TileY+15, "red")
-					gui.line(TileX, TileY, TileX, TileY+15, "red")
-				 end, -- 45° down-right slope
-			[0x03] = function ()
-					gui.line(TileX, TileY+15, TileX+15, TileY, "red")
-					gui.line(TileX, TileY+15, TileX+15, TileY+15, "red")
-					gui.line(TileX+15, TileY, TileX+15, TileY+15, "red")
-				 end, -- 45° down-left slope
-			[0x04] = function ()
-					gui.line(TileX, TileY, TileX+15, TileY+7, "red")
-					gui.line(TileX, TileY+15, TileX+15, TileY+15, "red")
-					gui.line(TileX, TileY, TileX, TileY+15, "red")
-				 end, -- Higher 22.5° down-right slope
-			[0x05] = function ()
-					gui.line(TileX, TileY+8, TileX+15, TileY+15, "red")
-					gui.line(TileX, TileY+15, TileX+15, TileY+15, "red")
-					gui.line(TileX, TileY+8, TileX, TileY+15, "red")
-				 end, -- Lower 22.5° down-right slope
-			[0x06] = function ()
-					gui.line(TileX, TileY+15, TileX+15, TileY+8, "red")
-					gui.line(TileX, TileY+15, TileX+15, TileY+15, "red")
-					gui.line(TileX+15, TileY+8, TileX+15, TileY+15, "red")
-				 end, -- Lower 22.5° down-left slope
-			[0x07] = function ()
-					gui.line(TileX, TileY+7, TileX+15, TileY, "red")
-					gui.line(TileX, TileY+15, TileX+15, TileY+15, "red")
-					gui.line(TileX+15, TileY, TileX+15, TileY+15, "red")
-				 end, -- Higher 22.5° down-left slope
-			[0x08] = function ()
-					gui.box(TileX, TileY, TileX+15, TileY+15, "clear", "purple")
-				 end,
-			[0x09] = function ()
-				 end, -- Transition blocks
-			[0x0A] = function ()
-					gui.box(TileX, TileY, TileX+15, TileY+15, "clear", "orange")
-				 end, -- Items
-			[0x0B] = function ()
-					gui.box(TileX, TileY, TileX+15, TileY+15, "clear", "orange")
-				 end, -- Door blocks
-			[0x0C] = function ()
-					gui.box(TileX, TileY, TileX+15, TileY+15, "clear", "purple")
-				 end
-		}
-		
-		for y=0,10 do
-			for x=0,16 do
-				TileX, TileY = x*16 - AND(cameraX, 0x000F), y*16 - AND(cameraY, 0x000F)
-				-- this if for pixel-aligning the grid, because the screen doesn't just scroll per block!
-				local b = memory.readshort(tile + SHIFT(x + y*width, -1))
-				-- this gets the block's clipdata
-				local a
-				if b < 0x8000 then
-					a = memory.readbyte(0x83F0834 + b)
-					if DisplayTileData ~= 0 then
-						gui.text(TileX+4, TileY+4, string.format("%02X",b), "red")
-					end
-				else
-					b = AND(b, 0x7FFF)
-					a = memory.readbyte(0x83BF5C0 + b)
-					if DisplayTileData ~= 0 then
-						gui.text(TileX+4, TileY+4, string.format("%02X",b), "orange")
-					end
-				end
-				-- this gets the block's hitbox index
-				outline[a]()
-			end
-		end
-	end
+-- Colour constants
+colour_opacity = 0xFF
 
-	local cameraX, cameraY = memory.readshort(0x3000124), memory.readshort(0x3000128)
-	-- these are the co-ordinates of the top-left of the screen measured in quarter pixels
-	
-	-- This function displays the hitbox of all the enemies in the room, as well as their health (as text and a bar)
-	if DisplayEnemyBoxes ~= 0 then
-		for i=0,23 do
-			if memory.readshort(0x3000140 + i*56) ~= 0 then
-				local enemyX, enemyY = memory.readshort(0x3000144 + i*56), memory.readshort(0x3000142 + i*56)
-				local topleft = {(enemyX + memory.readshortsigned(0x300014E + i*56) - cameraX)/4, (enemyY + memory.readshortsigned(0x300014A + i*56) - cameraY)/4}
-				local bottomright = {(enemyX + memory.readshortsigned(0x3000150 + i*56) - cameraX)/4, (enemyY + memory.readshortsigned(0x300014C + i*56) - cameraY)/4}
-				gui.box(topleft[1], topleft[2], bottomright[1], bottomright[2], "clear", "#808080")
-				-- draw enemy hitbox
-				
-				if DisplayEnemyData ~= 0 then
-					gui.text(topleft[1] + EnemyHAdjust, topleft[2]-32 + EnemyVAdjust, "Slot:" .. string.format("%02X",i) .. "\nID: " .. string.format("%02X",memory.readbyte(0x300015D + i*56)), "#808080")
-					--gui.text(topleft[1] + EnemyHAdjust, topleft[2]-24 + EnemyVAdjust, string.format("%02X",memory.readbyte(0x3000140 + i*56)) .. "\n" .. string.format("%01X",memory.readbyte(0x3000174 + i*56)), "#808080")
-				end
-				
-				local enemyhealth = memory.readshort(0x3000154 + i*56)
-				local enemyspawnhealth = memory.readshort(0x82E4D4C + memory.readbyte(0x300015D + i*56)*14)
-				if enemyspawnhealth ~= 0 then
-					gui.text(topleft[1], topleft[2]-16, enemyhealth .. "/" .. enemyspawnhealth, "#808080")
-					-- show enemy health
-					if enemyhealth < enemyspawnhealth then
-						gui.box(topleft[1], topleft[2]-8, topleft[1] + enemyhealth/enemyspawnhealth*32, topleft[2]-5, "#606060")
-						gui.box(topleft[1], topleft[2]-8, topleft[1] + 32, topleft[2]-5, "clear", "#808080")
-						-- draw enemy health bar
-					end
-				end
-			end
-		end
-	end
-	-- This function displays Samus' hitbox, as well as her arm cannon point and cooldown time
-	if DisplaySamusBox ~= 0 then
-		do
-			local samusX, samusY = memory.readshort(0x300125A), memory.readshort(0x300125C)
-			local armcannonX, armcannonY = (memory.readshort(0x3000B82) - cameraX - 2)/4, (memory.readshort(0x3000B80)-cameraY - 2)/4
-			local topleft = {(samusX + memory.readshortsigned(0x3001268) - cameraX - 2)/4, (samusY + memory.readshortsigned(0x300126A) - cameraY - 2)/4}
-			local bottomright = {(samusX + memory.readshortsigned(0x300126C) - cameraX - 2)/4, (samusY + memory.readshortsigned(0x300126E) - cameraY - 2)/4}
-			gui.box(topleft[1], topleft[2], bottomright[1], bottomright[2], "clear", "#80FFFF")
-			-- draw Samus' hitbox
-			gui.box(armcannonX-1, armcannonY-1, armcannonX+1, armcannonY+1, "green")
-			-- draw arm cannon point
-			
-			local cooldown = memory.readbyte(0x300124E)
-			if cooldown ~= 0 then
-				gui.text(armcannonX-1, armcannonY-9, cooldown, "green")
-			end
-			-- show current cooldown time
-		end
-	end
-	
-	-- This function displays the hitbox of all of Samus' projectiles in the room, as well as their damage
-	if DisplayProjectileBoxes ~= 0 then
-	    pdamage = {2, 2, 3, 3, nil, nil, 10, 15, 9, nil, 10, 30, 40, 45, 45, nil, 8, 50, 1}
-		for i=0,15 do
-			if memory.readshort(0x3000960 + i*32) ~= 0 then
-				local projectileX, projectileY = memory.readshort(0x300096A + i*32), memory.readshort(0x3000968 + i*32)
-				topleft = {(projectileX + memory.readshortsigned(0x300097A + i*32) - cameraX - 2)/4, (projectileY + memory.readshortsigned(0x3000976 + i*32) - cameraY - 2)/4}
-				local bottomright = {(projectileX + memory.readshortsigned(0x300097C + i*32) - cameraX - 2)/4, (projectileY + memory.readshortsigned(0x3000978 + i*32) - cameraY - 2)/4}
-				gui.box(topleft[1], topleft[2], bottomright[1], bottomright[2], "clear", "#FFFF80")
-				-- draw projectile hitbox
-				
-				local projectiletype = memory.readbyte(0x300096F + i*32)
-				local beam = memory.readbyte(0x300131A)
-				local projectiledamage
-				if projectiletype == 0x04 then		-- Uncharged beam
-					if AND(beam, 0x10) then		-- Ice
-						projectiledamage = 6
-					else				-- All others
-						projectiledamage = 3
-					end
-				elseif projectiletype == 0x09 then	-- Charge beam
-					if AND(beam, 0x10) then		-- Ice
-						projectiledamage = 12
-					else				-- All others
-						projectiledamage = 9
-					end
-				elseif projectiletype == 0x0F then	-- Flare damage
-					if AND(beam, 0x18) then		-- Wave/Ice
-						projectiledamage = 15
-					elseif AND(beam, 0x04) then	-- Plasma
-						projectiledamage = 12
-					elseif AND(beam, 0x02) then	-- Wide
-						projectiledamage = 9
-					else				-- Charge
-						projectiledamage = 6
-					end
-				else
-					projectiledamage = pdamage[projectiletype+1]	-- All others
-				end
-				gui.text(topleft[1], topleft[2]-8, projectiledamage, "#FFFF80")
-				-- show projectile damage
-			end
-		end
-	end
-	
-	-- This function pauses AVI recording during periods of no gameplay
-	if AVISkipDoorTransitions ~= 0 then
-		if memory.readbyte(0x03000BDE) ~= 0001 or memory.readbyte(0x03000BE0) ~= 0002 then
-			avi.pause()
-		else
-			avi.resume()
-		end
-	end
-	
-	-- This function assists my full map view AVI recording
-	if AVIFullMapView ~= 0 then
-		--memory.writeshort(cameraX, cameraX - cameraX % 960)
-		--memory.writeshort(cameraY, cameraY - cameraY % 640)
-	end
-        
-	vba.frameadvance()
+colour_slope        = 0x00FF0000 + colour_opacity
+colour_solidBlock   = 0xFF000000 + colour_opacity
+colour_specialBlock = 0x0000FF00 + colour_opacity
+colour_doorcap      = 0xFF800000 + colour_opacity
+colour_errorBlock   = 0x8000FF00 + colour_opacity
+
+colour_scroll_red   = 0xFF000000 + xemu.rshift(colour_opacity, 1)
+colour_scroll_blue  = 0x0000FF00 + xemu.rshift(colour_opacity, 1)
+colour_scroll_green = 0x00FF0000 + xemu.rshift(colour_opacity, 1)
+
+colour_enemy           = 0xFFFFFF00 + colour_opacity
+colour_spriteObject    = 0xFF800000 + colour_opacity
+colour_enemyProjectile = 0x00FF0000 + colour_opacity
+colour_powerBomb       = 0xFFFFFF00 + colour_opacity
+colour_projectile      = 0xFFFF0000 + colour_opacity
+colour_samus           = 0x00FFFF00 + colour_opacity
+colour_armCannon       = 0x00FF0000 + colour_opacity
+colour_camera          = 0x80808000 + colour_opacity
+
+-- Add padding borders in BizHawk (highly resource intensive)
+xExtra = 0
+yExtra = 0
+if xemu.emuId == xemu.emuId_bizhawk then
+    --xExtra = 256
+    --yExtra = 224
+    client.SetGameExtraPadding(xExtra, yExtra, xExtra, yExtra)
 end
+
+xExtraBlocks = xemu.rshift(xExtra, 4)
+yExtraBlocks = xemu.rshift(yExtra, 4)
+
+xExtraScrolls = xemu.rshift(xExtraBlocks, 4)
+yExtraScrolls = xemu.rshift(yExtraBlocks, 4)
+
+-- Adjust drawing to account for the borders
+function drawText(x, y, text, fg, bg)
+    xemu.drawText(x + xExtra, y + yExtra, text, fg, bg or "black")
+end
+
+function drawPixel(x, y, fg, bg)
+    xemu.drawPixel(x + xExtra, y + yExtra, fg)
+end
+
+function drawBox(x0, y0, x1, y1, fg, bg)
+    xemu.drawBox(x0 + xExtra, y0 + yExtra, x1 + xExtra, y1 + yExtra, fg, bg or "clear")
+end
+
+function drawLine(x0, y0, x1, y1, fg)
+    xemu.drawLine(x0 + xExtra, y0 + yExtra, x1 + xExtra, y1 + yExtra, fg)
+end
+
+function drawRightTriangle(x0, y0, x1, y1, fg)
+    drawLine(x0, y0, x1, y1, fg)
+    drawLine(x0, y0, x1, y0, fg)
+    drawLine(x1, y0, x1, y1, fg)
+end
+
+
+-- Draw standard block outline
+function standardOutline(colour)
+    return function(blockX, blockY)
+        drawBox(blockX, blockY, blockX + 0xF, blockY + 0xF, colour, "clear")
+    end
+end
+
+-- Block drawing functions
+outline = {
+    -- Air
+    [0x00] = function(blockX, blockY) end,
+    
+    -- Normal block
+    [0x01] = standardOutline(colour_solidBlock),
+         
+     -- 45° down-right slope
+    [0x02] = function(blockX, blockY) drawRightTriangle(blockX + 0xF, blockY + 0xF, blockX, blockY, colour_slope) end,
+         
+     -- 45° down-left slope
+    [0x03] = function(blockX, blockY) drawRightTriangle(blockX, blockY + 0xF, blockX + 0xF, blockY, colour_slope) end,
+         
+     -- Higher 22.5° down-right slope
+    [0x04] = function(blockX, blockY)
+        xemu.drawLine(blockX, blockY, blockX + 0xF, blockY + 7, colour_slope)
+        xemu.drawLine(blockX, blockY + 0xF, blockX + 0xF, blockY + 0xF, colour_slope)
+        xemu.drawLine(blockX, blockY, blockX, blockY + 0xF, colour_slope)
+        xemu.drawLine(blockX + 0xF, blockY + 8, blockX + 0xF, blockY + 0xF, colour_slope)
+    end,
+    
+    -- Lower 22.5° down-right slope
+    [0x05] = function(blockX, blockY) drawRightTriangle(blockX + 0xF, blockY + 0xF, blockX, blockY + 8, colour_slope) end,
+    
+    -- Lower 22.5° down-left slope
+    [0x06] = function(blockX, blockY) drawRightTriangle(blockX, blockY + 0xF, blockX + 0xF, blockY + 8, colour_slope) end,
+    
+    -- Higher 22.5° down-left slope
+    [0x07] = function(blockX, blockY)
+        xemu.drawLine(blockX, blockY + 7, blockX + 0xF, blockY, colour_slope)
+        xemu.drawLine(blockX, blockY + 0xF, blockX + 0xF, blockY + 0xF, colour_slope)
+        xemu.drawLine(blockX + 0xF, blockY, blockX + 0xF, blockY + 0xF, colour_slope)
+        xemu.drawLine(blockX, blockY + 8, blockX, blockY + 0xF, colour_slope)
+    end,
+
+    -- Transition blocks
+    [0x09] = function(blockX, blockY) end,
+    
+    -- Items
+    [0x0A] = standardOutline(colour_specialBlock),
+    
+    -- Door blocks
+    [0x0B] = standardOutline(colour_doorcap),
+}
+
+
+function handleDebugControls()
+    local input = xemu.read_u16_le(0x30011E8)
+    local changedInput = xemu.read_u16_le(0x30011EC)
+
+    if xemu.and_(input, xemu.button_select) == 0 then
+        return
+    end
+
+    -- Show the clipdata and BTS of every block on screen
+    blockInfoFlag = xemu.xor(blockInfoFlag, xemu.and_(changedInput, xemu.button_A))
+end
+
+function displayBlocks(cameraX, cameraY)
+    local roomWidth = xemu.read_u16_le(0x30000A0)
+    for y = -yExtraBlocks, 10 + yExtraBlocks do
+        for x = -xExtraBlocks, 15 + xExtraBlocks do
+            -- Align block outlines graphically
+            local blockX = x * 0x10 - xemu.and_(cameraX, 0xF)
+            local blockY = y * 0x10 - xemu.and_(cameraY, 0xF)
+
+            -- Blocks are 16x16 px², using a right shift to avoid dealing with floats
+            local blockIndex = xemu.rshift(cameraY + y * 0x10, 4) * roomWidth
+                             + xemu.rshift(cameraX + x * 0x10, 4)
+
+            local blockClip = xemu.read_u16_le(0x2026000 + blockIndex * 2)
+            if blockClip < 0x8000 then
+                if blockInfoFlag ~= 0 then
+                    xemu.drawText(blockX + 4, blockY + 4, string.format("%02X", blockClip), "red")
+                end
+                blockType = xemu.read_u8(0x83F0834 + blockClip)
+            else
+                blockClip = xemu.and_(blockClip, 0x7FFF)
+                blockType = xemu.read_u8(0x83BF5C0 + blockType)
+                if blockInfoFlag ~= 0 then
+                    xemu.drawText(blockX + 4, blockY + 4, string.format("%02X", blockClip), "orange")
+                end
+            end
+
+            -- Draw the block outline depending on its block type
+            local f = outline[blockType] or standardOutline(colour_errorBlock)
+            f(blockX, blockY)
+        end
+    end
+end
+
+function displayEnemyHitboxes(cameraX, cameraY)
+    local y = 0
+
+    -- Iterate backwards, I want earlier enemies drawn on top of later ones
+    for j=1,0x18 do
+        local i = 0x18 - j
+        local p_enemyData = 0x3000140 + i * 0x38
+        if xemu.read_u16_le(p_enemyData) ~= 0 then
+            local enemyXPosition = xemu.read_u16_le(p_enemyData + 4)
+            local enemyYPosition = xemu.read_u16_le(p_enemyData + 2)
+            local top    = xemu.rshift(enemyYPosition + xemu.read_s16_le(p_enemyData + 0xA), 2) - cameraY
+            local bottom = xemu.rshift(enemyYPosition + xemu.read_s16_le(p_enemyData + 0xC), 2) - cameraY
+            local left   = xemu.rshift(enemyXPosition + xemu.read_s16_le(p_enemyData + 0xE), 2) - cameraX
+            local right  = xemu.rshift(enemyXPosition + xemu.read_s16_le(p_enemyData + 0x10), 2) - cameraX
+
+            -- Draw enemy hitbox
+            drawBox(left, top, right, bottom, colour_enemy, "clear")
+
+            -- Show enemy index and ID
+            local enemyId = xemu.read_u8(p_enemyData + 0x1D)
+            drawText(left + 16, top, string.format("%u: %02X", i, enemyId), colour_enemy)
+
+            -- Log enemy index and ID to list in top-right
+            if logFlag ~= 0 then
+                drawText(208, y, string.format("%u: %04X", i, enemyId), colour_enemy, 0xFF)
+                y = y + 8
+            end
+
+            -- Show enemy health
+            local enemySpawnHealth = xemu.read_u16_le(0x82E4D4C + enemyId * 0xE)
+            if enemySpawnHealth ~= 0 then
+                local enemyHealth = xemu.read_u16_le(p_enemyData + 0x14)
+                drawText(left, top - 16, string.format("%u/%u", enemyHealth, enemySpawnHealth), colour_enemy)
+                -- Draw enemy health bar
+                if enemyHealth ~= 0 then
+                    drawBox(left, top - 8, left + enemyHealth * 32 / enemySpawnHealth, top - 5, colour_enemy, colour_enemy)
+                    drawBox(left, top - 8, left + 32, top - 5, colour_enemy, "clear")
+                end
+            end
+        end
+    end
+end
+
+function displayProjectileHitboxes(cameraX, cameraY)
+    for i=0,9 do
+        local p_projectile = 0x03000960 + i * 0x20
+        if xemu.read_u16_le(p_projectile) ~= 0 then
+            local projectileXPosition = xemu.read_u16_le(p_projectile + 0xA)
+            local projectileYPosition = xemu.read_u16_le(p_projectile + 8)
+            local top    = xemu.rshift(projectileYPosition + xemu.read_s16_le(p_projectile + 0x16), 2) - cameraY
+            local bottom = xemu.rshift(projectileYPosition + xemu.read_s16_le(p_projectile + 0x18), 2) - cameraY
+            local left   = xemu.rshift(projectileXPosition + xemu.read_s16_le(p_projectile + 0x1A), 2) - cameraX
+            local right  = xemu.rshift(projectileXPosition + xemu.read_s16_le(p_projectile + 0x1C), 2) - cameraX
+
+            -- Draw projectile hitbox
+            drawBox(left, top, right, bottom, colour_projectile, "clear")
+				
+            -- Show projectile damage
+            local projectileType = xemu.read_u8(p_projectile + 0xF)
+            local beams = xemu.read_u8(0x0300131A)
+            local projectileDamage
+            if projectileType == 4 then -- Uncharged wave/ice beam
+                if xemu.and_(beams, 0x10) then
+                    projectileDamage = 6 -- Ice beam
+                else
+                    projectileDamage = 3 -- Wave beam
+                end
+            elseif projectileType == 9 then -- Charged wave beam
+                if xemu.and_(beams, 0x10) then
+                    projectileDamage = 12 -- Ice beam
+                else
+                    projectileDamage = 9 -- Wave beam
+                end
+            elseif projectileType == 0xF then -- Flare
+                if xemu.and_(beams, 0x18) then
+                    projectileDamage = 15 -- Wave/Ice
+                elseif xemu.and_(beams, 4) then
+                    projectileDamage = 12 -- Plasma
+                elseif xemu.and_(beams, 2) then
+                    projectileDamage = 9 -- Wide
+                else
+                    projectileDamage = 6 -- Charge
+                end
+            else
+                local normalDamages = {2, 2, 3, 3, nil, nil, 10, 15, 9, nil, 10, 30, 40, 45, 45, nil, 8, 50, 1}
+                projectileDamage = normalDamages[projectileType + 1] -- All others
+            end
+            
+            drawText(left, top - 8, projectileDamage, colour_projectile)
+            
+            -- Show bomb timer
+            if projectileType == 0x10 or projectileType == 0x11 then
+                local bombTimer = xemu.read_u8(p_projectile + 0x1E)
+                drawText(left, top - 16, bombTimer, colour_projectile)
+            end
+        end
+    end
+end
+
+function displaySamusHitbox(cameraX, cameraY)
+    local samusXPosition = xemu.read_u16_le(0x0300125A)
+    local samusYPosition = xemu.read_u16_le(0x0300125C)
+    local left   = xemu.rshift(samusXPosition + xemu.read_s16_le(0x03001268), 2) - cameraX
+    local top    = xemu.rshift(samusYPosition + xemu.read_s16_le(0x0300126A), 2) - cameraY
+    local right  = xemu.rshift(samusXPosition + xemu.read_s16_le(0x0300126C), 2) - cameraX
+    local bottom = xemu.rshift(samusYPosition + xemu.read_s16_le(0x0300126E), 2) - cameraY
+
+    -- Draw Samus' hitbox
+    drawBox(left, top, right, bottom, colour_samus, "clear")
+    
+    -- Draw arm cannon point
+    drawPixel(xemu.rshift(xemu.read_u16_le(0x3000B82), 2) - cameraX, xemu.rshift(xemu.read_u16_le(0x3000B80), 2) - cameraY, colour_armCannon)
+
+    -- Show current cooldown time
+    local cooldown = xemu.read_u16_le(0x0300124E)
+    if cooldown ~= 0 then
+        drawText(right, (top + bottom) / 2 - 16, cooldown, "green")
+    end
+
+    -- Show current beam charge
+    local charge = xemu.read_u8(0x03001250)
+    if charge ~= 0 then
+        drawText(right, (top + bottom) / 2 - 8, charge, "green")
+    end
+
+    -- Show recoil/invincibility
+    local invincibility = xemu.read_u8(0x03001249)
+    if invincibility ~= 0 then
+        drawText(right, (top + bottom) / 2, invincibility, colour_samus)
+    end
+
+    -- Show shinespark timer
+    local shine = xemu.read_u16_le(0x030012DC)
+    if shine ~= 0 then
+        drawText(right, (top + bottom) / 2 + 8, shine, colour_samus)
+    end
+end
+
+function main()
+    -- Debug controls
+    if debugControlsEnabled ~= 0 then
+        handleDebugControls()
+    end
+	
+	local cameraX, cameraY = xemu.rshift(xemu.read_u16_le(0x3001228), 2), xemu.rshift(xemu.read_u16_le(0x300122A), 2)
+    
+    displayBlocks(cameraX, cameraY)
+    displayEnemyHitboxes(cameraX, cameraY)
+    displaySamusHitbox(cameraX, cameraY)
+    displayProjectileHitboxes(cameraX, cameraY)
+end
+
+xemu.run(main)
