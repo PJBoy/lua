@@ -1,4 +1,4 @@
-xemu = require("cross emu gba")
+local xemu = require("cross emu gba")
 
 if console and console.clear then
     console.clear()
@@ -14,56 +14,46 @@ elseif emu and emu.clearScreen then
 end
 
 -- Globals
-debugControlsEnabled = true
-blockInfoFlag = 0
-logFlag = 1
-
-DisplayEnemyData = 0
-DisplayRoomBoxes = 1
-DisplaySamusBox = 1
-DisplayProjectileBoxes = 1
-DisplayEnemyBoxes = 1
-EnemyHAdjust = 0
-EnemyVAdjust = 0
-AVISkipDoorTransitions = 0
-AVIFullMapView = 0
+local debugControlsEnabled = true
+local blockInfoFlag = 0
+local logFlag = 1
 
 -- Colour constants
-colour_opacity = 0xFF
+local colour_opacity = 0xFF
 
-colour_slope        = 0x00FF0000 + colour_opacity
-colour_solidBlock   = 0xFF000000 + colour_opacity
-colour_specialBlock = 0x0000FF00 + colour_opacity
-colour_doorcap      = 0xFF800000 + colour_opacity
-colour_errorBlock   = 0x8000FF00 + colour_opacity
+local colour_slope        = 0x00FF0000 + colour_opacity
+local colour_solidBlock   = 0xFF000000 + colour_opacity
+local colour_specialBlock = 0x0000FF00 + colour_opacity
+local colour_doorcap      = 0xFF800000 + colour_opacity
+local colour_errorBlock   = 0x8000FF00 + colour_opacity
 
-colour_scroll_red   = 0xFF000000 + xemu.rshift(colour_opacity, 1)
-colour_scroll_blue  = 0x0000FF00 + xemu.rshift(colour_opacity, 1)
-colour_scroll_green = 0x00FF0000 + xemu.rshift(colour_opacity, 1)
+local colour_scroll_red   = 0xFF000000 + xemu.rshift(colour_opacity, 1)
+local colour_scroll_blue  = 0x0000FF00 + xemu.rshift(colour_opacity, 1)
+local colour_scroll_green = 0x00FF0000 + xemu.rshift(colour_opacity, 1)
 
-colour_enemy           = 0xFFFFFF00 + colour_opacity
-colour_spriteObject    = 0xFF800000 + colour_opacity
-colour_enemyProjectile = 0x00FF0000 + colour_opacity
-colour_powerBomb       = 0xFFFFFF00 + colour_opacity
-colour_projectile      = 0xFFFF0000 + colour_opacity
-colour_samus           = 0x00FFFF00 + colour_opacity
-colour_armCannon       = 0x00FF0000 + colour_opacity
-colour_camera          = 0x80808000 + colour_opacity
+local colour_enemy           = 0xFFFFFF00 + colour_opacity
+local colour_spriteObject    = 0xFF800000 + colour_opacity
+local colour_enemyProjectile = 0x00FF0000 + colour_opacity
+local colour_powerBomb       = 0xFFFFFF00 + colour_opacity
+local colour_projectile      = 0xFFFF0000 + colour_opacity
+local colour_samus           = 0x00FFFF00 + colour_opacity
+local colour_armCannon       = 0x00FF0000 + colour_opacity
+local colour_camera          = 0x80808000 + colour_opacity
 
 -- Add padding borders in BizHawk (highly resource intensive)
-xExtra = 0
-yExtra = 0
+local xExtra = 0
+local yExtra = 0
 if xemu.emuId == xemu.emuId_bizhawk then
     --xExtra = 256
     --yExtra = 224
     client.SetGameExtraPadding(xExtra, yExtra, xExtra, yExtra)
 end
 
-xExtraBlocks = xemu.rshift(xExtra, 4)
-yExtraBlocks = xemu.rshift(yExtra, 4)
+local xExtraBlocks = xemu.rshift(xExtra, 4)
+local yExtraBlocks = xemu.rshift(yExtra, 4)
 
-xExtraScrolls = xemu.rshift(xExtraBlocks, 4)
-yExtraScrolls = xemu.rshift(yExtraBlocks, 4)
+local xExtraScrolls = xemu.rshift(xExtraBlocks, 4)
+local yExtraScrolls = xemu.rshift(yExtraBlocks, 4)
 
 -- Adjust drawing to account for the borders
 function drawText(x, y, text, fg, bg)
@@ -97,7 +87,7 @@ function standardOutline(colour)
 end
 
 -- Block drawing functions
-outline = {
+local outline = {
     -- Air
     [0x00] = function(blockX, blockY) end,
     

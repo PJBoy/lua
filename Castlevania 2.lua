@@ -1,6 +1,6 @@
-debugFlag = 0
+local debugFlag = 0
 
-outline = {
+local outline = {
     -- Air
     [0x00] = function (tileX, tileY)
     end,
@@ -90,8 +90,8 @@ while true do
     
     for y=0,14 do
         for x=0,8 do
-            tileX = x * 16 * 2 - AND(cameraX, 0x001F)
-            tileY = y * 16 - AND(cameraY, 0x000F) - 3
+            local tileX = x * 16 * 2 - AND(cameraX, 0x001F)
+            local tileY = y * 16 - AND(cameraY, 0x000F) - 3
             
             local blockX = SHIFT(cameraX, 5) + x
             local blockY = SHIFT(cameraY, 4) + y - 1
@@ -109,16 +109,17 @@ while true do
             end
             
             -- get block's tile number
-            a = tile + AND(blockX, 0xF) + blockY % 0xF * 0x10
+            local a = tile + AND(blockX, 0xF) + blockY % 0xF * 0x10
             
             -- clipdata of two blocks
-            clipBoth = memory.readbyte(0x0520 + a)
+            local clipBoth = memory.readbyte(0x0520 + a)
             
             -- clipdata of each block
-            clip0 = SHIFT(clipBoth, 4)
-            clip1 = AND(clipBoth, 0xF)
+            local clip0 = SHIFT(clipBoth, 4)
+            local clip1 = AND(clipBoth, 0xF)
             
             -- Process the block's clipdata nibble
+            local outlinefunction
             outlinefunction = outline[clip0] or function(tileX, tileY) gui.box(tileX, tileY, tileX + 15, tileY + 15, "clear", "purple") end
             outlinefunction(tileX, tileY)
             

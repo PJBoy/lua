@@ -1,5 +1,5 @@
-xemu = require("cross emu")
-sm = require("Super Metroid")
+local xemu = require("cross emu")
+local sm = require("Super Metroid")
 
 console.clear()
 

@@ -1,5 +1,5 @@
-xemu = require("cross emu")
-sm = require("Super Metroid")
+local xemu = require("cross emu")
+local sm = require("Super Metroid")
 
 function trim(s)
     return string.match(s, "^%s*(.-)%s*$")
@@ -22,6 +22,13 @@ function pairsByKeys (t, f)
   end
   return iter
 end
+
+-- Globals
+local enemyDatabase
+local superform
+local dropdown_main
+local form_main
+local i_enemy
 
 function isValidLevelData()
     -- The screen refresh should only be done when the game is in a valid state to draw the level data.

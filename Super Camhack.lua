@@ -76,7 +76,7 @@ The fourth problem - x-ray prevents scrolling:
 console.clear()
 
 -- Note that BizHawk requires a restart if any included files are modified
-sm = require("Super Metroid")
+local sm = require("Super Metroid")
 
 function snes2pc(p)
     return bit.band(bit.rshift(p, 1), 0x3F8000) + bit.band(p, 0x7FFF)
@@ -1067,6 +1067,20 @@ function scrollHandler_up(idealLayer1YPosition)
 end
 
 
+-- Globals
+local xrayOriginPosition
+local cameraPosition
+local bg1Scroll_backup
+local bg2Scroll_backup
+local lavaAcidYPosition
+local waterYPosition
+local CE6
+local previousLayer1XBlock
+local previousLayer1YBlock
+local previousLayer2XBlock
+local previousLayer2YBlock
+
+
 function initialiseGlobals()
     -- Globals
     xrayOriginPosition = {x = 0, y = 0}
@@ -1085,7 +1099,6 @@ function initialiseGlobals()
 end
 
 initialiseGlobals()
-
 
 -- Reinitialise variables on loading savestate
 event.onloadstate(initialiseGlobals)

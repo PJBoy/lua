@@ -1,4 +1,4 @@
-displayTileData = 0
+local displayTileData = 0
 
 function gbromreadshort(address)
     return memory.gbromreadbyte(address + 1) * 0x100 + memory.gbromreadbyte(address)

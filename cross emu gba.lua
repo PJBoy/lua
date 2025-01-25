@@ -1,4 +1,4 @@
-xemu = {}
+local xemu = {}
 xemu.emuId_bizhawk = 0
 xemu.emuId_vba  = 1
 

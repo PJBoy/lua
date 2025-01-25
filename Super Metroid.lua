@@ -1,4 +1,4 @@
-xemu = require("cross emu")
+local xemu = require("cross emu")
 
 function makeReader(p, n, is_signed, interval, is_aram)
     -- p: Pointer to WRAM (or ARAM)
@@ -75,7 +75,7 @@ function makeWriter(p, n, interval)
     end
 end
 
-sm = {}
+local sm = {}
 
 -- Button bitmasks --
 sm.button_B      = 0x8000

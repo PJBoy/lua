@@ -1,16 +1,16 @@
-xemu = require("cross emu")
+local xemu = require("cross emu")
 
 console.clear()
 gui.clearGraphics()
 
-colour_irq     = 0xFFFFFF80
-colour_system  = 0x80808080
-colour_enemy   = 0xFF000080
-colour_samus   = 0x00FFFF80
-colour_sprites = 0x0000FF80
+local colour_irq     = 0xFFFFFF80
+local colour_system  = 0x80808080
+local colour_enemy   = 0xFF000080
+local colour_samus   = 0x00FFFF80
+local colour_sprites = 0x0000FF80
 
 -- Globals
-interestPoints = {
+local interestPoints = {
     {colour = colour_irq,     address_begin = 0x009583, address_ends = {0x809601},           label = "NMI"},
     {colour = colour_irq,     address_begin = 0x00986A, address_ends = {0x80988A},           label = "IRQ"},
     {colour = 0x00000080,     address_begin = 0x808338, address_ends = {0x80834A},           label = "Wait for NMI"},
@@ -31,11 +31,11 @@ interestPoints = {
     {colour = colour_samus,   address_begin = 0x82DB69, address_ends = {0x828BAF},           label = "Handle Samus running out of health and increment game time"},
 }
 
-colour = 0
-colour_old = 0
+local colour = 0
+local colour_old = 0
 
-drawQueue = {}
-colourStack = {}
+local drawQueue = {}
+local colourStack = {}
 
 function drawWrapped(x_from, y_from, x_to, y_to, colour, label)
     --console.log(string.format('(%3d, %3d) -> (%3d, %3d) - %08X %s', x_from, y_from, x_to, y_to, colour, label))

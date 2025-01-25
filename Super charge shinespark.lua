@@ -1,6 +1,6 @@
 -- Note that BizHawk requires a restart if any included files are modified
-xemu = require("cross emu")
-sm = require("Super Metroid")
+local xemu = require("cross emu")
+local sm = require("Super Metroid")
 
 -- Define a controller 1 input function
 if xemu.emuId == xemu.emuId_bizhawk then
@@ -42,9 +42,9 @@ elseif xemu.emuId == xemu.emuId_snes9x then
 end
 
 -- Globals
-flashTimer = 0
+local flashTimer = 0
 
-animationDelays = {
+local animationDelays = {
     [0] = {
         [0] = 2,
         [1] = 3,
