@@ -3768,6 +3768,7 @@ EF7F
     0FB0: Function
     {
         C6AB: RTS
+        C6BF: Simple movement
         D5C2: Wake enemy if Samus is below and right of target position
         D5DF: Simple movement
         D5E6: Normal movement

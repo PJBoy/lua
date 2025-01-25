@@ -8,6 +8,7 @@ Specifically:
   * [lsnes](https://tasvideos.org/EmulatorResources/Lsnes) (I should test this more often)
 * GBA
   * [VBA-rr](https://github.com/TASEmulators/vba-rerecording/releases)
+  * [BizHawk](https://github.com/TASEmulators/BizHawk/releases/tag/2.8) (v2.8 or less)
 * NES
   * [FCEUX](https://fceux.com/web/home.html)
 
@@ -23,8 +24,8 @@ Specifically:
   * Bind the hitbox display origin around Samus for navigation out of bounds (via select + B), origin can then be moved arbitrarily via select + d-pad to easily explore an entire room without moving
   * Move Samus around arbitrarily via select + A + d-pad
   * Show enemy health (with health bar); projectile damage; Samus' cooldown time, beam charge, recoil time and i-frame time
-* `Super Hitbox + TAS.lua`: Requires `Super Metroid.lua` + `cross emu.lua`. Extension of `Super Hitbox.lua` with ports of the TAS feature's from sniq's lsnes script
-* `Fusion Hitbox.lua`: Hitbox viewer for Metroid Fusion. Supports room data, Samus, enemies and projectiles
+* `Super Hitbox + TAS.lua`: Requires `Super Metroid.lua` + `cross emu.lua`. Extension of `Super Hitbox.lua` with ports of the TAS features from sniq's lsnes script
+* `Fusion Hitbox.lua`: Requires `cross emu gba.lua`. Hitbox viewer for Metroid Fusion. Supports room data, Samus, enemies and projectiles
 * `RoS.lua`: Hitbox viewer for Metroid II. Supports room data and enemies.
 * `Castlevania 2.lua`: Hitbox viewer for Castlevania II. Level data only. This one was the hardest hitbox viewer to make, Simon's Quest is weird.
 * `Super charge shinespark.lua`: Requires `Super Metroid.lua` + `cross emu.lua`. Shows a rhythm game style chart on top of the HUD minimap to help learn the quick charge timing
