@@ -540,7 +540,7 @@ D47F
 
 D4BF
 {
-    name: Draygon
+    name: Dragon
     debug: DRAGON
     0FAE: Function timer / attack counter
     0FB2: Function
