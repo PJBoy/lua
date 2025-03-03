@@ -1766,12 +1766,12 @@ DE3F
 DE7F
 {
     name: Draygon eye
-    0FE8: Function
+    0FA8: Function
     {
         C48D: Facing left
         C513: Facing right
     }
-    0FF2: Angle to Samus
+    0FB2: Angle to Samus
 }
 
 DEBF
