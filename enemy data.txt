@@ -1807,11 +1807,13 @@ DF3F
     7E8006: Stalk segment 2 Y position
     7E8008: Stalk segment 1 Y position
     7E800A: Stalk segment 0 Y position
-    7E801E: Damaged flag
-    7E8806: Death drift angle
-    7E8012: Death drift X speed
+    7E8010: Death drift X speed
+    7E8012: Death drift X subspeed
     7E8014: Death drift Y speed
+    7E8016: Death drift Y subspeed
+    7E801E: Damaged flag
     7E8800: Previous health
+    7E8806: Death drift angle
     7E9000: Spore generation flag
 }
 
