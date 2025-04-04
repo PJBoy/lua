@@ -2098,8 +2098,7 @@ E2BF
     }
     0FAA: Instruction list pointer
     0FAC: Instruction timer
-    0FB2: Function timer
-    0FB6: Ceiling break index
+    0FB2: Function timer / ceiling break index
     7E7800: Next function
     7E7806: Thinking timer
     7E7808: Minimum Samus ejection Y position
