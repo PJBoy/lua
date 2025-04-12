@@ -98,7 +98,7 @@ elseif xemu.emuId == xemu.emuId_snes9x then
     xemu.read_s16_le  = memory.readshortsigned
     xemu.write_u8     = memory.writebyte
     xemu.write_u16_le = memory.writeshort
-elseif xemu.emuId == lsnes then
+elseif xemu.emuId == xemu.emuId_lsnes then
     function makeMemoryReader(f)
         return function(p)
             if p < 0x800000 then
