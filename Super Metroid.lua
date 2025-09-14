@@ -350,10 +350,10 @@ sm.getAram_noteModifiedFlag    = makeAramReader(0x13, 1)
 sm.getAram_misc0               = makeAramReader(0x14, 2)
 sm.getAram_misc1               = makeAramReader(0x16, 2)
 
-sm.getAram_randomNumber            = makeAramReader(0x18, 2)
-sm.getAram_enableSoundEffectVoices = makeAramReader(0x1A, 1)
-sm.getAram_disableNoteProcessing   = makeAramReader(0x1B, 1)
-sm.getAram_p_return                = makeAramReader(0x20, 2)
+sm.getAram_randomNumber          = makeAramReader(0x18, 2)
+sm.getAram_enabledSoundVoices    = makeAramReader(0x1A, 1)
+sm.getAram_disableNoteProcessing = makeAramReader(0x1B, 1)
+sm.getAram_p_return              = makeAramReader(0x20, 2)
 
 -- Sound 1
 sm.getAram_sound1_instructionListPointerSet = makeAramReader(0x22, 2)
@@ -409,7 +409,7 @@ sm.getAram_dynamicEchoVolumeTimer = makeAramReader(0x68, 1)
 sm.getAram_targetEchoVolumeLeft   = makeAramReader(0x69, 1)
 sm.getAram_targetEchoVolumeRight  = makeAramReader(0x6A, 1)
 
--- Track
+-- Music
 sm.getAram_trackNoteTimers                 = makeAramReader(0x70, 1, false, 2)
 sm.getAram_trackNoteRingTimers             = makeAramReader(0x71, 1, false, 2)
 sm.getAram_trackRepeatedSubsectionCounters = makeAramReader(0x80, 1, false, 2)
@@ -445,8 +445,8 @@ sm.getAram_trackNoteRingLengths                   = makeAramReader(0x201, 1, fal
 sm.getAram_trackNoteVolume                        = makeAramReader(0x210, 1, false, 2)
 sm.getAram_trackInstrumentIndices                 = makeAramReader(0x211, 1, false, 2)
 sm.getAram_trackInstrumentPitches                 = makeAramReader(0x220, 2, false, 2)
-sm.getAram_trackRepeatedSubsectionAddresses       = makeAramReader(0x230, 2, false, 2)
-sm.getAram_trackRepeatedSubsectionReturnAddresses = makeAramReader(0x240, 2, false, 2)
+sm.getAram_trackRepeatedSubsectionReturnAddresses = makeAramReader(0x230, 2, false, 2)
+sm.getAram_trackRepeatedSubsectionAddresses       = makeAramReader(0x240, 2, false, 2)
 sm.getAram_trackSlideLengths                      = makeAramReader(0x280, 1, false, 2)
 sm.getAram_trackSlideDelays                       = makeAramReader(0x281, 1, false, 2)
 sm.getAram_trackSlideDirections                   = makeAramReader(0x290, 1, false, 2)
