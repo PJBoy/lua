@@ -36,6 +36,7 @@ local colour_opacity = 0x80
 local colour_slope        = 0x00FF0000 + xemu.rshift(colour_opacity, 1)
 local colour_solidBlock   = 0xFF000000 + colour_opacity
 local colour_specialBlock = 0x0000FF00 + colour_opacity
+local colour_doorBlock    = 0x00FFFF00 + colour_opacity
 local colour_doorcap      = 0xFF800000 + colour_opacity
 local colour_errorBlock   = 0x8000FF00 + colour_opacity
 
@@ -241,7 +242,7 @@ outline = {
     [0x08] = standardOutline(colour_solidBlock),
 
     -- Door block
-    [0x09] = standardOutline(colour_specialBlock),
+    [0x09] = standardOutline(colour_doorBlock),
 
     -- Spike block
     [0x0A] = standardOutline(colour_specialBlock),
@@ -392,15 +393,15 @@ function displayBlocks(cameraX, cameraY, roomWidth)
             local blockX = x * 0x10 - xemu.and_(cameraX, 0xF)
             local blockY = y * 0x10 - xemu.and_(cameraY, 0xF)
 
-            -- Blocks are 16x16 px², using a right shift to avoid dealing with floats
+            -- Blocks are 16x16 pxÂ², using a right shift to avoid dealing with floats
             local blockIndex = xemu.rshift(xemu.and_(cameraY + y * 0x10, 0xFFF), 4) * roomWidth
                              + xemu.rshift(xemu.and_(cameraX + x * 0x10, 0xFFFF), 4)
 
             -- Block type is the most significant 4 bits of level data
             local blockType = xemu.rshift(sm.getLevelDatum(blockIndex), 12)
-            if debugFlag ~= 0 or blockType == 6 then
+            if debugFlag ~= 0 or blockType == 6 or blockType == 9 then
                 -- Show the block type and BTS of every block
-                drawText(blockX + 4, blockY, string.format("%02X", blockType), "red")
+                drawText(blockX + 6, blockY, string.format("%X", blockType), "red")
                 drawText(blockX + 4, blockY + 8, string.format("%02X", sm.getBts(blockIndex)), "red")
             end
 
