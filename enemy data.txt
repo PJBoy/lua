@@ -3797,6 +3797,7 @@ EF7F
     7E7800: Link instruction
     7E7806: Turn around timer
     7E7808: Animation lock flag
+    7E780C: Eye beam explosions flag
     7E780E: Space jump counter
     7E7812: Step counter
 }
