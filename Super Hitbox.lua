@@ -630,7 +630,7 @@ function displayEnemyHitboxes(cameraX, cameraY)
                 -- Process extended spritemap format
                 local p_spritemap = sm.getEnemySpritemap(i)
                 if p_spritemap ~= 0 then
-                    local bank = xemu.lshift(sm.getEnemyBank(i), 16)
+                    local bank = xemu.lshift(sm.getEnemyBank(i), 0x10)
                     p_spritemap = bank + p_spritemap
                     local n_spritemap = xemu.read_u8(p_spritemap)
                     if n_spritemap ~= 0 then
@@ -638,16 +638,16 @@ function displayEnemyHitboxes(cameraX, cameraY)
                             local entryPointer = p_spritemap + 2 + ii*8
                             local entryXOffset = xemu.read_s16_le(entryPointer)
                             local entryYOffset = xemu.read_s16_le(entryPointer + 2)
-                            local entryHitboxPointer = xemu.read_u16_le(entryPointer + 6)
-                            if entryHitboxPointer ~= 0 then
-                                entryHitboxPointer = bank + entryHitboxPointer
-                                local n_hitbox = xemu.read_u16_le(entryHitboxPointer)
+                            local p_entryHitbox = xemu.read_u16_le(entryPointer + 6)
+                            if p_entryHitbox ~= 0 then
+                                p_entryHitbox = bank + p_entryHitbox
+                                local n_hitbox = xemu.read_u16_le(p_entryHitbox)
                                 if n_hitbox ~= 0 then
                                     for iii=0,n_hitbox-1 do
-                                        local entryLeft   = xemu.read_s16_le(entryHitboxPointer + 2 + iii*12)
-                                        local entryTop    = xemu.read_s16_le(entryHitboxPointer + 2 + iii*12 + 2)
-                                        local entryRight  = xemu.read_s16_le(entryHitboxPointer + 2 + iii*12 + 4)
-                                        local entryBottom = xemu.read_s16_le(entryHitboxPointer + 2 + iii*12 + 6)
+                                        local entryLeft   = xemu.read_s16_le(p_entryHitbox + 2 + iii*12)
+                                        local entryTop    = xemu.read_s16_le(p_entryHitbox + 2 + iii*12 + 2)
+                                        local entryRight  = xemu.read_s16_le(p_entryHitbox + 2 + iii*12 + 4)
+                                        local entryBottom = xemu.read_s16_le(p_entryHitbox + 2 + iii*12 + 6)
                                         drawBox(
                                             enemyXPosition - cameraX + entryXOffset + entryLeft,
                                             enemyYPosition - cameraY + entryYOffset + entryTop,

@@ -29,6 +29,12 @@ local superform
 local dropdown_main
 local form_main
 local i_enemy
+local superform_ridley = nil -- I'd rather not declare this variable, but bizhawk doesn't clear the value of globals to nil between script reloads
+
+-- Colour constants
+local colour_opacity = 0x80
+local colour_enemy = 0xFFFFFF00 + colour_opacity
+
 
 function isValidLevelData()
     -- The screen refresh should only be done when the game is in a valid state to draw the level data.
@@ -81,7 +87,7 @@ function loadEnemyDatabase()
                     readMode = readMode_detailList
                     enemyDatabase[enemyId][address .. "_list"] = {}
                 else
-                    address = trim(string.match(line, "[^:]+"))
+                    address = trim(string.match(line, "[^:]+")) -- address or name or width
                     local value = trim(string.match(line, "[^:]+:(.+)"))
                     enemyDatabase[enemyId][address] = value
                 end
@@ -126,7 +132,7 @@ function initGui()
 
     y = height + 4
     height = super_height - y
-    form_main = forms.label(superform, "", x, y, width, height, fixedWidth)
+    form_main = forms.textbox(superform, "", width, height, x, y, multiline, fixedWidth, scrollbars)
 
     i_enemy = 0
 end
@@ -183,9 +189,13 @@ function updateForm_main(form)
     local parameter1Description = ""
     local parameter2Description = ""
     local otherDescriptions = {}
+    local width = 25
     if enemyDatabase[enemyId] ~= nil then
         -- Custom enemy name
         customEnemyName = enemyDatabase[enemyId]["name"] or customEnemyName
+        
+        -- Custom variable label width
+        width = enemyDatabase[enemyId]["width"] or width
         
         -- Custom variable names
         for k, v in pairs(enemyDatabase[enemyId]) do
@@ -301,51 +311,116 @@ function updateForm_main(form)
     
     local otherText = ""
     for k, v in pairsByKeys(otherDescriptions) do
-        otherText = otherText .. string.format("%- 25s % 4X", v['address'] .. ":", xemu.read_u16_le(tonumber(k, 0x10) + i_enemy * 0x40))
+        local fmt = string.format("%%- %ds %% 4X", width)
+        otherText = otherText .. string.format(fmt, v['address'] .. ":", xemu.read_u16_le(tonumber(k, 0x10) + i_enemy * 0x40))
         if v['value'] ~= "" then
             otherText = otherText .. ". " .. v['value']
         end
         
-        otherText = otherText .. "\n"
+        otherText = otherText .. "\r\n"
     end
 
     forms.settext(form, ""
-        .. string.format("Current enemy index: %X\n", i_enemy)
+        .. string.format("Current enemy index: %X\r\n", i_enemy)
         .. "\n"
-        .. text_enemyId                 .. "\n"
-        .. text_enemyPositionX          .. "\n"
-        .. text_enemyPositionY          .. "\n"
-        .. text_enemyRadiusX            .. "\n"
-        .. text_enemyRadiusY            .. "\n"
-        .. text_enemyProperties         .. "\n"
-        .. text_enemyExtraProperties    .. "\n"
-        .. text_enemyAiHandler          .. "\n"
-        .. text_enemyHealth             .. "\n"
-        .. text_p_enemySpritemap        .. "\n"
-        .. text_enemyTimer              .. "\n"
-        .. text_p_enemyInstructionList  .. "\n"
-        .. text_enemyInstructionTimer   .. "\n"
-        .. text_i_enemyPalette          .. "\n"
-        .. text_i_enemyVramTiles        .. "\n"
-        .. text_enemyLayer              .. "\n"
-        .. text_enemyFlashTimer         .. "\n"
-        .. text_enemyFrozenTimer        .. "\n"
-        .. text_enemyInvincibilityTimer .. "\n"
-        .. text_enemyShakeTimer         .. "\n"
-        .. text_enemyFrameCounter       .. "\n"
-        .. text_enemyBank               .. "\n"
-        .. "\n"
-        .. text_enemyAiVariable0        .. "\n"
-        .. text_enemyAiVariable1        .. "\n"
-        .. text_enemyAiVariable2        .. "\n"
-        .. text_enemyAiVariable3        .. "\n"
-        .. text_enemyAiVariable4        .. "\n"
-        .. text_enemyAiVariable5        .. "\n"
-        .. text_enemyParameter1         .. "\n"
-        .. text_enemyParameter2         .. "\n"
+        .. text_enemyId                 .. "\r\n"
+        .. text_enemyPositionX          .. "\r\n"
+        .. text_enemyPositionY          .. "\r\n"
+        .. text_enemyRadiusX            .. "\r\n"
+        .. text_enemyRadiusY            .. "\r\n"
+        .. text_enemyProperties         .. "\r\n"
+        .. text_enemyExtraProperties    .. "\r\n"
+        .. text_enemyAiHandler          .. "\r\n"
+        .. text_enemyHealth             .. "\r\n"
+        .. text_p_enemySpritemap        .. "\r\n"
+        .. text_enemyTimer              .. "\r\n"
+        .. text_p_enemyInstructionList  .. "\r\n"
+        .. text_enemyInstructionTimer   .. "\r\n"
+        .. text_i_enemyPalette          .. "\r\n"
+        .. text_i_enemyVramTiles        .. "\r\n"
+        .. text_enemyLayer              .. "\r\n"
+        .. text_enemyFlashTimer         .. "\r\n"
+        .. text_enemyFrozenTimer        .. "\r\n"
+        .. text_enemyInvincibilityTimer .. "\r\n"
+        .. text_enemyShakeTimer         .. "\r\n"
+        .. text_enemyFrameCounter       .. "\r\n"
+        .. text_enemyBank               .. "\r\n"
+        .. "\r\n"
+        .. text_enemyAiVariable0        .. "\r\n"
+        .. text_enemyAiVariable1        .. "\r\n"
+        .. text_enemyAiVariable2        .. "\r\n"
+        .. text_enemyAiVariable3        .. "\r\n"
+        .. text_enemyAiVariable4        .. "\r\n"
+        .. text_enemyAiVariable5        .. "\r\n"
+        .. text_enemyParameter1         .. "\r\n"
+        .. text_enemyParameter2         .. "\r\n"
         .. otherText
     )
     forms.refresh(form)
+end
+
+function initGui_ridley()
+    local super_width = 600
+    local super_height = 200
+    
+    local x = 0
+    local y = 0
+    local width = super_width
+    local height = super_height
+    local fixedWidth = true
+    local boxType = nil
+    local multiline = true
+    local scrollbars = "both"
+
+    superform_ridley = forms.newform(super_width, super_height, "Ridley tail")
+    
+    form_ridley = forms.label(superform_ridley, "", x, y, width, height, fixedWidth)
+end
+
+function updateForm_ridley()
+    n_segments = 7
+
+    local text_2020 = "Active flag:        "
+    local text_2022 = "Stagger angle:      "
+    local text_2024 = "Movement direction: "
+    local text_2026 = "Distance:           "
+    local text_2028 = "Target distance:    "
+    local text_202A = "Angle:              "
+    local text_202C = "X position:         "
+    local text_202E = "Y position:         "
+    local text_2030 = "X offset:           "
+    local text_2032 = "Y offset:           "
+
+    local separator = ""
+    for i = 0, n_segments - 1 do
+        text_2020 = text_2020 .. separator .. string.format("% 4Xh", xemu.read_u16_le(0x7E2020 + i * 0x14))
+        text_2022 = text_2022 .. separator .. string.format("% 4Xh", xemu.read_u16_le(0x7E2022 + i * 0x14))
+        text_2024 = text_2024 .. separator .. string.format("% 4Xh", xemu.read_u16_le(0x7E2024 + i * 0x14))
+        text_2026 = text_2026 .. separator .. string.format("% 4Xh", xemu.read_u16_le(0x7E2026 + i * 0x14))
+        text_2028 = text_2028 .. separator .. string.format("% 4Xh", xemu.read_u16_le(0x7E2028 + i * 0x14))
+        text_202A = text_202A .. separator .. string.format("% 4Xh", xemu.read_u16_le(0x7E202A + i * 0x14))
+        text_202C = text_202C .. separator .. string.format("% 4Xh", xemu.read_u16_le(0x7E202C + i * 0x14))
+        text_202E = text_202E .. separator .. string.format("% 4Xh", xemu.read_u16_le(0x7E202E + i * 0x14))
+        text_2030 = text_2030 .. separator .. string.format("% 4Xh", xemu.read_u16_le(0x7E2030 + i * 0x14))
+        text_2032 = text_2032 .. separator .. string.format("% 4Xh", xemu.read_u16_le(0x7E2032 + i * 0x14))
+
+        separator = " | "
+    end
+    
+    forms.settext(form_ridley, ""
+        .. text_2020 .. "\n"
+        .. text_2022 .. "\n"
+        .. text_2024 .. "\n"
+        .. text_2026 .. "\n"
+        .. text_2028 .. "\n"
+        .. text_202A .. "\n"
+        .. text_202C .. "\n"
+        .. text_202E .. "\n"
+        .. text_2030 .. "\n"
+        .. text_2032 .. "\n"
+    )
+    
+    forms.refresh(form_ridley)
 end
 
 function displayEnemyHitbox()
@@ -365,52 +440,48 @@ function displayEnemyHitbox()
         -- Draw enemy hitbox
         -- If not using extended spritemap format or frozen, draw simple hitbox
         if xemu.and_(sm.getEnemyExtraProperties(i_enemy), 4) == 0 or sm.getEnemyAiHandler(i_enemy) == 4 then
-            xemu.drawBox(left, top, right, bottom, 0xFF0000FF, "clear")
+            xemu.drawBox(left, top, right, bottom, colour_enemy, "clear")
         else
-            xemu.drawBox(left, top, right, bottom, 0xFFFFFFFF, "clear")
             -- Process extended spritemap format
             local p_spritemap = sm.getEnemySpritemap(i_enemy)
             if p_spritemap ~= 0 then
-                local bank = xemu.lshift(sm.getEnemyBank(i_enemy), 16)
+                local bank = xemu.lshift(sm.getEnemyBank(i_enemy), 0x10)
                 p_spritemap = bank + p_spritemap
                 local n_spritemap = xemu.read_u8(p_spritemap)
                 if n_spritemap ~= 0 then
                     for ii=0,n_spritemap-1 do
                         local entryPointer = p_spritemap + 2 + ii*8
-                        local entryXOffset = xemu.read_s16_le(entryPointer)
-                        local entryYOffset = xemu.read_s16_le(entryPointer + 2)
+                        local entryXOffset     = xemu.read_s16_le(entryPointer)
+                        local entryYOffset     = xemu.read_s16_le(entryPointer + 2)
                         local p_entrySpritemap = xemu.read_u16_le(entryPointer + 4)
-                        local p_entryHitbox = xemu.read_u16_le(entryPointer + 6)
+                        local p_entryHitbox    = xemu.read_u16_le(entryPointer + 6)
                         if p_entryHitbox ~= 0 then
                             p_entryHitbox = bank + p_entryHitbox
                             local n_hitbox = xemu.read_u16_le(p_entryHitbox)
                             if n_hitbox ~= 0 then
                                 for iii=0,n_hitbox-1 do
-                                    local entryLeft   = xemu.read_s16_le(p_entryHitbox + 2 + iii*12)
-                                    local entryTop    = xemu.read_s16_le(p_entryHitbox + 2 + iii*12 + 2)
-                                    local entryRight  = xemu.read_s16_le(p_entryHitbox + 2 + iii*12 + 4)
-                                    local entryBottom = xemu.read_s16_le(p_entryHitbox + 2 + iii*12 + 6)
+                                    local entryLeft    = xemu.read_s16_le(p_entryHitbox + 2 + iii*12)
+                                    local entryTop     = xemu.read_s16_le(p_entryHitbox + 2 + iii*12 + 2)
+                                    local entryRight   = xemu.read_s16_le(p_entryHitbox + 2 + iii*12 + 4)
+                                    local entryBottom  = xemu.read_s16_le(p_entryHitbox + 2 + iii*12 + 6)
                                     local p_entryTouch = xemu.read_u16_le(p_entryHitbox + 2 + iii*12 + 8)
-                                    local p_entryShot = xemu.read_u16_le(p_entryHitbox + 2 + iii*12 + 0xA)
+                                    local p_entryShot  = xemu.read_u16_le(p_entryHitbox + 2 + iii*12 + 0xA)
                                     
                                     xemu.drawBox(
                                         enemyXPosition - cameraX + entryXOffset + entryLeft,
                                         enemyYPosition - cameraY + entryYOffset + entryTop,
                                         enemyXPosition - cameraX + entryXOffset + entryRight,
                                         enemyYPosition - cameraY + entryYOffset + entryBottom,
-                                        0xFF0000FF, "clear"
+                                        colour_enemy, "clear"
                                     )
                                     
-                                    local colour = 0xFF0000FF
-                                    if p_entryShot == 0xC9C2 then
-                                        colour = 0xFFFF00FF
-                                    end
-                                    xemu.drawText(
-                                        enemyXPosition - cameraX + entryXOffset + entryLeft + 1,
-                                        enemyYPosition - cameraY + entryYOffset + entryTop + 1,
-                                        string.format("%d: %X", ii, p_entryShot),
-                                        colour, 0x000000FF
-                                    )
+                                    -- Show enemy shot pointer
+                                    --xemu.drawText(
+                                    --    enemyXPosition - cameraX + entryXOffset + entryLeft + 1,
+                                    --    enemyYPosition - cameraY + entryYOffset + entryTop + 1,
+                                    --    string.format("%d: %X", ii, p_entryShot),
+                                    --    colour, 0x000000FF
+                                    --)
                                 end
                             end
                         end
@@ -420,7 +491,56 @@ function displayEnemyHitbox()
         end
 
         -- Show enemy index and ID
-        xemu.drawText(left + 16, top, string.format("%u: %04X", i_enemy, enemyId), 0xFFFFFFFF)
+        xemu.drawText(left + 16, top, string.format("%u: %04X", i_enemy, enemyId), colour_enemy)
+    end
+end
+
+function specialEnemyDisplay_ridley(is_norfair)
+    local tailColours = {
+        [0] = 0xFF000000 + colour_opacity,
+        [1] = 0x0091FF00 + colour_opacity,
+        [2] = 0xFFDA0000 + colour_opacity,
+        [3] = 0x4800FF00 + colour_opacity,
+        [4] = 0x48FF0000 + colour_opacity,
+        [5] = 0xFF00DA00 + colour_opacity,
+        [6] = 0x00FF9100 + colour_opacity
+    }
+    
+    local cameraX = sm.getLayer1XPosition()
+    local cameraY = sm.getLayer1YPosition()
+    
+    -- Draw tail
+    local xPosition_prev = sm.getEnemyXPosition(0)
+    local yPosition_prev = sm.getEnemyYPosition(0)
+    
+    for i = 0,6 do
+        local xPosition = xemu.read_u16_le(0x7E202C + i*0x14)
+        local yPosition = xemu.read_u16_le(0x7E202E + i*0x14)
+        xemu.drawLine(
+            xPosition_prev - cameraX,
+            yPosition_prev - cameraY,
+            xPosition - cameraX,
+            yPosition - cameraY,
+            tailColours[i]
+        )
+        
+        xPosition_prev = xPosition
+        yPosition_prev = yPosition
+    end
+    
+    if superform_ridley == nil then
+        initGui_ridley()
+    end
+    
+    updateForm_ridley()
+end
+
+function specialEnemyDisplay()
+    local enemyId = sm.getEnemyId(i_enemy)
+    if enemyId == 0xE13F then
+        specialEnemyDisplay_ridley(false)
+    elseif enemyId == 0xE17F then
+        specialEnemyDisplay_ridley(true)
     end
 end
 
@@ -438,6 +558,7 @@ function main()
     updateForm_dropdown(dropdown_main)
     updateForm_main(form_main)
     displayEnemyHitbox()
+    specialEnemyDisplay()
 end
 
 init()

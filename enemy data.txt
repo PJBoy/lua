@@ -1598,7 +1598,7 @@ DD7F
         3: Bombed off Samus
     }
     0FB6: Freeze health threshold
-    
+
     7E7800: Metroid electricity sprite object index
     7E7802: Metroid shell sprite object index
     7E7804: Samus subhealth
@@ -2004,11 +2004,239 @@ E0FF
 E13F
 {
     name: Ceres Ridley
+    width: 35
+    0FA8: Function
+    {
+        A354: Transition to flying
+        A35B: Initial
+        A377: Wait to fade in
+        A389: Fade in eye
+        A3DF: Fade in body
+        A455: Wait to roar
+        A478: Roar before fly
+        A6AF: Rising - accelerating
+        A6C8: Rising - decelerating
+        A6E8: Hovering
+        A782: Shoot fireballs - move to position
+        A7F9: Shoot fireballs - shooting
+        A83C: Lunge - setup
+        A84E: Lunge - main
+        A88D: Swoop - setup
+        A8A4: Swoop - move to position
+        A8D4: Swoop - descending - aiming down
+        A8F8: Swoop - descending - aiming left
+        A923: Swoop - ascending - aiming up
+        A947: Swoop - ascending - aiming up faster
+        A971: Real retreat - rising
+        A9A0: Real retreat - write palettes and spawn walls
+        AA11: Real retreat - set up getaway cutscene
+        AA4F: RTS
+        AA50: Real retreat - activated self destruct sequence
+        BD9A: Fake retreat - move to position
+        BDBC: Fake retreat - rising
+        BDF2: Fake retreat - drop baby metroid
+        BE03: Fake retreat - retrieve baby metroid
+        C04E: Real retreat - activating self destruct sequence
+    }
+    0FAA: X velocity
+    0FAC: Y velocity
+    0FB0: Fade in frame/index / misc
+    0FB2: Function timer / misc
+    7E2000: Tail function index
+    {
+        0: Inactive
+        1: Neutral
+        4: Pogo - normal
+        5: Pogo - descending - stab setup
+        6: Pogo - descending - stab
+    }
+    7E2002: Idle tail whip enable flag
+    7E2004: Tail whip request flag
+    7E200A: Tail whip target additional angle
+    7E200C: Pogo downwards Y acceleration
+    7E200E: Pogo upwards Y acceleration
+    7E2012: Tail extension speed
+    7E2014: Tail angle delta
+    7E2016: Tail minimum clockwise angle
+    7E2018: Tail maximum anticlockwise angle
+    7E201A: Tail whip target clockwise angle
+    7E201C: Tail whip target anticlockwise angle
+    7E201E: Tail ideal inter-segment angle
+    7E7800: $7E:7800. Misc
+    7E7802: Fight mode
+    {
+        0: Fight intro / retreat
+        1: Normal
+    }
+    7E7804: Movement and animation enabled flag
+    7E7806: Baby metroid instruction list pointer
+    7E7808: Baby metroid instruction timer
+    7E780A: Ribs animation table pointer
+    7E780C: Ribs animation timer
+    7E780E: Wings animation frame
+    7E7810: Wings animation timer delta
+    7E7812: Wings animation timer
+    7E7814: Swoop / mode 7 angle
+    7E7816: Swoop speed
+    7E7818: Spritemap palette index
+    7E781A: Hit counter
+    7E781C: Tail whip sound effect counter
+    7E781E: Roaring flag
+    7E7820: Facing direction
+    {
+        0: Left
+        1: Forwards
+        2: Right
+    }
+    7E782E: Fireball base hover X position
+    7E7830: Fireball base hover Y position
+    7E7832: Fireball X velocity
+    7E7834: Fireball Y velocity
+    7E7838: Tail damage
+    7E783A: Feet distance index
+    7E783E: Hit a room boundary flag
+    7E8000: Minimum Y position
+    7E8002: Maximum Y position
+    7E8004: Minimum X position
+    7E8006: Maximum X position
+    7E8020: Mode 7 zoom level
+    7E8024: Getaway finished flag
+    7E8026: Getaway table index
+    7E8028: Mode 7 X position
+    7E802A: Mode 7 Y position
+    7E802C: Mode 7 baby metroid animation frame
+    7E802E: Mode 7 wings animation frame
+    7E8030: Emergency text glow animation frame
+    7E8032: Unused red background glow animation frame
+    7E8800: Baby metroid function
+    {
+        BE9C: Held by Ridley
+        BEB3: Held by Ridley's feet
+        BECA: Start falling
+        BEDC: Falling
+    }
+    7E8804: Baby metroid X position
+    7E8807: Baby metroid Y subposition
+    7E8808: Baby metroid Y position
+    7E880C: Baby metroid Y velocity
 }
 
 E17F
 {
     name: Ridley
+    width: 35
+    0FA8: Function
+    {
+        A35B: Initial
+        A377: Wait to fade in
+        A389: Fade in eye
+        A3DF: Fade in body
+        A455: Wait to roar
+        A478: Roar before fly
+        A354: Transition to flying
+        B2F3: Liftoff
+        B321: Decide action
+        B3EC: Lunge missed - setup
+        B3F8: Lunge missed - move to position
+        B455: Swoop - move to position
+        B493: Swoop - descending - aiming down
+        B4D1: Swoop - descending - aiming left
+        B516: Swoop - ascending - aiming up
+        B554: Swoop - ascending - aiming up faster
+        B594: Swoop - ascending - decelerate
+        B5E5: Hover - move to wall behind Ridley
+        B613: Hover - move to wall in front of Ridley
+        B6DD: Pogo - wait at position
+        B70E: Pogo - descending
+        B7B9: Pogo - ascending
+        BB8F: Grabbed Samus - setup
+        BBC4: Grabbed Samus - rising to up to 40h px
+        BBF1: Grabbed Samus - rising to room middle
+        BC2E: Grabbed Samus - release Samus
+        BD4E: Dodging power bomb
+        BD9A: Fake retreat - move to position
+        BDBC: Fake retreat - rising
+        BDF2: Fake retreat - drop baby metroid
+        BE03: Fake retreat - retrieve baby metroid
+        C04E: Real retreat - activating self destruct sequence
+        C538: Dying - grabbed Samus
+        C53E: Death sequence - death roar
+        C551: Death sequence - move to death spot
+        C588: Death sequence - lowering acid and release Samus
+        C5A8: Death sequence - start falling apart
+        C5C8: Death sequence - falling apart
+        C5DA: Death sequence - still falling apart
+    }
+    0FAA: X velocity
+    0FAC: Y velocity
+    0FB0: Fade in frame/index
+    0FB2: Function timer
+    7E2000: Tail function index
+    {
+        0: Inactive
+        1: Neutral
+        4: Pogo - normal
+        5: Pogo - descending - stab setup
+        6: Pogo - descending - stab
+    }
+    7E2002: Idle tail whip enable flag
+    7E2004: Tail whip request flag
+    7E200A: Tail whip target additional angle
+    7E200C: Pogo downwards Y acceleration
+    7E200E: Pogo upwards Y acceleration
+    7E2012: Tail extension speed
+    7E2014: Tail angle delta
+    7E2016: Tail minimum clockwise angle
+    7E2018: Tail maximum anticlockwise angle
+    7E201A: Tail whip target clockwise angle
+    7E201C: Tail whip target anticlockwise angle
+    7E201E: Tail ideal inter-segment angle
+    7E7800: $7E:7800. Misc
+    7E7802: Fight mode
+    {
+        0: Fight intro
+        1: Normal
+        2: Power bomb dodge active
+        FFFF: Death sequence
+    }
+    7E7804: Movement and animation enabled flag
+    7E780A: Ribs animation table pointer
+    7E780C: Ribs animation timer
+    7E780E: Wings animation frame
+    7E7810: Wings animation timer delta
+    7E7812: Wings animation timer
+    7E7814: Swoop angle
+    7E7816: Swoop speed
+    7E7818: Spritemap palette index
+    7E781C: Tail whip sound effect counter
+    7E781E: Roaring flag
+    7E7820: Facing direction
+    {
+        0: Left
+        1: Forwards
+        2: Right
+    }
+    7E7824: Acceleration index
+    7E7828: Grabbed Samus X offset
+    7E782A: Grabbed Samus Y offset
+    7E782E: Fireball base hover / target lunge X position
+    7E7830: Fireball base hover / target lunge Y position
+    7E7832: Fireball X velocity
+    7E7834: Fireball Y velocity
+    7E7836: Holding Samus flag
+    7E7838: Tail damage
+    7E783A: Feet distance index
+    7E783C: Intangibility timer
+    7E783E: Hit a room boundary flag
+    7E8000: Minimum Y position
+    7E8002: Maximum Y position
+    7E8004: Minimum X position
+    7E8006: Maximum X position
+    7E8008: Grabbed Samus movement lag timer
+    7E800A: Death lunge counter
+    7E800C: Pogo fireball counter
+    7E800E: Small explosion timer
+    7E8010: Small explosion index
 }
 
 E1BF
@@ -3356,7 +3584,7 @@ EC7F
     }
     7E7850: Painful walking function
     {
-        BFD0: Walk forwards 
+        BFD0: Walk forwards
         BFE8: Walking forwards
         C004: Walk backwards
         C01C: Walking backwards
@@ -4144,7 +4372,7 @@ F353
     0FAE: Wall-jump arc centre X position
     0FB0: Wall-jump arc centre Y position
     0FB2: Wall-jump arc angle
-    
+
     7E8000: Wall-jump arc right target angle
     7E8002: Wall-jump arc left target angle
     7E8004: Wall-jump arc angle delta
@@ -4171,7 +4399,7 @@ F393
     0FAE: Wall-jump arc centre X position
     0FB0: Wall-jump arc centre Y position
     0FB2: Wall-jump arc angle
-    
+
     7E8000: Wall-jump arc right target angle
     7E8002: Wall-jump arc left target angle
     7E8004: Wall-jump arc angle delta
@@ -4198,7 +4426,7 @@ F3D3
     0FAE: Wall-jump arc centre X position
     0FB0: Wall-jump arc centre Y position
     0FB2: Wall-jump arc angle
-    
+
     7E8000: Wall-jump arc right target angle
     7E8002: Wall-jump arc left target angle
     7E8004: Wall-jump arc angle delta
@@ -4225,7 +4453,7 @@ F413
     0FAE: Wall-jump arc centre X position
     0FB0: Wall-jump arc centre Y position
     0FB2: Wall-jump arc angle
-    
+
     7E8000: Wall-jump arc right target angle
     7E8002: Wall-jump arc left target angle
     7E8004: Wall-jump arc angle delta
@@ -4252,7 +4480,7 @@ F453
     0FAE: Wall-jump arc centre X position
     0FB0: Wall-jump arc centre Y position
     0FB2: Wall-jump arc angle
-    
+
     7E8000: Wall-jump arc right target angle
     7E8002: Wall-jump arc left target angle
     7E8004: Wall-jump arc angle delta
@@ -4279,7 +4507,7 @@ F493
     0FAE: Wall-jump arc centre X position
     0FB0: Wall-jump arc centre Y position
     0FB2: Wall-jump arc angle
-    
+
     7E8000: Wall-jump arc right target angle
     7E8002: Wall-jump arc left target angle
     7E8004: Wall-jump arc angle delta
