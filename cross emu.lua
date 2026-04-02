@@ -4,9 +4,14 @@ xemu.emuId_snes9x  = 1
 xemu.emuId_lsnes   = 2
 xemu.emuId_mesen   = 3
 
+local is_atleast_bizhawk_v29 = false -- Detect BizHawk v2.9+, which changes how bitwise operations are written
+
 if memory then
     if memory.usememorydomain then
         xemu.emuId = xemu.emuId_bizhawk
+        if bizstring.pad_start then
+            is_atleast_bizhawk_v29 = true
+        end
     elseif memory.readshort then
         xemu.emuId = xemu.emuId_snes9x
     else
@@ -17,7 +22,7 @@ else
 end
 
 -- Bitwise operations
-if xemu.emuId == xemu.emuId_mesen then
+if xemu.emuId == xemu.emuId_mesen or is_atleast_bizhawk_v29 then
     -- [[
     xemu_mesen = require("cross emu - mesen")
     xemu.rshift = xemu_mesen.rshift
@@ -51,7 +56,7 @@ if xemu.emuId == xemu.emuId_bizhawk then
     if memory.getmemorydomainsize("CARTRIDGE_ROM") ~= memory.getcurrentmemorydomainsize() then
         romDomainName = "CARTRIDGE_ROM" -- used by BSNES core
     elseif memory.getmemorydomainsize("CARTROM") ~= memory.getcurrentmemorydomainsize() then
-        romDomainName = "CARTROM" -- used by snes9x
+        romDomainName = "CARTROM" -- used by snes9x core
     end
 
     function makeMemoryReader(f)
@@ -178,6 +183,12 @@ if xemu.emuId == xemu.emuId_bizhawk then
     xemu.drawLine = function(x0, y0, x1, y1, fg)
         if fg ~= nil and type(fg) ~= "string" then
             fg = xemu.rshift(fg, 8) + xemu.lshift(xemu.and_(fg, 0xFF), 0x18)
+        end
+        
+        -- BizHawk fails to draw 1px x 1px lines
+        if x0 == x1 and y0 == y1 then
+            xemu.drawPixel(x0, y0, fg)
+            return
         end
         
         gui.drawLine(x0, y0, x1, y1, fg)

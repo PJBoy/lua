@@ -147,23 +147,15 @@ outline = {
         local flip_x = xemu.and_(bts, 0x40) ~= 0
         local flip_y = xemu.and_(bts, 0x80) ~= 0
         
+        -- Read slope shape
         local p_slope = 0x948B2B + i_slope * 0x10
         
         local ys = {}
         for x = 0, 0xF do
-            local i = x
-            if flip_x then
-                i = 0xF - x
-            end
-            
-            local y = xemu.read_u8(p_slope + i)
-            if flip_y and y < 0x10 then
-                y = 0xF - y
-            end
-            
-            ys[x] = y
+            ys[x] = xemu.read_u8(p_slope + x)
         end
         
+        -- Determine drawable X range
         local x_min
         for x = 0, 0xF do
             if ys[x] < 0x10 then
@@ -177,29 +169,73 @@ outline = {
         end
         
         local x_max
-        for i = 0, 0xF do
-            local x = 0xF - i
+        for j = 0, 0xF do
+            local x = 0xF - j
             if ys[x] < 0x10 then
                 x_max = x
                 break
             end
         end
         
-        local y_base = 0xF
-        if flip_y then
-            y_base = 0xF - y_base
-        end
-        
-        xemu.drawLine(blockX + x_min, blockY + y_base, blockX + x_min, blockY + ys[x_min], colour_slope)
-        
-        for x = x_min + 1, x_max do
-            if ys[x - 1] < 0x10 and ys[x] < 0x10 then
-                xemu.drawLine(blockX + x, blockY + ys[x - 1], blockX + x, blockY + ys[x], colour_slope)
+        -- Natural surface
+        for i = x_min + 1, x_max - 1 do
+            if ys[i - 1] < 0x10 and ys[i] < 0x10 then
+                local y_from = ys[i - 1]
+                local y_to = ys[i]
+                if flip_y then
+                    y_from = 0xF - y_from
+                    y_to = 0xF - y_to
+                end
+                
+                local x = i
+                if flip_x then
+                    x = 0xF - x
+                end
+                
+                xemu.drawPixel(
+                    blockX + x, blockY + y_to, 
+                    colour_slope
+                )
             end
         end
         
-        xemu.drawLine(blockX + x_max, blockY + y_base, blockX + x_max, blockY + ys[x_max], colour_slope)
-        xemu.drawLine(blockX + x_min, blockY + y_base, blockX + x_max, blockY + y_base, colour_slope)
+        -- Position of natural left, right and bottom edges
+        local x_left = x_min
+        local x_right = x_max
+        if flip_x then
+            x_left = 0xF - x_left
+            x_right = 0xF - x_right
+        end
+        
+        local y_left = ys[x_min]
+        local y_right = ys[x_max]
+        local y_base = 0xF
+        if flip_y then
+            y_base = 0xF - y_base
+            y_left = 0xF - y_left
+            y_right = 0xF - y_right
+        end
+        
+        -- Natural bottom edge
+        xemu.drawLine(
+            blockX + x_left,  blockY + y_base, 
+            blockX + x_right, blockY + y_base, 
+            colour_slope
+        )
+        
+        -- Natural left edge
+        xemu.drawLine(
+            blockX + x_left, blockY + y_base, 
+            blockX + x_left, blockY + y_left, 
+            colour_slope
+        )
+        
+        -- Natural right edge
+        xemu.drawLine(
+            blockX + x_right, blockY + y_base, 
+            blockX + x_right, blockY + y_right, 
+            colour_slope
+        )
     end,
 
     -- Spike air
@@ -242,7 +278,12 @@ outline = {
     [0x08] = standardOutline(colour_solidBlock),
 
     -- Door block
-    [0x09] = standardOutline(colour_doorBlock),
+    [0x09] = function(blockX, blockY, blockIndex, stackLimit)
+        -- Show door index
+        local bts = sm.getBts(blockIndex)
+        standardOutline(colour_doorBlock)(blockX, blockY, blockIndex, stackLimit)
+        drawText(blockX + 4, blockY + 4, string.format("%02X", sm.getBts(blockIndex)), colour_doorBlock)
+    end,
 
     -- Spike block
     [0x0A] = standardOutline(colour_specialBlock),
@@ -354,20 +395,24 @@ end
 function displayScrollBoundaries(cameraX, cameraY, roomWidth)
     for y = -yExtraScrolls, yExtraScrolls + 1 do
         for x = -xExtraScrolls, xExtraScrolls + 1 do
-            local scrollX = x * 0x100 - xemu.and_(cameraX, 0xFF)
-            local scrollY = y * 0x100 - xemu.and_(cameraY, 0xFF)
+            local scrollXAbsolute = cameraX + x * 0x100
+            local scrollYAbsolute = cameraY + y * 0x100
+            if 0 <= scrollXAbsolute and scrollXAbsolute < roomWidth * 0x10 + 0x100 and 0 <= scrollYAbsolute and scrollYAbsolute < sm.getRoomHeight() * 0x10 + 0x100 then
+                local scrollX = x * 0x100 - xemu.and_(cameraX, 0xFF)
+                local scrollY = y * 0x100 - xemu.and_(cameraY, 0xFF)
+            
+                local i_scroll = xemu.rshift(scrollYAbsolute, 8) * xemu.rshift(roomWidth, 4) + xemu.rshift(scrollXAbsolute, 8)
+                local scroll = sm.getScroll(i_scroll)
 
-            local scroll = sm.getScroll((xemu.rshift(cameraY + y * 0x100, 8)) * xemu.rshift(roomWidth, 4) + xemu.rshift(cameraX + x * 0x100, 8))
+                local colour = colour_scroll_red
+                if scroll == 1 then
+                    colour = colour_scroll_blue
+                elseif scroll == 2 then
+                    colour = colour_scroll_green
+                end
 
-            local colour = colour_scroll_red
-            if scroll == 1 then
-                colour = colour_scroll_blue
-            elseif scroll == 2 then
-                colour = colour_scroll_green
+                drawBox(scrollX, scrollY, scrollX + 0xFF, scrollY + 0xFF, colour)
             end
-
-            drawBox(scrollX, scrollY, scrollX + 0xFF, scrollY + 0xFF, colour)
-            --drawBox(scrollX, scrollY, scrollX + 0xFF, scrollY + 0xFF, colour, colour)
         end
     end
 end
@@ -399,7 +444,7 @@ function displayBlocks(cameraX, cameraY, roomWidth)
 
             -- Block type is the most significant 4 bits of level data
             local blockType = xemu.rshift(sm.getLevelDatum(blockIndex), 12)
-            if debugFlag ~= 0 or blockType == 6 or blockType == 9 then
+            if debugFlag ~= 0 then
                 -- Show the block type and BTS of every block
                 drawText(blockX + 6, blockY, string.format("%X", blockType), "red")
                 drawText(blockX + 4, blockY + 8, string.format("%02X", sm.getBts(blockIndex)), "red")
@@ -663,8 +708,9 @@ function displayEnemyHitboxes(cameraX, cameraY)
                 end
             end
 
-            -- Show enemy index and ID
-            drawText(left + 16, top, string.format("%u: %04X", i, enemyId), colour_enemy)
+            -- Show enemy index
+           drawText(left + 16, top, string.format("%u", i), colour_enemy)
+            --drawText(left + 16, top, string.format("%u: %04X", i, enemyId), colour_enemy)
 
             -- Log enemy index and ID to list in top-right
             if logFlag ~= 0 then
@@ -707,8 +753,9 @@ function displaySpriteObjects(cameraX, cameraY)
             -- Draw sprite object
             drawBox(left, top, right, bottom, colour_spriteObject, "clear")
 
-            -- Show sprite object index and ID
-            drawText(left, top, string.format("%u: %04X", i, spriteObjectId), colour_spriteObject, "black")
+            -- Show sprite object index
+            drawText(left, top, string.format("%u", i), colour_spriteObject, "black")
+            --drawText(left, top, string.format("%u: %04X", i, spriteObjectId), colour_spriteObject, "black")
 
             -- Log sprite object index and ID to list in top-left
             if logFlag ~= 0 then
@@ -738,8 +785,9 @@ function displayEnemyProjectileHitboxes(cameraX, cameraY)
             drawBox(left, top, right, bottom, colour_enemyProjectile, "clear")
             --drawBox(math.min(left, right - 2), math.min(top, bottom - 2), math.max(right, left + 2), math.max(bottom, top + 2), colour_enemyProjectile, "clear")
 
-            -- Show enemy projectile index and ID
-            drawText(left, top, string.format("%u: %04X", i, enemyProjectileId), colour_enemyProjectile)
+            -- Show enemy projectile index
+            drawText(left, top, string.format("%u", i), colour_enemyProjectile)
+            --drawText(left, top, string.format("%u: %04X", i, enemyProjectileId), colour_enemyProjectile)
             --xemu.write_u16_le(0x7E1BD7 + i * 2, xemu.and_(xemu.read_u16_le(0x7E1BD7 + i * 2), 0xEFFF))
             --drawText(left, top, string.format("%04X", xemu.read_u16_le(0x7E1BD7 + i * 2)), 0x00FFFFFF, 0x000000FF)
 
@@ -900,7 +948,11 @@ function on_paint()
     --]]
 end
 
-if xemu.emuId == xemu.emuId_mesen then
+if xemu.emuId == xemu.emuId_bizhawk then
+    -- BizHawk requires using onframestart to draw on the correct frame
+    event.unregisterbyname("Super Hitbox")
+    event.onframestart(on_paint, "Super Hitbox")
+elseif xemu.emuId == xemu.emuId_mesen then
     emu.addEventCallback(on_paint, emu.eventType.nmi)
 elseif xemu.emuId ~= xemu.emuId_lsnes then
     while true do

@@ -3,7 +3,7 @@ Lua scripts for lua-supporting emulators
 Specifically:
 * SNES
   * [snes9x-rr](https://github.com/TASEmulators/snes9x-rr/releases) (v1.43 or 1.51)
-  * [BizHawk](https://github.com/TASEmulators/BizHawk/releases/tag/2.8) (v2.8 or less)
+  * [BizHawk](https://github.com/TASEmulators/BizHawk/releases). BizHawk v2.9+ additionally requires `cross emu - mesen.lua`
   * [Mesen](https://mesen.ca/). Mesen scripts additionally require `cross emu - mesen.lua`
   * [lsnes](https://tasvideos.org/EmulatorResources/Lsnes) (I should test this more often)
 * GBA
