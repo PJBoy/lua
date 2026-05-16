@@ -258,13 +258,12 @@ outline = {
         stackLimit = stackLimit - 1
         local bts = sm.getBtsSigned(blockIndex)
 
-        -- Infinite recursion, game would probably freeze if this block reacts to anything
+        -- Special case, acts like air
         if bts == 0 then
-            standardOutline(colour_errorBlock)(blockX, blockY, blockIndex, stackLimit)
             return
         end
 
-        blockIndex = blockIndex + bts
+        blockIndex = xemu.and_(blockIndex + bts, 0xFFFF)
         outline[xemu.rshift(sm.getLevelDatum(blockIndex), 12)](blockX, blockY, blockIndex, stackLimit)
     end,
 
@@ -313,13 +312,12 @@ outline = {
         stackLimit = stackLimit - 1
         local bts = sm.getBtsSigned(blockIndex)
 
-        -- Infinite recursion, game would probably freeze if this block reacts to anything
+        -- Special case, acts like air
         if bts == 0 then
-            standardOutline(colour_errorBlock)(blockX, blockY, blockIndex, stackLimit)
             return
         end
 
-        blockIndex = blockIndex + bts * sm.getRoomWidth()
+        blockIndex = xemu.and_(blockIndex + bts * sm.getRoomWidth(), 0xFFFF)
         outline[xemu.rshift(sm.getLevelDatum(blockIndex), 12)](blockX, blockY, blockIndex, stackLimit)
     end,
 
@@ -429,18 +427,22 @@ function displayCameraMargin()
 end
 
 function displayBlocks(cameraX, cameraY, roomWidth)
-    for y = -yExtraBlocks,14 + yExtraBlocks do
-        for x = -xExtraBlocks,16 + xExtraBlocks do
+    for y = -yExtraBlocks, 14 + yExtraBlocks do
+        for x = -xExtraBlocks, 16 + xExtraBlocks do
             -- Impose a limit on the number of block extensions allowed, otherwise infinite loops can occur
             local stackLimit = 224
 
-            -- Align block outlines graphically
-            local blockX = x * 0x10 - xemu.and_(cameraX, 0xF)
-            local blockY = y * 0x10 - xemu.and_(cameraY, 0xF)
-
-            -- Blocks are 16x16 px², using a right shift to avoid dealing with floats
-            local blockIndex = xemu.rshift(xemu.and_(cameraY + y * 0x10, 0xFFF), 4) * roomWidth
-                             + xemu.rshift(xemu.and_(cameraX + x * 0x10, 0xFFFF), 4)
+            -- Block co-ordinates of top-left of screen. Blocks are 16x16 px², using a right shift to avoid dealing with floats
+            local originXBlock = xemu.rshift(cameraX, 4)
+            local originYBlock = xemu.rshift(cameraY, 4)
+            
+            local blockX = (originXBlock + x) * 0x10 - cameraX
+            local blockY = (originYBlock + y) * 0x10 - cameraY
+            
+            -- FFh mask comes from use of Y block as an 8-bit multiplicand when calculating block index
+            -- FFFh mask comes from division of 16-bit position by 10h when calculating X block
+            local blockIndex = xemu.and_(originYBlock + y, 0xFF) * roomWidth
+                             + xemu.and_(originXBlock + x, 0xFFF)
 
             -- Block type is the most significant 4 bits of level data
             local blockType = xemu.rshift(sm.getLevelDatum(blockIndex), 12)
@@ -462,12 +464,13 @@ function displayDebugInfo(cameraX, cameraY, roomWidth)
         return
     end
 
-    local cameraXBlock = xemu.rshift(cameraX, 4)
-    local cameraYBlock = xemu.rshift(xemu.and_(cameraY, 0xFFF), 4)
-    local clip = 0x7F0000 + xemu.and_(2 + (cameraXBlock + cameraYBlock * roomWidth) * 2, 0xFFFF)
-    local clip_end = 0x7F0002 + 0x1FE * roomWidth + 0x1FFE
-    local bts_end = 0x7F6402 + roomWidth * sm.getRoomHeight()
-    drawText(0, 0, string.format("cameraX: %03X\ncameraY: %03X\nClip: %X\nClip end: %X\nBTS end: %X", cameraXBlock, cameraYBlock, clip, clip_end, bts_end), "cyan")
+    local cameraXBlock = xemu.and_(xemu.rshift(cameraX, 4), 0xFFF)
+    local cameraYBlock = xemu.and_(xemu.rshift(cameraY, 4), 0xFF)
+    local clip = 0x7F0002 + xemu.and_((cameraYBlock * roomWidth + cameraXBlock) * 2, 0xFFFF)
+    local clip_end = 0x7F0002 + (0xFF * roomWidth + 0x1000) * 2
+    local bts = 0x7F6402 + xemu.and_(cameraYBlock * roomWidth + cameraXBlock, 0xFFFF)
+    local bts_end = 0x7F6402 + 0xFF * roomWidth + 0x1000
+    drawText(0, 0, string.format("Camera X: %03X\nCamera Y: %02X\nClip: %X\nClip end: %X\nBTS: %X\nBTS end: %X", cameraXBlock, cameraYBlock, clip, clip_end, bts, bts_end), "cyan")
 
     if debugFlag == 0 then
         return
@@ -475,7 +478,7 @@ function displayDebugInfo(cameraX, cameraY, roomWidth)
 
     if doorListFlag ~= 0 then
         p_doorList = sm.getDoorListPointer()
-        for i = 0,xemu.rshift(clip_end - 0x7F0002, 1) do
+        for i = 0, xemu.rshift(clip_end - 0x7F0002, 1) do
             if xemu.and_(sm.getLevelDatum(i), 0xF000) == 0x9000 then
                 bts = xemu.and_(sm.getBts(i), 0x7F)
                 if doors[xemu.read_u16_le(0x8F0000 + p_doorList + bts * 2)] then
@@ -483,6 +486,7 @@ function displayDebugInfo(cameraX, cameraY, roomWidth)
                 end
             end
         end
+        
         doorListFlag = 0
     end
 
@@ -838,8 +842,6 @@ function displayProjectileHitboxes(cameraX, cameraY)
         if sm.getBombTimer(i) ~= 0 then
             if i >= 5 then
                 drawText(left, top - 16, sm.getBombTimer(i), colour_projectile)
-            else
-                drawText(left, top - 16, string.format("%04X", sm.getBombTimer(i)), colour_projectile)
             end
         end
     end
@@ -916,8 +918,8 @@ function on_paint()
         cameraX = samusXPosition - 128 + xAdjust
         cameraY = samusYPosition - 112 + yAdjust
     else
-        cameraX = sm.getLayer1XPosition()
-        cameraY = sm.getLayer1YPosition()
+        cameraX = sm.getLayer1XPosition() + xAdjust
+        cameraY = sm.getLayer1YPosition() + yAdjust
     end
     
     -- Width of the room in blocks
@@ -926,7 +928,6 @@ function on_paint()
     -- [[
     displayScrollBoundaries(cameraX, cameraY, roomWidth)
     --displayCameraMargin()
-    displayDebugInfo(cameraX, cameraY, roomWidth)
     displayBlocks(cameraX, cameraY, roomWidth)
     displayFx(cameraX, cameraY)
     
@@ -945,6 +946,8 @@ function on_paint()
         -- Show in-game time
         drawText(216, 0, string.format("%d:%d:%d.%d", sm.getGameTimeHours(), sm.getGameTimeMinutes(), sm.getGameTimeSeconds(), sm.getGameTimeFrames()), 0xFFFFFFFF)
     end
+    
+    displayDebugInfo(cameraX, cameraY, roomWidth)
     --]]
 end
 

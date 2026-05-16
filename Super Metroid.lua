@@ -38,7 +38,7 @@ function makeReader(p, n, is_signed, interval, is_aram)
     end
 
     if interval then
-        return function(i) return reader(p + i * interval) end
+        return function(i) return reader(p + xemu.and_(i * interval, 0xFFFF)) end
     else
         return function() return reader(p) end
     end
@@ -69,7 +69,7 @@ function makeWriter(p, n, interval)
 
     local writer = writers[n]
     if interval then
-        return function(i, v) return writer(p + i * interval, v) end
+        return function(i, v) return writer(p + xemu.and_(i * interval, 0xFFFF), v) end
     else
         return function(v) return writer(p, v) end
     end
